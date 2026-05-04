@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8주 훈련 플랜 — JTBC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; font-family: 'Noto Sans KR', sans-serif; }
+  .poster { width: 900px; background: #0f0f0f; border: 1px solid #222; padding: 60px 50px; position: relative; overflow: hidden; }
+  .poster::before { content: 'JTBC'; position: absolute; top: -10px; right: -10px; font-family: 'Bebas Neue', sans-serif; font-size: 220px; color: rgba(255,255,255,0.015); line-height: 1; pointer-events: none; user-select: none; }
+  .accent-line { width: 60px; height: 4px; background: #E8FF00; margin-bottom: 20px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
+  .title { font-family: 'Black Han Sans', sans-serif; font-size: 42px; color: #fff; line-height: 1.1; letter-spacing: -1px; }
+  .title span { color: #E8FF00; }
+  .subtitle { font-size: 12px; color: #444; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; }
+  .meta { text-align: right; }
+  .meta-label { font-size: 10px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+  .meta-value { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #E8FF00; letter-spacing: 1px; margin-bottom: 10px; }
+  .goal-banner { background: #E8FF00; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+  .goal-label { font-size: 10px; color: #000; letter-spacing: 3px; font-weight: 700; }
+  .goal-value { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #000; letter-spacing: 2px; }
+  .goal-divider { width: 1px; height: 26px; background: rgba(0,0,0,0.2); }
+
+  .week-tabs { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; margin-bottom: 20px; }
+  .week-tab { padding: 8px 4px; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; color: #444; border: 1px solid #1a1a1a; background: #0d0d0d; cursor: pointer; transition: all 0.15s; }
+  .week-tab:hover { color: #777; border-color: #2a2a2a; }
+  .week-tab.active { color: #E8FF00; border-color: #E8FF00; background: #131300; }
+  .tab-date { display: block; font-size: 8px; color: #2a2a2a; margin-top: 2px; font-family: 'Noto Sans KR', sans-serif; font-weight: 400; letter-spacing: 0; }
+  .week-tab.active .tab-date { color: #666; }
+  .tab-icons { display: flex; justify-content: center; gap: 2px; margin-top: 3px; }
+  .icon-dot { width: 4px; height: 4px; border-radius: 50%; }
+  .icon-tempo { background: #FF9800; }
+  .icon-lt { background: #ff4444; }
+  .icon-tt { background: #E8FF00; }
+
+  .week-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #111; border-left: 3px solid #E8FF00; margin-bottom: 12px; }
+  .week-number { font-family: 'Bebas Neue', sans-serif; font-size: 11px; color: #555; letter-spacing: 3px; }
+  .week-date-range { font-size: 13px; color: #fff; font-weight: 700; margin-top: 2px; }
+  .week-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; }
+  .badge-tempo { background: #2a1a08; color: #FF9800; border: 1px solid #4a2a08; }
+  .badge-lt { background: #140808; color: #ff4444; border: 1px solid #3a1010; }
+  .badge-tt { background: #141408; color: #E8FF00; border: 1px solid #3a3a10; }
+  .badge-long { background: #0e0e18; color: #CE93D8; border: 1px solid #2a2a55; }
+
+  .schedule { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; }
+  .day-card { display: grid; grid-template-columns: 76px 1fr auto; align-items: center; gap: 16px; padding: 13px 20px; border: 1px solid #1e1e1e; background: #111; position: relative; }
+  .day-card.rest { background: #0d0d0d; border-color: #141414; }
+  .day-card.z2-card { border-color: #1e2535; background: #0e1118; }
+  .day-card.z1-card { border-color: #1a1a1a; background: #0d0d0d; }
+  .day-card.tempo-card { border-color: #FF9800; background: #120d04; }
+  .day-card.tempo-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #FF9800; }
+  .day-card.lt-card { border-color: #ff4444; background: #140808; }
+  .day-card.lt-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #ff4444; }
+  .day-card.tt-card { border-color: #E8FF00; background: #141408; }
+  .day-card.tt-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #E8FF00; }
+  .day-card.long-card { border-color: #7c6fc4; background: #0e0e18; }
+  .day-card.long-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #7c6fc4; }
+  .day-card.buildup-card { border-color: #FF6B35; background: #130d08; }
+  .day-card.buildup-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #FF6B35; }
+
+  .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; line-height: 1; color: #fff; }
+  .day-card.rest .day-name { color: #222; }
+  .day-sub { font-size: 9px; color: #333; letter-spacing: 0.5px; margin-top: 1px; }
+  .day-date { font-size: 9px; color: #2a2a2a; margin-top: 1px; }
+  .training-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .day-card.rest .training-name { color: #222; }
+  .training-detail { font-size: 11px; color: #4a4a4a; display: flex; gap: 12px; flex-wrap: wrap; }
+  .training-detail span { display: flex; align-items: center; gap: 3px; }
+  .detail-dot { width: 3px; height: 3px; border-radius: 50%; background: #2a2a2a; flex-shrink: 0; }
+  .tempo-card .detail-dot { background: #FF9800; opacity: 0.5; }
+  .lt-card .detail-dot { background: #ff4444; opacity: 0.5; }
+  .tt-card .detail-dot { background: #E8FF00; opacity: 0.5; }
+  .long-card .detail-dot { background: #7c6fc4; opacity: 0.5; }
+  .buildup-card .detail-dot { background: #FF6B35; opacity: 0.5; }
+
+  .zone-badge { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
+  .zb1 { background: #1a2a1a; color: #4CAF50; border: 1px solid #2a3a2a; }
+  .zb2 { background: #1a2535; color: #64B5F6; border: 1px solid #2a3555; }
+  .zb3 { background: #2a1a08; color: #FF9800; border: 1px solid #4a2a08; }
+  .zb2-3 { background: #1f1008; color: #FF6B35; border: 1px solid #3a1808; }
+  .zb4 { background: #140808; color: #ff4444; border: 1px solid #3a1010; }
+  .zb-tt { background: #141408; color: #E8FF00; border: 1px solid #3a3a10; }
+  .zb-long { background: #0e0e18; color: #CE93D8; border: 1px solid #2a2a55; }
+  .zb-rest { background: #0d0d0d; color: #222; border: 1px solid #1a1a1a; font-family: 'Bebas Neue', sans-serif; font-size: 11px; padding: 3px 8px; border-radius: 2px; }
+
+  .week-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #1a1a1a; }
+  .summary-box { background: #0f0f0f; padding: 12px 16px; text-align: center; }
+  .summary-label { font-size: 9px; color: #333; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .summary-value { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #E8FF00; letter-spacing: 1px; line-height: 1; }
+  .summary-unit { font-size: 10px; color: #444; margin-top: 1px; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 16px 0 0; border-top: 1px solid #1a1a1a; margin-top: 20px; }
+  .legend-title { font-size: 9px; color: #333; letter-spacing: 2px; text-transform: uppercase; width: 100%; margin-bottom: 4px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #444; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .footer { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-left { font-size: 9px; color: #222; letter-spacing: 2px; text-transform: uppercase; }
+  .footer-right { font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #222; letter-spacing: 3px; }
+  .week-panel { display: none; }
+  .week-panel.active { display: block; }
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="accent-line"></div>
+  <div class="header">
+    <div>
+      <div class="title">8주 훈련<br><span>플랜</span></div>
+      <div class="subtitle">JTBC Marathon 2026 · LT Development · May ~ June</div>
+    </div>
+    <div class="meta">
+      <div class="meta-label">목표 레이스</div><div class="meta-value">JTBC 11.01</div>
+      <div class="meta-label">훈련 기간</div><div class="meta-value">5.04 ~ 6.30</div>
+      <div class="meta-label">6월 말 목표</div><div class="meta-value">LT↑ Z2↑</div>
+    </div>
+  </div>
+
+  <div class="goal-banner">
+    <div><div class="goal-label">LTHR</div><div class="goal-value">191 BPM</div></div>
+    <div class="goal-divider"></div>
+    <div><div class="goal-label">템포런</div><div class="goal-value">매주 수요일</div></div>
+    <div class="goal-divider"></div>
+    <div><div class="goal-label">LT런</div><div class="goal-value">2주 1회 (짝수주)</div></div>
+    <div class="goal-divider"></div>
+    <div><div class="goal-label">TT</div><div class="goal-value">W5 단독 배치</div></div>
+    <div class="goal-divider"></div>
+    <div><div class="goal-label">롱런 목표</div><div class="goal-value">20~22 KM</div></div>
+    <div class="goal-divider"></div>
+    <div><div class="goal-label">원칙</div><div class="goal-value">80 / 20</div></div>
+  </div>
+
+  <div class="week-tabs">
+    <div class="week-tab active" onclick="switchWeek(1)">W1<span class="tab-date">5/4~5/10</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(2)">W2<span class="tab-date">5/11~5/17</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div><div class="icon-dot icon-lt"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(3)">W3<span class="tab-date">5/18~5/24</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(4)">W4<span class="tab-date">5/25~5/31</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div><div class="icon-dot icon-lt"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(5)">W5<span class="tab-date">6/1~6/7</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div><div class="icon-dot icon-tt"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(6)">W6<span class="tab-date">6/8~6/14</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div><div class="icon-dot icon-lt"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(7)">W7<span class="tab-date">6/15~6/21</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div></div></div>
+    <div class="week-tab" onclick="switchWeek(8)">W8<span class="tab-date">6/22~6/30</span><div class="tab-icons"><div class="icon-dot icon-tempo"></div><div class="icon-dot icon-lt"></div></div></div>
+  </div>
+
+  <!-- WEEK 1: 템포런 -->
+  <div class="week-panel active" id="panel-1">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 1</div><div class="week-date-range">5월 4일 (월) ~ 5월 10일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-long">LONG 14~16 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card buildup-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">5/4</div></div>
+        <div><div class="training-name">빌드업</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 1 ~ 2 km 포함</span></div></div>
+        <div class="zone-badge zb2-3">ZONE 2→3</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">5/5</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span><span><div class="detail-dot"></div>컨디션 안 좋으면 완전 휴식으로 대체</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">5/6</div></div>
+        <div><div class="training-name">템포런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>172 ~ 178 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 ~ 25 min</span></div></div>
+        <div class="zone-badge zb3">ZONE 3</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">5/7</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 7 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card long-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">5/8</div></div>
+        <div><div class="training-name">롱런 (LSD)</div><div class="training-detail"><span><div class="detail-dot"></div>14 ~ 16 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>끝까지 Zone 2 사수</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">5/9</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">스트레칭 권장</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">5/10</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">스트레칭 권장</span></div></div><div class="zb-rest">REST</div></div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">36~43</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">월(빌드업) · 수(템포)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">14~16</div><div class="summary-unit">km 금요일</div></div>
+      <div class="summary-box"><div class="summary-label">훈련일</div><div class="summary-value">4일</div><div class="summary-unit">월·수·목·금</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 2: 템포 + LT런 -->
+  <div class="week-panel" id="panel-2">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 2</div><div class="week-date-range">5월 11일 (월) ~ 5월 17일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-lt">LT런</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card z2-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">5/11</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">5/12</div></div>
+        <div><div class="training-name">템포런 (조절)</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 9 km</span><span><div class="detail-dot"></div>172 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 min</span><span><div class="detail-dot"></div>⚠️ LT런 있는 주 — Zone 3 하단</span></div></div>
+        <div class="zone-badge zb3">ZONE 3↓</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">5/13</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card z2-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">5/14</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 8 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>LT런 전날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card lt-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">5/15</div></div>
+        <div><div class="training-name">LT런 (역치)</div><div class="training-detail"><span><div class="detail-dot"></div>10 ~ 12 km</span><span><div class="detail-dot"></div>181 ~ 191 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + LT 15 ~ 20 min + 쿨다운 2 km</span></div></div>
+        <div class="zone-badge zb4">ZONE 4</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">5/16</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">LT런 회복 · 토일 훈련 불가</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">5/17</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">토일 훈련 불가 (5월)</span></div></div><div class="zb-rest">REST</div></div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">31~37</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">화(템포) · 금(LT)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">생략</div><div class="summary-unit">80/20 원칙 우선</div></div>
+      <div class="summary-box"><div class="summary-label">LT 구간</div><div class="summary-value">15~20</div><div class="summary-unit">min</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 3: 템포런 -->
+  <div class="week-panel" id="panel-3">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 3</div><div class="week-date-range">5월 18일 (월) ~ 5월 24일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-long">LONG 16~18 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card buildup-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">5/18</div></div>
+        <div><div class="training-name">빌드업</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 1 ~ 2 km 포함</span></div></div>
+        <div class="zone-badge zb2-3">ZONE 2→3</div>
+      </div>
+      <div class="day-card z1-card"><div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">5/19</div></div><div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span><span><div class="detail-dot"></div>컨디션 안 좋으면 완전 휴식으로 대체</span></div></div><div class="zone-badge zb1">ZONE 1</div></div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">5/20</div></div>
+        <div><div class="training-name">템포런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>172 ~ 178 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 ~ 25 min</span></div></div>
+        <div class="zone-badge zb3">ZONE 3</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">5/21</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 7 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card long-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">5/22</div></div>
+        <div><div class="training-name">롱런 (LSD)</div><div class="training-detail"><span><div class="detail-dot"></div>16 ~ 18 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>끝까지 Zone 2 사수</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">5/23</div></div><div><div class="training-name">완전 휴식</div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">5/24</div></div><div><div class="training-name">완전 휴식</div></div><div class="zb-rest">REST</div></div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">38~45</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">월(빌드업) · 수(템포)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">16~18</div><div class="summary-unit">km 금요일</div></div>
+      <div class="summary-box"><div class="summary-label">훈련일</div><div class="summary-value">4일</div><div class="summary-unit">월·수·목·금</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 4: 템포 + LT런 -->
+  <div class="week-panel" id="panel-4">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 4</div><div class="week-date-range">5월 25일 (월) ~ 5월 31일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-lt">LT런</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card z2-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">5/25</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">5/26</div></div>
+        <div><div class="training-name">템포런 (조절)</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 9 km</span><span><div class="detail-dot"></div>172 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 min</span><span><div class="detail-dot"></div>⚠️ LT런 있는 주 — Zone 3 하단</span></div></div>
+        <div class="zone-badge zb3">ZONE 3↓</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">5/27</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card z2-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">5/28</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 8 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>LT런 전날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card lt-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">5/29</div></div>
+        <div><div class="training-name">LT런 (역치)</div><div class="training-detail"><span><div class="detail-dot"></div>10 ~ 12 km</span><span><div class="detail-dot"></div>181 ~ 191 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + LT 15 ~ 20 min + 쿨다운 2 km</span></div></div>
+        <div class="zone-badge zb4">ZONE 4</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">5/30</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">LT런 회복 · 토일 훈련 불가</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">5/31</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">토일 훈련 불가 (5월)</span></div></div><div class="zb-rest">REST</div></div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">31~37</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">화(템포) · 금(LT)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">생략</div><div class="summary-unit">80/20 원칙 우선</div></div>
+      <div class="summary-box"><div class="summary-label">LT 구간</div><div class="summary-value">15~20</div><div class="summary-unit">min</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 5: 템포 + TT -->
+  <div class="week-panel" id="panel-5">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 5</div><div class="week-date-range">6월 1일 (월) ~ 6월 7일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-tt">TT 5KM</span><span class="badge badge-long">LONG 17~19 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card buildup-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">6/1</div></div>
+        <div><div class="training-name">빌드업</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 1 ~ 2 km 포함</span></div></div>
+        <div class="zone-badge zb2-3">ZONE 2→3</div>
+      </div>
+      <div class="day-card z1-card"><div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">6/2</div></div><div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span><span><div class="detail-dot"></div>컨디션 안 좋으면 완전 휴식으로 대체</span></div></div><div class="zone-badge zb1">ZONE 1</div></div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">6/3</div></div>
+        <div><div class="training-name">템포런 (조절)</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 9 km</span><span><div class="detail-dot"></div>172 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 min</span><span><div class="detail-dot"></div>⚠️ TT 있는 주 — 에너지 아끼기</span></div></div>
+        <div class="zone-badge zb3">ZONE 3↓</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">6/4</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span><span><div class="detail-dot"></div>TT 전 완전 회복</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card tt-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">6/5</div></div>
+        <div><div class="training-name">TT (타임트라이얼) — 5 km</div><div class="training-detail"><span><div class="detail-dot"></div>워밍업 2 km + 5 km 전력</span><span><div class="detail-dot"></div>현재 역치 페이스 측정</span><span><div class="detail-dot"></div>W8 이후 TT와 비교 기준점</span></div></div>
+        <div class="zone-badge zb-tt">TIME TRIAL</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">6/6</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">TT 회복 필수</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card long-card">
+        <div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">6/7</div></div>
+        <div><div class="training-name">롱런 (LSD)</div><div class="training-detail"><span><div class="detail-dot"></div>17 ~ 19 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>TT 다음날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">46~54</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">화(템포) · 금(TT)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">17~19</div><div class="summary-unit">km 일요일</div></div>
+      <div class="summary-box"><div class="summary-label">핵심</div><div class="summary-value">TT</div><div class="summary-unit">역치 페이스 기준점</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 6: 템포 + LT런 -->
+  <div class="week-panel" id="panel-6">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 6</div><div class="week-date-range">6월 8일 (월) ~ 6월 14일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-lt">LT런</span><span class="badge badge-long">LONG 18~20 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card z2-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">6/8</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">6/9</div></div>
+        <div><div class="training-name">템포런 (조절)</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 9 km</span><span><div class="detail-dot"></div>172 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 ~ 25 min</span><span><div class="detail-dot"></div>⚠️ LT런 있는 주 — Zone 3 하단</span></div></div>
+        <div class="zone-badge zb3">ZONE 3↓</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">6/10</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card z2-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">6/11</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 8 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>LT런 전날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card lt-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">6/12</div></div>
+        <div><div class="training-name">LT런 (역치)</div><div class="training-detail"><span><div class="detail-dot"></div>10 ~ 12 km</span><span><div class="detail-dot"></div>181 ~ 191 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + LT 20 ~ 25 min + 쿨다운 2 km</span></div></div>
+        <div class="zone-badge zb4">ZONE 4</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">6/13</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">LT런 회복 필수</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card long-card">
+        <div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">6/14</div></div>
+        <div><div class="training-name">롱런 (LSD)</div><div class="training-detail"><span><div class="detail-dot"></div>18 ~ 20 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>LT런 다음날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">49~57</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">화(템포) · 금(LT)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">18~20</div><div class="summary-unit">km 일요일</div></div>
+      <div class="summary-box"><div class="summary-label">LT 구간</div><div class="summary-value">20~25</div><div class="summary-unit">min (증가)</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 7: 템포런 -->
+  <div class="week-panel" id="panel-7">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 7</div><div class="week-date-range">6월 15일 (월) ~ 6월 21일 (일)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-long">LONG 19~21 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card buildup-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">6/15</div></div>
+        <div><div class="training-name">빌드업</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 1 ~ 2 km 포함</span></div></div>
+        <div class="zone-badge zb2-3">ZONE 2→3</div>
+      </div>
+      <div class="day-card z1-card"><div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">6/16</div></div><div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span><span><div class="detail-dot"></div>컨디션 안 좋으면 완전 휴식으로 대체</span></div></div><div class="zone-badge zb1">ZONE 1</div></div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">6/17</div></div>
+        <div><div class="training-name">템포런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>172 ~ 181 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 25 ~ 30 min</span><span><div class="detail-dot"></div>Zone 3 전체 활용 (강도 올리기)</span></div></div>
+        <div class="zone-badge zb3">ZONE 3</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">6/18</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 7 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card long-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">6/19</div></div>
+        <div><div class="training-name">롱런 (LSD)</div><div class="training-detail"><span><div class="detail-dot"></div>19 ~ 21 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>끝까지 Zone 2 사수</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">6/20</div></div><div><div class="training-name">완전 휴식</div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">6/21</div></div><div><div class="training-name">완전 휴식</div></div><div class="zb-rest">REST</div></div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">41~48</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">월(빌드업) · 수(템포)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">19~21</div><div class="summary-unit">km 금요일</div></div>
+      <div class="summary-box"><div class="summary-label">템포 강도</div><div class="summary-value">Z3</div><div class="summary-unit">전체 구간 활용</div></div>
+    </div>
+  </div>
+
+  <!-- WEEK 8: 템포 + LT런 + 마무리 롱런 -->
+  <div class="week-panel" id="panel-8">
+    <div class="week-header">
+      <div><div class="week-number">WEEK 8 — 6월 마무리</div><div class="week-date-range">6월 22일 (월) ~ 6월 30일 (월)</div></div>
+      <div class="week-badges"><span class="badge badge-tempo">TEMPO</span><span class="badge badge-lt">LT런</span><span class="badge badge-long">LONG 20~22 KM</span></div>
+    </div>
+    <div class="schedule">
+      <div class="day-card z2-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">6/22</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 10 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card tempo-card">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">6/23</div></div>
+        <div><div class="training-name">템포런 (조절)</div><div class="training-detail"><span><div class="detail-dot"></div>8 ~ 9 km</span><span><div class="detail-dot"></div>172 ~ 175 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + 템포 20 ~ 25 min</span><span><div class="detail-dot"></div>⚠️ LT런 있는 주 — Zone 3 하단</span></div></div>
+        <div class="zone-badge zb3">ZONE 3↓</div>
+      </div>
+      <div class="day-card z1-card">
+        <div><div class="day-name">WED</div><div class="day-sub">수요일</div><div class="day-date">6/24</div></div>
+        <div><div class="training-name">회복런</div><div class="training-detail"><span><div class="detail-dot"></div>5 ~ 6 km</span><span><div class="detail-dot"></div>&lt; 162 bpm</span></div></div>
+        <div class="zone-badge zb1">ZONE 1</div>
+      </div>
+      <div class="day-card z2-card">
+        <div><div class="day-name">THU</div><div class="day-sub">목요일</div><div class="day-date">6/25</div></div>
+        <div><div class="training-name">이지런</div><div class="training-detail"><span><div class="detail-dot"></div>6 ~ 8 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>LT런 전날 — Zone 2 하단 유지</span></div></div>
+        <div class="zone-badge zb2">ZONE 2</div>
+      </div>
+      <div class="day-card lt-card">
+        <div><div class="day-name">FRI</div><div class="day-sub">금요일</div><div class="day-date">6/26</div></div>
+        <div><div class="training-name">LT런 (역치)</div><div class="training-detail"><span><div class="detail-dot"></div>10 ~ 12 km</span><span><div class="detail-dot"></div>181 ~ 191 bpm</span><span><div class="detail-dot"></div>워밍업 2 km + LT 20 ~ 25 min + 쿨다운 2 km</span></div></div>
+        <div class="zone-badge zb4">ZONE 4</div>
+      </div>
+      <div class="day-card rest"><div><div class="day-name">SAT</div><div class="day-sub">토요일</div><div class="day-date">6/27</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">LT런 회복 필수</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card rest"><div><div class="day-name">SUN</div><div class="day-sub">일요일</div><div class="day-date">6/28</div></div><div><div class="training-name">완전 휴식</div><div class="training-detail"><span style="color:#222;">롱런 전 충분한 회복</span></div></div><div class="zb-rest">REST</div></div>
+      <div class="day-card long-card">
+        <div><div class="day-name">MON</div><div class="day-sub">월요일</div><div class="day-date">6/29</div></div>
+        <div><div class="training-name">롱런 (LSD) — 8주 피날레</div><div class="training-detail"><span><div class="detail-dot"></div>20 ~ 22 km</span><span><div class="detail-dot"></div>162 ~ 172 bpm</span><span><div class="detail-dot"></div>Zone 2 페이스 5월 대비 확인</span></div></div>
+        <div class="zone-badge zb-long">ZONE 2</div>
+      </div>
+      <div class="day-card rest">
+        <div><div class="day-name">TUE</div><div class="day-sub">화요일</div><div class="day-date">6/30</div></div>
+        <div><div class="training-name">완전 휴식 — 8주 마감</div><div class="training-detail"><span style="color:#444;">7월 볼륨 빌딩 전환 준비</span></div></div>
+        <div class="zb-rest">REST</div>
+      </div>
+    </div>
+    <div class="week-summary">
+      <div class="summary-box"><div class="summary-label">주간 거리</div><div class="summary-value">48~58</div><div class="summary-unit">km</div></div>
+      <div class="summary-box"><div class="summary-label">고강도</div><div class="summary-value">2회</div><div class="summary-unit">화(템포) · 금(LT)</div></div>
+      <div class="summary-box"><div class="summary-label">롱런</div><div class="summary-value">20~22</div><div class="summary-unit">km 목표 달성</div></div>
+      <div class="summary-box"><div class="summary-label">LT 구간</div><div class="summary-value">20~25</div><div class="summary-unit">min</div></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">HR Zone 기준 (LTHR 191 bpm) · 훈련 유형</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4CAF50;"></div>Zone 1 &lt; 162 bpm · 회복런</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#64B5F6;"></div>Zone 2 · 162 ~ 172 bpm · 이지런</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FF6B35;"></div>Zone 2→3 · 빌드업</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FF9800;"></div>Zone 3 · 172 ~ 181 bpm · 템포런</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff4444;"></div>Zone 4 · 181 ~ 191 bpm · LT런</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E8FF00;"></div>TT · 전력</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7c6fc4;"></div>롱런 · Zone 2</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">2026 JTBC Marathon Training Plan</div>
+    <div class="footer-right">LT DEVELOPMENT · MAY 4 ~ JUNE 30</div>
+  </div>
+</div>
+
+<script>
+  function switchWeek(w) {
+    document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.week-tab')[w-1].classList.add('active');
+    document.getElementById('panel-' + w).classList.add('active');
+  }
+</script>
+</body>
+</html>
