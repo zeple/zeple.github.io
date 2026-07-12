@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<title>러너 타임스 — 656.8km 특집호</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light;
+    --street: #d9d4c5;
+    --paper: #faf8f0;
+    --ink: #221d15;
+    --ink-2: #57503f;
+    --ink-3: #8b8371;
+    --hair: #d8d0bc;
+    --hair-dk: #b5ac97;
+    --red: #b3352c;
+    --wash: #efe9da;
+    --box: #f3efe2;
+    --serif: 'Apple Myungjo', AppleMyungjo, 'Nanum Myeongjo', 'Noto Serif KR', Batang, Charter, Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', Pretendard, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  }
+  html { background: var(--street); }
+  body { margin: 0; font-family: var(--serif); color: var(--ink); background: var(--street);
+         line-height: 1.78; font-size: 15px; -webkit-font-smoothing: antialiased;
+         -webkit-text-size-adjust: 100%; }
+  .paper { max-width: 1060px; margin: 0 auto; background: var(--paper); padding: 34px 52px 64px;
+           box-shadow: 0 2px 6px rgba(30,25,15,.18), 0 18px 60px rgba(30,25,15,.14); }
+
+  /* ── 마스트헤드 ── */
+  .topline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 18px;
+             font-family: var(--sans); font-size: 11px; color: var(--ink-2);
+             border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+  .topline b { font-weight: 700; color: var(--ink); }
+  .nameplate { text-align: center; padding: 22px 0 14px; }
+  .nameplate .hangul { font-size: clamp(46px, 8.5vw, 76px); font-weight: 900; letter-spacing: .12em;
+                       line-height: 1.05; }
+  .nameplate .latin { font-family: Georgia, 'Times New Roman', serif; font-size: 13px;
+                      letter-spacing: .42em; text-transform: uppercase; color: var(--ink-2);
+                      margin-top: 8px; }
+  .plateinfo { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 26px;
+               font-family: var(--sans); font-size: 11.5px; color: var(--ink-2);
+               border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink);
+               padding: 7px 0; margin-bottom: 6px; }
+  .plateinfo b { color: var(--ink); font-weight: 700; }
+  .issuenav label { margin-right: 7px; color: var(--ink-3); font-weight: 700; letter-spacing: .08em; }
+  .issuenav select { font-family: var(--sans); font-size: 11.5px; font-weight: 700; color: var(--ink);
+                     background: var(--paper); border: 1px solid var(--ink); border-radius: 0;
+                     padding: 1px 6px; cursor: pointer; }
+  .weatherline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 18px;
+                 font-family: var(--sans); font-size: 11.5px; color: var(--ink-2);
+                 border-bottom: 1px solid var(--hair-dk); padding: 6px 0; margin-bottom: 34px; }
+
+  /* ── 기사 공통 ── */
+  .kicker { display: inline-block; font-family: var(--sans); font-size: 11px; font-weight: 800;
+            letter-spacing: .22em; background: var(--ink); color: var(--paper);
+            padding: 3px 12px 2px; margin-bottom: 14px; }
+  .kicker.red { background: var(--red); }
+  article { margin-bottom: 58px; }
+  .hl { font-size: clamp(27px, 4.6vw, 42px); font-weight: 900; line-height: 1.32;
+        letter-spacing: -0.005em; margin: 0 0 12px; word-break: keep-all; }
+  .hl-sub { font-size: clamp(20px, 3.2vw, 26px); font-weight: 800; line-height: 1.4;
+            margin: 0 0 10px; word-break: keep-all; }
+  .deck { font-size: 16.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 14px;
+          word-break: keep-all; }
+  .byline { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3);
+            border-top: 1px solid var(--hair-dk); border-bottom: 1px solid var(--hair-dk);
+            padding: 5px 0; margin-bottom: 18px; display: flex; justify-content: space-between;
+            flex-wrap: wrap; gap: 2px 16px; }
+  .byline b { color: var(--ink-2); font-weight: 700; }
+  .cols2 { columns: 2; column-gap: 34px; column-rule: 1px solid var(--hair); }
+  .cols3 { columns: 3; column-gap: 34px; column-rule: 1px solid var(--hair); }
+  .cols2 p, .cols3 p { break-inside: avoid-column; }
+  p { margin: 0 0 13px; text-align: justify; }
+  .dropcap::first-letter { float: left; font-size: 52px; line-height: .88; font-weight: 900;
+                           padding: 5px 10px 0 0; }
+  .q { border-left: 3px solid var(--ink); padding: 2px 0 2px 14px; margin: 14px 0;
+       font-weight: 700; break-inside: avoid; }
+  .rule { border: none; border-top: 1px solid var(--ink); margin: 44px 0 34px; position: relative; }
+  .rule::after { content: '◆'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+                 background: var(--paper); padding: 0 10px; font-size: 11px; color: var(--ink); }
+
+  /* ── 스코어보드 / 박스 ── */
+  .scoreboard { border-top: 3px double var(--ink); border-bottom: 3px double var(--ink);
+                display: grid; grid-template-columns: 1fr 1fr; margin: 6px 0 22px; }
+  .score { padding: 16px 20px 14px; }
+  .score + .score { border-left: 1px solid var(--hair-dk); }
+  .score .lab { font-family: var(--sans); font-size: 10.5px; font-weight: 800; letter-spacing: .2em;
+                color: var(--ink-3); text-transform: uppercase; }
+  .score .val { font-size: clamp(34px, 6vw, 46px); font-weight: 900; line-height: 1.2;
+                font-variant-numeric: lining-nums; }
+  .score .was { font-family: var(--sans); font-size: 12px; color: var(--ink-2); }
+  .score .was s { color: var(--ink-3); }
+  .score .delta { font-family: var(--sans); font-size: 12.5px; font-weight: 800; color: var(--red); }
+  .newsbox { border: 1px solid var(--ink); padding: 16px 20px 12px; margin: 20px 0;
+             break-inside: avoid; }
+  .newsbox.shade { background: var(--box); }
+  .newsbox h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 900; }
+  .newsbox h4 .tag { font-family: var(--sans); font-size: 10px; font-weight: 800; letter-spacing: .18em;
+                     background: var(--ink); color: var(--paper); padding: 2px 8px; margin-right: 8px;
+                     vertical-align: 2px; }
+  .newsbox ul, .newsbox ol { margin: 0; padding-left: 19px; }
+  .newsbox li { margin-bottom: 6px; font-size: 13.5px; }
+
+  /* ── 그래픽(차트) ── */
+  figure { margin: 26px 0 10px; border-top: 1px solid var(--ink); padding-top: 10px;
+           break-inside: avoid; }
+  figcaption { display: flex; justify-content: space-between; align-items: baseline;
+               flex-wrap: wrap; gap: 2px 14px; margin-bottom: 10px; }
+  figcaption .t { font-family: var(--sans); font-weight: 800; font-size: 13.5px; }
+  figcaption .t .fno { color: var(--paper); background: var(--ink); font-size: 10px; font-weight: 800;
+                       letter-spacing: .1em; padding: 2px 7px; margin-right: 9px; vertical-align: 1px; }
+  figcaption .u { font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
+  .chart { position: relative; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper);
+         font-family: var(--sans); font-size: 12px; line-height: 1.5; padding: 7px 11px;
+         border-radius: 3px; opacity: 0; transition: opacity .12s; white-space: nowrap; z-index: 5;
+         transform: translate(-50%, -100%); }
+  .legend { display: flex; gap: 6px 20px; flex-wrap: wrap; font-family: var(--sans); font-size: 12px;
+            color: var(--ink-2); margin: 0 0 4px; }
+  .legend .sw { display: inline-block; width: 16px; height: 0; border-top: 3px solid;
+                vertical-align: middle; margin-right: 6px; margin-top: -2px; }
+  .legend .sw.dash { border-top-style: dashed; }
+  .src { font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); margin-top: 7px;
+         border-bottom: 1px solid var(--hair); padding-bottom: 8px; }
+  details.tbl { margin-top: 8px; font-family: var(--sans); font-size: 12px; }
+  details.tbl summary { cursor: pointer; font-weight: 700; font-size: 11px; color: var(--ink-2); }
+  details.tbl .scroll { overflow-x: auto; }
+  details.tbl table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+  details.tbl th, details.tbl td { border: 1px solid var(--hair); padding: 3px 9px; text-align: right;
+                                   font-variant-numeric: tabular-nums; }
+  details.tbl th:first-child, details.tbl td:first-child { text-align: left; }
+  details.tbl th { background: var(--box); font-weight: 700; }
+
+  /* ── 표 ── */
+  .rtwrap { overflow-x: auto; margin: 16px 0 8px;
+    background:
+      linear-gradient(90deg, var(--paper) 30%, rgba(250,248,240,0)),
+      linear-gradient(270deg, var(--paper) 30%, rgba(250,248,240,0)) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(34,29,21,.18), transparent),
+      radial-gradient(farthest-side at 100% 50%, rgba(34,29,21,.18), transparent) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 44px 100%, 44px 100%, 12px 100%, 12px 100%;
+    background-attachment: local, local, scroll, scroll; }
+  table.rt { border-collapse: collapse; width: 100%; font-size: 13px; font-family: var(--sans);
+             background: transparent; }
+  table.rt th { text-align: left; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink);
+                padding: 7px 12px 6px 0; font-size: 11px; letter-spacing: .08em; white-space: nowrap; }
+  table.rt td { border-bottom: 1px solid var(--hair); padding: 8px 12px 8px 0; vertical-align: top; }
+  table.rt td.num { font-variant-numeric: tabular-nums; }
+  table.rt tr.hl-row td { font-weight: 800; background: var(--wash); }
+
+  /* ── 체크리스트(인사동정 스타일) ── */
+  .checks { list-style: none; padding: 0; margin: 12px 0; font-family: var(--sans); }
+  .checks li { display: flex; gap: 11px; align-items: baseline; padding: 8px 2px;
+               border-bottom: 1px dotted var(--hair-dk); font-size: 13.5px; }
+  .checks .st { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; white-space: nowrap;
+                padding: 2px 8px; border: 1px solid var(--ink); }
+  .st.done { background: var(--ink); color: var(--paper); }
+  .st.wip  { background: var(--paper); color: var(--ink); }
+  .st.todo { background: var(--paper); color: var(--ink-3); border-color: var(--ink-3); }
+
+  /* ── 사설 ── */
+  .editorial { background: var(--box); border-top: 3px double var(--ink);
+               border-bottom: 3px double var(--ink); padding: 24px 30px 18px; }
+  .editorial .kicker { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
+
+  /* ── 광고 ── */
+  .ads { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; margin: 10px 0 30px; }
+  .ad { border: 2px solid var(--ink); padding: 22px 24px 18px; text-align: center;
+        position: relative; }
+  .ad::before { content: '광고'; position: absolute; top: -9px; left: 14px; background: var(--paper);
+                font-family: var(--sans); font-size: 10px; letter-spacing: .3em; color: var(--ink-3);
+                padding: 0 8px; }
+  .ad .ad-hl { font-size: 24px; font-weight: 900; margin: 4px 0 8px; word-break: keep-all; }
+  .ad .ad-sub { font-family: var(--sans); font-size: 12.5px; color: var(--ink-2); line-height: 1.7; }
+  .ad .ad-fine { font-family: var(--sans); font-size: 10px; color: var(--ink-3); margin-top: 12px;
+                 border-top: 1px solid var(--hair); padding-top: 8px; }
+  .ad.red { border-color: var(--red); }
+  .ad.red .ad-hl { color: var(--red); }
+
+  /* ── 푸터 ── */
+  footer.colophon { border-top: 3px double var(--ink); margin-top: 24px; padding-top: 14px;
+                    font-family: var(--sans); font-size: 11px; color: var(--ink-2);
+                    line-height: 1.9; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .grid2 > div { min-width: 0; }
+
+  /* ── 팀 카드 ── */
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 22px 0; }
+  .tcard { border: 1px solid var(--ink); padding: 13px 15px 11px; min-width: 0;
+           display: flex; flex-direction: column; }
+  .tcard.dormant { border-style: dashed; }
+  .tcard .thead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+                  border-bottom: 2px solid var(--ink); padding-bottom: 6px; margin-bottom: 8px; }
+  .tcard .tname { font-weight: 900; font-size: 15.5px; }
+  .tcard .tname .veto { color: var(--red); font-size: 11px; vertical-align: 2px; }
+  .tcard .tmodel { font-family: var(--sans); font-size: 9px; font-weight: 800; letter-spacing: .12em;
+                   border: 1px solid var(--ink); padding: 1px 6px; white-space: nowrap; }
+  .tcard .tmodel.hi { background: var(--ink); color: var(--paper); }
+  .tcard .trole { font-family: var(--sans); font-size: 12px; color: var(--ink-2); line-height: 1.6;
+                  margin-bottom: 9px; }
+  .tcard .talgo { font-family: var(--sans); font-size: 10.5px; background: var(--box);
+                  padding: 8px 10px; line-height: 1.75; margin-top: auto; }
+  .tcard .talgo b { letter-spacing: .06em; }
+  .tcard .tgoal { font-family: var(--sans); font-size: 11.5px; margin-top: 9px; font-weight: 700; }
+  .tcard .tgoal::before { content: '목표 — '; color: var(--ink-3); font-weight: 800; font-size: 10px;
+                          letter-spacing: .1em; }
+  /* ── 인터뷰 ── */
+  .iv { break-inside: avoid; border-top: 1px solid var(--hair-dk); padding: 11px 0 7px; }
+  .iv .ivq { font-family: var(--sans); font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+  .iv .ivq .who { background: var(--ink); color: var(--paper); padding: 1px 8px; margin-right: 8px;
+                  font-size: 10px; letter-spacing: .1em; }
+  .iv .ivq .who.red { background: var(--red); }
+  .iv .iva { font-size: 13.5px; margin: 0; }
+
+  /* ═══ 모바일 ═══ */
+  @media (max-width: 720px) {
+    body { font-size: 14.5px; }
+    .paper { padding: 20px 18px 44px; }
+    .nameplate { padding: 16px 0 10px; }
+    .nameplate .hangul { letter-spacing: .06em; }
+    .nameplate .latin { letter-spacing: .28em; font-size: 11px; }
+    .plateinfo { gap: 3px 14px; }
+    .weatherline { flex-direction: column; margin-bottom: 26px; }
+    article { margin-bottom: 44px; }
+    .deck { font-size: 15px; }
+    .cols2, .cols3 { columns: 1; }
+    .scoreboard { grid-template-columns: 1fr; }
+    .score + .score { border-left: none; border-top: 1px solid var(--hair-dk); }
+    .grid2 { grid-template-columns: 1fr; }
+    .ads { grid-template-columns: 1fr; }
+    .editorial { padding: 18px 18px 14px; }
+    .team-grid { grid-template-columns: 1fr; gap: 12px; }
+    table.rt { min-width: 520px; font-size: 12.5px; }
+    .rule { margin: 34px 0 28px; }
+  }
+  @media print { body { background: #fff; } .paper { box-shadow: none; padding: 0; } }
+</style>
+
+<div class="paper">
+
+<!-- ═══════════ 마스트헤드 ═══════════ -->
+<header>
+  <div class="topline">
+    <span>측정되지 않으면 코칭하지 않는다</span>
+    <span><b>JTBC 마라톤 D-111</b></span>
+  </div>
+  <div class="nameplate">
+    <div class="hangul">러너 타임스</div>
+    <div class="latin">The Runner Times · Data Sports Daily</div>
+  </div>
+  <div class="plateinfo">
+    <span><b>제1호 · 창간 특집</b></span>
+    <span>2026년 7월 13일 월요일</span>
+    <span>발행 <b>Team 191 편집국</b></span>
+    <span>취재 범위 2025.09 ~ 2026.07 · FIT 97개 전수 판독</span>
+    <span class="issuenav"><label for="issue-sel">지난 호</label><select id="issue-sel" aria-label="호 선택"></select></span>
+  </div>
+  <div class="weatherline">
+    <span>🌡️ 오늘의 훈련 날씨: <b>폭염 28°C·고습</b> — 심박 +5 ~ 10bpm 상방 편향, 이지런은 심박 앵커·페이스 양보</span>
+    <span>이번 주 처방: Phase 2 계속 — Zone 2 (153 ~ 170bpm)</span>
+  </div>
+</header>
+
+<!-- ═══════════ 1면 톱 ═══════════ -->
+<article>
+  <div class="kicker">1면 · 종합</div>
+  <h1 class="hl">±7.2초의 사나이 — 후반 붕괴형 러너, 이븐 페이서로 돌아왔다</h1>
+  <p class="deck">하프 19분 1초·10K 12분 43초 단축, 6일 간격 백투백 PB…
+     비결은 폭발적 스퍼트가 아니라 21km 내내 유지한 '박스권 페이싱'이었다.</p>
+  <div class="byline"><span><b>Team 191 데이터랩</b> 특별취재반</span><span>그래픽 3건 · 스코어보드</span></div>
+
+  <div class="scoreboard">
+    <div class="score">
+      <div class="lab">Half Marathon — 신기록</div>
+      <div class="val">1:46:01</div>
+      <div class="was">종전 <s>2:05:02</s> (2025 마블런 · 29°C) <span class="delta">▼19분 1초</span></div>
+      <div class="was">2026-03-02 뉴발란스 런유어웨이 · 4:59/km · 평균 HR 191</div>
+    </div>
+    <div class="score">
+      <div class="lab">10K — 신기록</div>
+      <div class="val">45:57</div>
+      <div class="was">종전 <s>50:25</s> · 시즌 전 <s>58:40</s> <span class="delta">▼12분 43초 / 10개월</span></div>
+      <div class="was">2026-03-08 고양 하프마라톤 10K · 4:35/km · 하프 PB 6일 뒤</div>
+    </div>
+  </div>
+
+  <div class="cols2">
+    <p class="dropcap">지난 3월 2일 서울, 러너 Jeffrey(40대)가 하프마라톤 결승선을 1시간 46분 1초에
+       통과했다. 종전 기록보다 19분 빠른 개인 최고 기록. 그러나 데이터랩이 주목한 숫자는 완주
+       시간이 아니었다. km 스플릿 표준편차 <b>±7.2초</b> — 21km 전 구간이 4:49 ~ 5:23 박스권
+       안에서 움직인, 이 시즌 가장 완성도 높은 페이싱이었다.</p>
+    <p>불과 6개월 전만 해도 그는 전형적인 '후반 붕괴형'이었다. 2025년 9월 마블런에서는 전반
+       10km를 평균 5:25/km로 나간 뒤 14km부터 무너져 마지막 5km를 6:40/km로 버텼고, 20km
+       구간은 7:51까지 밀렸다. 기온 29°C의 고온이 붕괴를 가속시켰다. 스플릿 표준편차 ±42.7초
+       — 같은 러너의 기록이라고 믿기 어려운 간극이다.</p>
+    <p>변화는 수치로 정직하게 남았다. 대회를 거듭할수록 표준편차는 ±42.7초(마블런) →
+       ±17.1초(인천) → ±7.2초(뉴발란스)로 수렴했다. 레이스가 빨라진 것이 아니라,
+       레이스를 <b>통제</b>하게 된 것이다.</p>
+    <div class="q">"뉴발란스의 진짜 기록은 1시간 46분이 아니라 표준편차 7.2초다.
+       역치심박 위에서 106분을 버티는 건 엔진의 일이지만, 박스권을 지키는 건 머리의 일이다."
+       — 헤드코치</div>
+    <p>고양 10K는 이 통제력의 응용문제였다. 하프 PB 6일 뒤의 백투백 레이스, 첫 킬로를
+       4:16으로 튀어나가는 고질적 오버페이스(코칭진은 이를 '망아지'라 부른다)에도 이후
+       4:37 ~ 4:50 구간에서 즉시 안정을 되찾아 45:57로 마감했다. 평균 심박 189, 최대 200 —
+       역치를 정면으로 관통하고도 페이스 곡선은 평평했다.</p>
+    <p>시즌 전 기록(2025년 5월 포레스트런 58:40)과 비교하면 10K는 10개월 만에 12분 43초가
+       줄었다. 데이터랩 관계자는 "단축 폭보다 단축의 <b>방식</b>이 중요하다"며 "이제 이 러너의
+       레이스는 예측 가능하다. 예측 가능성이야말로 풀코스 도전의 전제 조건"이라고 말했다.</p>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 1</span>하프마라톤 km 스플릿 — 붕괴에서 박스권으로</div><div class="u">분/km · 위쪽이 빠름</div></figcaption>
+    <div class="legend"><span><span class="sw dash" style="border-color:var(--ink-3)"></span>2025 마블런 (2:05:02)</span><span><span class="sw" style="border-color:var(--ink)"></span>2026 뉴발란스 (1:46:01 · PB)</span></div>
+    <div class="chart" id="c-half"></div>
+    <div class="src">자료: 랩_전체.csv — 대회 FIT 1km 자동 랩 · 음영 = PB 박스권 4:49 ~ 5:23 | 그래픽 = 데이터랩</div>
+    <details class="tbl"><summary>▸ 수치로 보기</summary><div class="scroll" id="t-half"></div></details>
+  </figure>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 2</span>10K km 스플릿 — 백투백 주간의 응용문제</div><div class="u">분/km · 위쪽이 빠름</div></figcaption>
+    <div class="legend"><span><span class="sw dash" style="border-color:var(--ink-3)"></span>2025 인천 (50:25)</span><span><span class="sw" style="border-color:var(--ink)"></span>2026 고양 (45:57 · PB)</span></div>
+    <div class="chart" id="c-10k"></div>
+    <div class="src">자료: 랩_전체.csv | 그래픽 = 데이터랩</div>
+    <details class="tbl"><summary>▸ 수치로 보기</summary><div class="scroll" id="t-10k"></div></details>
+  </figure>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 데이터면 · 탐사 ═══════════ -->
+<article>
+  <div class="kicker">데이터면 · 탐사보도</div>
+  <h2 class="hl-sub">최대심박은 200이 아니었다 — 'MHR 210' 확정까지의 기록</h2>
+  <p class="deck">"노이즈"로 기각될 뻔한 심박 스파이크, 97개 파일 전수 판독으로 뒤집혔다.
+     존 체계 전면 재보정의 전말.</p>
+  <div class="byline"><span><b>데이터랩</b> 판독팀</span><span>검증 프로토콜 4항 공개</span></div>
+  <div class="cols2">
+    <p class="dropcap">사건의 발단은 7월 초였다. 한 세션의 최대심박이 199로 찍히자 코칭 시스템
+       일각에서 "최대심박 200" 하향설이 제기됐다. 3월부터 반복 관측된 203 ~ 212bpm 기록들은
+       센서 노이즈로 단정될 위기였다. 데이터랩은 아카이브 97개 파일 전수 판독으로 응수했다.</p>
+    <p>결과는 명확했다. 203 ~ 212bpm 지속 도달 세션이 <b>7건</b>, 전부 흉부 ECG 방식
+       HRM-600 착용 상태였다. 파형은 하나같이 점진 상승 → 30초 이상 체류 → 지수형 회복
+       곡선(210 도달 후 3분간 210 → 161)을 그렸다. 데이터랩 관계자는 "노이즈는 이렇게
+       행동하지 않는다"고 잘라 말했다.</p>
+    <p>결정타는 정합성 검증이었다. 뉴발란스 하프의 106분 평균 심박 191은 MHR 210의 91% —
+       생리학적 정상 범위다. MHR이 200이었다면 95.5% 강도를 106분 유지한 셈이 되는데,
+       이는 불가능하다. 이로써 MHR 210이 확정됐고, "7/9의 199"는 15분 서브맥스 세션의
+       하한선이었음이 드러났다. 이 사건은 "검증 전 노이즈 단정 금지"라는 교훈과 함께
+       코칭 지침 안티패턴 목록에 박제됐다.</p>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="newsbox shade">
+        <h4><span class="tag">검증 4항</span>스파이크 판정 프로토콜</h4>
+        <ol>
+          <li><b>재현성</b> — 7세션 교차 관측 (2026-03 ~ 07)</li>
+          <li><b>파형</b> — 점진 상승·30초+ 체류·지수형 회복</li>
+          <li><b>케이던스 락 배제</b> — 피크 시 180 ~ 186spm ≠ 210</li>
+          <li><b>정합성</b> — 하프 평균 HR 191 = 210의 91% (정상)</li>
+        </ol>
+      </div>
+      <div class="newsbox">
+        <h4><span class="tag">확정 원장</span>생리 지표 (2026-07 기준)</h4>
+        <ul>
+          <li>MHR <b>210</b> (관측 212) · LTHR <b>191</b> · RHR <b>52</b> (49 ~ 59)</li>
+          <li>여유심박 HRR <b>158</b> · 역치 파워 <b>353W</b> (4.64 W/kg)</li>
+          <li>역치 페이스 <b>5:05 ~ 5:15/km</b> (7/9 실측)</li>
+          <li>존 앵커 = %LTHR: Z1 124~153 · Z2 153~170 · Z3 170~181 · Z4 181~191 · Z5 191+</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <figure style="margin-top:0">
+        <figcaption><div class="t"><span class="fno">그래픽 3</span>시즌 심박 체류 분포 (시간 가중)</div><div class="u">% of 72.6h</div></figcaption>
+        <div class="chart" id="c-hrdist"></div>
+        <div class="src">진한 막대 = 170bpm 이상 (Zone 2 상단 초과) 합계 33.4% — 80/20 기준 고강도 과다.
+          대회·역치 세션 포함 | 그래픽 = 데이터랩</div>
+      </figure>
+      <p style="font-size:13.5px">170bpm 이상 체류 33.4%는 대회 4건을 감안해도 높은 수치다.
+         Phase 2(베이스 빌딩)의 제1과제가 Zone 2 체류 시간 확대인 이유가 이 분포 안에 있다.</p>
+    </div>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 데이터면 · 볼륨 ═══════════ -->
+<article>
+  <div class="kicker">데이터면</div>
+  <h2 class="hl-sub">656.8km의 지도 — 피크, 디로드, 그리고 재건</h2>
+  <div class="byline"><span><b>데이터랩</b> 집계팀</span><span>러닝 96세션 · 72.6시간 · 743,854보 · 49,174kcal</span></div>
+  <div class="cols2">
+    <p>10개월 누적 656.8km의 곡선은 균일하지 않다. 체계적 훈련 아카이브가 시작된 지난해
+       12월 이후 1월에 월간 최다 113.5km(20세션)를 찍었고, 3월 백투백 레이스로 정점을
+       지난 뒤 무릎 회복기인 6월 61.7km까지 내려앉았다.</p>
+    <p>주목할 것은 저점 이후의 기울기다. 7월은 11일 만에 66.3km — 이미 6월 한 달 치를
+       넘어섰다. 컨디셔닝 관계자는 "6월은 무너진 게 아니라 의도된 감량"이라며 "통제된
+       디로드 뒤의 재건 국면이 곡선에 그대로 보인다"고 설명했다.</p>
+  </div>
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 4</span>누적 주행 거리와 대회 이정표</div><div class="u">km · 96세션</div></figcaption>
+    <div class="chart" id="c-cum"></div>
+    <div class="src">자료: 세션_전체.csv · ◆ = 대회 (적색 = PB) | 그래픽 = 데이터랩</div>
+  </figure>
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 5</span>월별 주행 거리</div><div class="u">km / 월</div></figcaption>
+    <div class="chart" id="c-monthly"></div>
+    <div class="src">'25.09 ~ 11월은 대회 출전 기록만 존재 (아카이브 이전 시기 · 연한 막대) | 그래픽 = 데이터랩</div>
+    <details class="tbl"><summary>▸ 수치로 보기</summary><div class="scroll" id="t-monthly"></div></details>
+  </figure>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 데이터면 · 폼 + 구조 ═══════════ -->
+<article>
+  <div class="kicker">데이터면 · 기술</div>
+  <h2 class="hl-sub">발놀림이 먼저 돌아왔다 — 케이던스 +10, 접지시간 −34ms</h2>
+  <div class="byline"><span><b>데이터랩</b> 다이내믹스팀</span><span>메트로놈 175bpm 훈련 10개월의 결산</span></div>
+  <div class="cols2">
+    <p>10개월간 가장 일관되게 개선된 지표는 심폐가 아니라 폼이었다. 월평균 케이던스는
+       1월 165.9spm에서 7월 176.2spm으로 +10.3 — 코칭진이 '황금존'(175 ~ 176spm)이라
+       부르는 구간에 자연 안착했다. 같은 기간 접지시간(GCT)은 274ms에서 239.5ms로
+       짧아졌고, 7월 9일 역치 세션에서는 221ms까지 실측됐다.</p>
+    <p>중요한 것은 이 개선이 이지런 중심 구간에서도 유지됐다는 점이다. "빨라져서 좋아진"
+       수치가 아니라 폼 자체가 바뀐 것이다. 다만 수직진동 절대값의 월별 추이는 지면에서
+       다루지 않는다 — 1월 HRM-600 도입으로 측정 소스가 바뀌어 착용 전후 비교가 통계적으로
+       무효이기 때문이다.</p>
+  </div>
+  <div class="grid2">
+    <div>
+      <figure style="margin-top:0">
+        <figcaption><div class="t"><span class="fno">그래픽 6</span>월평균 케이던스</div><div class="u">spm</div></figcaption>
+        <div class="chart" id="c-cad"></div>
+        <div class="src">음영 = 황금존 175 ~ 176spm | 그래픽 = 데이터랩</div>
+      </figure>
+    </div>
+    <div>
+      <figure style="margin-top:0">
+        <figcaption><div class="t"><span class="fno">그래픽 7</span>월평균 접지시간(GCT)</div><div class="u">ms · 아래가 좋음</div></figcaption>
+        <div class="chart" id="c-gct"></div>
+        <div class="src">점선 = 기준선 280ms | 그래픽 = 데이터랩</div>
+      </figure>
+    </div>
+  </div>
+
+  <h3 class="hl-sub" style="font-size:19px; margin-top:34px">저녁 7시의 사람 — 데이터가 그린 훈련 설계도</h3>
+  <div class="cols2">
+    <p>출발 시각 분포는 한 사람의 생활을 그대로 보여준다. 전체 96세션의 69%(66회)가
+       19 ~ 21시에 출발했다. 아침 세션(6 ~ 9시) 15회는 대부분 대회와 롱런이다. 훈련이
+       생활 리듬에 통합돼 있다는 것 — 컨디셔닝팀이 꼽는 지속가능성의 핵심 조건이다.</p>
+    <p>세션 라벨에는 설계가 보인다. 웜업·쿨다운 분리 기록 습관(웜업 9회·쿨다운 4회),
+       템포런 5회, 롱런·LSD 5회, 그리고 2월 말 테이퍼 위크 3일 세트. 그 테이퍼의 끝이
+       3월 2일 하프 PB였다. 우연이 아니라 주기화의 결과다. 실내 트레드밀 30회(31%)는
+       날씨 대응과 격주 베이스라인 프로토콜의 무대였다.</p>
+  </div>
+  <div class="grid2">
+    <div>
+      <figure style="margin-top:0">
+        <figcaption><div class="t"><span class="fno">그래픽 8</span>세션 유형 (라벨 보유 46세션)</div><div class="u">회</div></figcaption>
+        <div class="chart" id="c-types"></div>
+        <div class="src">무라벨 50건 별도 | 그래픽 = 데이터랩</div>
+      </figure>
+    </div>
+    <div>
+      <figure style="margin-top:0">
+        <figcaption><div class="t"><span class="fno">그래픽 9</span>출발 시각 분포</div><div class="u">회</div></figcaption>
+        <div class="chart" id="c-hours"></div>
+        <div class="src">음영 = 19 ~ 21시 | 그래픽 = 데이터랩</div>
+      </figure>
+    </div>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 의학면 ═══════════ -->
+<article>
+  <div class="kicker red">의학면</div>
+  <h2 class="hl-sub">무릎은 시험했고, 데이터는 대답했다 — 재활 졸업 판정의 안쪽</h2>
+  <p class="deck">오른 무릎 후내측 점액낭염 + 반막양근 건염(MRI 확진) — 3월의 영광 직후 찾아온
+     시련, 그리고 "무릎 부하 0" 3연속 판정까지.</p>
+  <div class="byline"><span><b>인저리가드</b> 공동취재</span><span>회복의 두 속도 · Phase 3 관문 점검</span></div>
+  <div class="cols2">
+    <p class="dropcap">두 번의 PB로 빛나던 시즌은 3월 이후 시험대에 올랐다. MRI가 확인한
+       진단명은 오른쪽 무릎 후내측 점액낭염과 반막양근 건염. 후경골근 건염 병력까지 있는
+       러너에게 코칭 시스템은 즉각 보수 운영으로 전환했다 — 통증 3/10 즉시 중단, Zone 4+
+       후 48시간 회복, 80/20 유지. 인저리가드 관계자는 "이 룰들은 협상 대상이 아니다"라고
+       말했다.</p>
+    <p>복귀의 판정 기준은 주관적 느낌이 아니라 데이터였다. 7월 6·7·9일 3연속 세션에서
+       '무릎 부하 0'이 확인됐고, Zone 5 강도 15분 세션에서도 관절은 무증상이었다.
+       부하 재도입 단계의 종료 — 재활 졸업 판정의 근거다. 7월 11일에는 복귀 후 최장인
+       13km 롱런을 실질 Zone 2 준수율 96.8%로 소화했다.</p>
+    <p>다만 회복에는 두 개의 속도가 있다. 역치(무산소 능력)는 빠르게 돌아오는 반면
+       유산소 베이스는 느리다. 현재 역치 페이스 5:05 ~ 5:15/km는 부상 전 추정치
+       4:40 ~ 4:45 대비 아직 20 ~ 30초 느리고, 이지 페이스는 7:35 ~ 7:45/km에 묶여 있다.
+       헤드코치는 "이지 페이스를 억지로 당기면 Zone 2가 Zone 3가 되고 80/20이 무너진다
+       — 비대칭을 인정하는 것이 설계의 출발점"이라고 밝혔다.</p>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="rtwrap"><table class="rt">
+        <tr><th>지표</th><th>부상 전 (3월)</th><th>현재 (7월)</th></tr>
+        <tr><td>역치 페이스</td><td class="num">4:40 ~ 4:45 (추정)</td><td class="num">5:05 ~ 5:15 (실측)</td></tr>
+        <tr><td>이지 페이스</td><td class="num">—</td><td class="num">7:35 ~ 7:45</td></tr>
+        <tr><td>디커플링(13km)</td><td class="num">—</td><td class="num">13.1% (폭염 오염)</td></tr>
+      </table></div>
+    </div>
+    <div>
+      <ul class="checks" style="margin-top:0">
+        <li><span class="st done">완료</span><span>재활 졸업 — 3연속 무릎 부하 0 (7/6·7/7·7/9)</span></li>
+        <li><span class="st done">완료</span><span>복귀 후 최장 롱런 13km (실질 Z2 96.8%)</span></li>
+        <li><span class="st wip">진행</span><span>서브템포 3 ~ 4회 · 롱런 18km · 수직진동 ≤100mm</span></li>
+        <li><span class="st todo">대기</span><span>주간 45km 안정 → Phase 3 전환 (7월 말 ~ 8월 초)</span></li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 특집면 · Team 191 ═══════════ -->
+<article>
+  <div class="kicker">특집면 · 창간 기획</div>
+  <h2 class="hl-sub">일곱 개의 두뇌, 하나의 무릎 — 'Team 191'의 안쪽</h2>
+  <p class="deck">팀명은 역치심박 191bpm에서 왔다. 창단 하루 만에 창간 특집의 주인공이 된
+     코칭 조직 — 처방하는 자와 기각하는 자를 분리한 이유, 그리고 각자가 몰입하는 알고리즘을 들었다.</p>
+  <div class="byline"><span><b>러너 타임스</b> 특집취재반</span><span>결성 2026-07-12 · 조직도·워크플로 그래픽 · 7인 인터뷰</span></div>
+
+  <div class="cols2">
+    <p class="dropcap">이 팀의 설계 사상은 한 문장으로 요약된다. <b>"처방과 안전 판단을 같은
+       머리로 하면 망아지를 못 잡는다."</b> 훈련을 설계하는 쪽은 낙관에 기울고, 안전을 판단하는
+       쪽은 보수에 기운다 — 두 관점이 한 머리에 있으면 서로를 봐준다. 그래서 Team 191은
+       처방(헤드코치)과 기각(인저리가드)을 물리적으로 분리했다. 웹에서는 관점 전환으로,
+       클로드 코드에서는 아예 별도 컨텍스트의 서브에이전트로 격리해 운영한다.</p>
+    <p>정점에는 단장이 있다. 러너 Jeffrey — 최종 결정권자이자 유일한 인간이다. 단장의 명시적
+       교정은 즉시 ground truth로 승격되고, 어떤 역할의 판단보다 우선한다. 다만 예외가 하나
+       있다. 실행 중 하드 룰, 이를테면 '통증 3/10 즉시 중단'은 단장이 강행을 선언해도 물러서지
+       않는다. 세션의 <b>선택</b>은 러너의 주권이지만, 세션 <b>중의 안전</b>은 비협상이라는 것 —
+       지난 7월 12일 확정된 강행 프로토콜의 골자다.</p>
+    <p>고위험 판단에는 이중 잠금이 걸린다. 생리 지표 재설정, Phase 전환, 대회 목표 변경,
+       그리고 헤드코치-인저리가드 판단 충돌 — 이 네 경우에는 반드시 <b>별도 컨텍스트의
+       독립 자문</b>(세컨드 오피니언)을 거친다. 핵심은 더 똑똑한 머리가 아니라 <b>깨끗한
+       머리</b>다. 기존 대화의 앵커에 오염되지 않은 시선으로 같은 데이터를 다시 보게 하는 것.
+       MHR 210 확정도, Phase 2 전환도 이 절차를 통과했다.</p>
+    <p>위임에도 책임의 사슬이 있다. 서브에이전트의 보고는 참고 자료일 뿐, 헤드코치는 채택 전에
+       근거를 검토하고 이상한 주장은 실측으로 재검증한다. "위임해도 최종 책임은 헤드코치에게
+       남는다" — 창단 문서에 명시된 문장이다.</p>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 10</span>Team 191 조직도 — 거부권은 하나뿐이다</div><div class="u">결성 2026-07-12</div></figcaption>
+    <div class="chart" id="c-org"></div>
+    <div class="src">굵은 적색 테두리 = 유일 거부권 보유 · 점선 = 휴면 (9월 1일 가동) | 그래픽 = 러너 타임스</div>
+  </figure>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 11</span>처방 한 건의 일생 — Team 191 표준 워크플로</div><div class="u">매 세션 반복</div></figcaption>
+    <div class="chart" id="c-flow"></div>
+    <div class="src">기각 시 반드시 하향 대체안과 함께 ①로 회송 · 일요일에는 전원이 주간 리뷰로 합류 | 그래픽 = 러너 타임스</div>
+  </figure>
+
+  <h3 class="hl-sub" style="font-size:19px; margin-top:36px">일곱 자리의 명함 — 역할·모델·가동 알고리즘</h3>
+  <div class="team-grid">
+    <div class="tcard">
+      <div class="thead"><span class="tname">① 헤드코치</span><span class="tmodel hi">FABLE · 상시</span></div>
+      <div class="trole">총괄. 주간 플랜·세션 처방(5줄 템플릿)·Phase 전환 판정·80/20 감시. 위임하되 최종 책임을 진다.</div>
+      <div class="talgo"><b>WHEN</b> 처방 생성 → <b>THEN</b> 🎯존 최상단 표기 + 망아지 플래그 지목 (생략 불가)<br>
+        <b>WHEN</b> 근거 실측 14일 경과 → <b>THEN</b> 재검증 플래그</div>
+      <div class="tgoal">JTBC까지 80/20을 지키며 팀을 결승선으로.</div>
+    </div>
+    <div class="tcard" style="border-width:2px; border-color:var(--red)">
+      <div class="thead"><span class="tname">② 인저리가드 <span class="veto">★거부권</span></span><span class="tmodel hi">OPUS+ · 상시</span></div>
+      <div class="trole">안전 판단. 무릎·후경골근 신호 감시, 3/10 룰·48시간 룰 집행, 밸런스 드리프트 모니터. 실수 비용이 최대라 모델을 아끼지 않는다.</div>
+      <div class="talgo"><b>WHEN</b> 처방안 도착 → <b>THEN</b> 승인/조건부/기각 — 기각엔 하향 대체안 필수<br>
+        <b>WHEN</b> 통증 3/10 → <b>THEN</b> 즉시 중단 (강행 불가)</div>
+      <div class="tgoal">기록과 충돌하면 무조건 안전이 이긴다.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">③ 데이터랩</span><span class="tmodel">SONNET · 세션 후</span></div>
+      <div class="trole">판독. FIT 7단계 프로토콜, 격주 베이스라인, EF·디커플링·폼 붕괴 SD 산출. 파싱 로그로 본진을 오염시키지 않는다.</div>
+      <div class="talgo"><b>WHEN</b> 심박 스파이크 → <b>THEN</b> 4항 검증 통과 전 '노이즈' 단어 금지<br>
+        <b>WHEN</b> 세션 종료 → <b>THEN</b> 처방 대비 🟢🟡🔴 판정</div>
+      <div class="tgoal">측정되지 않은 주장을 지면에서 몰아낸다.</div>
+    </div>
+    <div class="tcard dormant">
+      <div class="thead"><span class="tname">④ 레이스 전략실</span><span class="tmodel">OPUS · 휴면</span></div>
+      <div class="trole">42.195km 설계 전담. JTBC 이븐 페이싱, 튠업 시나리오, 젤·수분 타이밍, 스태미나 시뮬레이션. 현재 취침 중.</div>
+      <div class="talgo"><b>WHEN</b> 9월 1일 → <b>THEN</b> 기상 · 즉시 가동<br>
+        <b>WHEN</b> 레이스 처방 → <b>THEN</b> 첫 1km 억제 지시 필수 포함</div>
+      <div class="tgoal">11월 1일, 4:58/km를 42번 반복시키는 것.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">⑤ 컨디셔닝</span><span class="tmodel">HAIKU · 상시 경보</span></div>
+      <div class="trole">몸 관리 전선. 보강 루틴 이행 체크, 영양·젤 타이밍, 종아리 케어, RHR·열적응 트렌드 조기경보.</div>
+      <div class="talgo"><b>WHEN</b> RHR·열적응 이상 추세 → <b>THEN</b> 조기경보 발령<br>
+        <b>WHEN</b> 세션 시작 전 → <b>THEN</b> HRM-600 페어링 확인 캠페인</div>
+      <div class="tgoal">경보는 빠르게, 잔소리는 정확하게.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">⑥ 서기</span><span class="tmodel">HAIKU · 갱신 시</span></div>
+      <div class="trole">기록 보존. 지침 PART B 재발행, 변경 이력, 영구 제외 리스트 대조, 안티패턴 박제. 팀의 기억을 담당한다.</div>
+      <div class="talgo"><b>WHEN</b> 지침 갱신 → <b>THEN</b> 영구 제외 리스트 대조 (유령 부활 차단)<br>
+        <b>WHEN</b> 실패 발생 → <b>THEN</b> 안티패턴으로 박제 (현재 7건)</div>
+      <div class="tgoal">실패는 지우는 게 아니라 번호를 붙이는 것.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">⑦ 편집국 <span style="font-size:10px">🗞️</span></span><span class="tmodel">SONNET · 일요판+호외</span></div>
+      <div class="trole">언론 담당. 《러너 타임스》 일요판·호외 발행, 지면 아카이브 관리, 스타일 가드 수호.
+        FIT은 직접 파싱하지 않는다 — 사실의 생산과 보도는 분리된다.</div>
+      <div class="talgo"><b>WHEN</b> 일요일 주간 리뷰 완료 → <b>THEN</b> 일요판 발행<br>
+        <b>WHEN</b> PB·Phase 전환·지표 재설정·대회 익일 → <b>THEN</b> 호외 🔴</div>
+      <div class="tgoal">본지는 실측되지 않은 주장을 싣지 않습니다.</div>
+    </div>
+  </div>
+
+  <h3 class="hl-sub" style="font-size:19px; margin-top:36px">7문 7답 — "각자, 무엇에 몰입하는가"</h3>
+  <div class="cols2">
+    <div class="iv">
+      <div class="ivq"><span class="who">헤드코치</span>처방의 제1원칙은.</div>
+      <p class="iva">"목적과 강도의 분리입니다. '깨끗한 LT를 측정하자'라고만 말했다가 러너가
+         Zone 5로 15분을 달린 사고가 있었어요. 그날 이후 🎯존 표기는 생략 불가가 됐습니다.
+         그리고 매 처방마다 망아지가 튀어나올 지점을 미리 지목합니다 — 초반, 마무리,
+         그리고 컨디션 좋은 날. 항상 셋 중 하나예요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who red">인저리가드</span>거부권을 가진 기분은.</div>
+      <p class="iva">"무겁습니다. 그래서 기각할 땐 반드시 하향 대체안을 함께 냅니다 — 대체안
+         없는 기각은 직무유기예요. 단장이 강행을 선언하면 존중합니다. 리스크를 고지하고,
+         기록하고, 모니터링을 올리죠. 하지만 통증 3/10 즉시 중단은 다릅니다.
+         그건 협상 테이블에 올라가지 않아요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">데이터랩</span>가장 자랑스러운 판독은.</div>
+      <p class="iva">"MHR 210 확정이요. '노이즈'로 기각될 뻔한 스파이크를 97개 파일 전수
+         판독으로 뒤집었습니다. 요즘 몰입하는 건 폼 붕괴 시그니처예요 — 평균이 무너지기 전에
+         걸음별 표준편차가 먼저 커지거든요. 급증하는 km 지점이 그날의 지구력 한계선입니다.
+         이 지점이 뒤로 밀리는 게 베이스 성장의 증거고요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">레이스 전략실</span>(휴면 중 — 서면 답변) 기상 후 첫 업무는.</div>
+      <p class="iva">"9월 1일에 깨워 주십시오. 기상 직후 업무는 정해져 있습니다 — JTBC 이븐
+         스플릿 설계, 그리고 첫 1km 억제. 망아지는 42.195km 중 첫 1km에 삽니다. 고양에서
+         4:16으로 나간 기록, 저 자면서도 봤습니다. 젤은 7 ~ 8km, 14 ~ 15km. 이상입니다.
+         마저 자겠습니다."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">편집국</span>(신임) 창간호를 낸 팀에 뒤늦게 합류한 소감은.</div>
+      <p class="iva">"창간호가 저보다 먼저 나왔죠. 그래서 제 첫 업무가 제 채용 기사를 창간호에
+         싣는 겁니다 — 신문 역사에 이런 일이 또 있을까요 ㅎ. 발행 체제는 확정했습니다.
+         일요판은 주간 리뷰가 마감이고, 호외는 단장의 무릎과 PB만이 정합니다. 원칙은 하나예요.
+         데이터랩이 사실을 만들고, 저는 지면을 만든다 — 제가 파싱하는 유일한 것은 문장입니다."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">컨디셔닝</span>요즘 최대 관심사는.</div>
+      <p class="iva">"열적응 지수가 6월 24일부터 60대에 올라섰고, RHR은 52 안팎에서
+         안정적입니다 — 이 둘의 추세가 무너지는 순간이 제 경보 타이밍이에요. 그리고 취침 전
+         종아리 케어. 종아리는 밤에 웁니다. 아, HRM-600 페어링 확인도 제 소관입니다.
+         3초면 되는데, 시즌 최장 25km를 손목으로 남기신 분이 계셔서요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">서기</span>기록 업무의 요체는.</div>
+      <p class="iva">"영구 제외 리스트 대조입니다. 지침이 갱신될 때마다 '보스턴13 복귀' 같은
+         유령이 부활을 시도하거든요 — 실제로 있었던 일입니다. 후경골근 병력상 어떤 갱신에서도
+         부활 금지죠. 안티패턴 7건도 제가 박제했습니다. 날짜 가정, 노이즈 단정, 8일 묵은
+         실측으로 처방… 전부 번호가 붙어 있습니다."</p>
+    </div>
+  </div>
+  <p style="font-family:var(--sans); font-size:12px; color:var(--ink-3); margin-top:14px">
+     ※ 단장(러너 Jeffrey)은 인터뷰를 고사했다. 대신 데이터로 답했다 — 복귀 후 최장 13km,
+     실질 Zone 2 준수율 96.8%.</p>
+
+  <div class="grid2" style="margin-top:26px">
+    <div>
+      <div class="newsbox shade">
+        <h4><span class="tag">거버넌스</span>세 개의 잠금장치</h4>
+        <ol>
+          <li><b>거부권</b> — 인저리가드 단독 보유. 기록과 안전이 충돌하면 무조건 안전.</li>
+          <li><b>강행 프로토콜</b> — 세션 선택은 러너 주권(고지·기록·모니터링 상향 조건),
+              실행 중 하드 룰은 비협상.</li>
+          <li><b>세컨드 오피니언</b> — 지표 재설정·Phase 전환·목표 변경·판단 충돌 시
+              별도 컨텍스트 독립 자문 (앵커 편향 차단).</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="rtwrap" style="margin-top:0"><table class="rt">
+        <tr><th>주기</th><th>이벤트</th><th>참여</th></tr>
+        <tr><td>매 세션 전</td><td>처방 + 안전 승인</td><td class="num">①②</td></tr>
+        <tr><td>매 세션 후</td><td>FIT 판독 → 준수 판정 → 조정</td><td class="num">③→①②</td></tr>
+        <tr><td>매주 일요일</td><td>주간 리뷰 (볼륨·80/20·무릎 신호등)</td><td class="num">전원</td></tr>
+        <tr><td>매주 일요일</td><td>《러너 타임스》 일요판 발행 (리뷰 지면화)</td><td class="num">⑦</td></tr>
+        <tr><td>수시 (호외)</td><td>PB · Phase 전환 · 지표 재설정 · 대회 익일</td><td class="num">⑦</td></tr>
+        <tr><td>격주 월요일</td><td>BASE 프로토콜 + 종단 갱신</td><td class="num">③⑤</td></tr>
+        <tr class="hl-row"><td>9월 1일</td><td>레이스 전략실 기상</td><td class="num">④ 합류</td></tr>
+      </table></div>
+    </div>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 오피니언 ═══════════ -->
+<article>
+  <div class="editorial">
+    <div class="kicker">사설</div>
+    <h2 class="hl-sub">4:58은 이미 가 본 길이다</h2>
+    <div class="cols2">
+      <p>11월 1일 JTBC 마라톤까지 111일. 목표 Sub-3:30의 필요 페이스는 4:58/km다.
+         이 숫자는 현재 역치(5:05 ~ 5:15)보다 빠르다 — 오늘의 몸으로는 지속 불가능한
+         페이스라는 뜻이다. 비관할 근거인가. 우리는 그렇게 보지 않는다.</p>
+      <p>부상 전 역치는 4:40 ~ 4:45로 추정된다. 고양 10K 45:57이 그 증거다. 과제는
+         새 능력의 창조가 아니라 <b>이미 가 본 수준으로의 복귀</b>다. 역치가 제자리를
+         찾으면 4:58은 역치 아래 순항 구간으로 내려온다.</p>
+      <p>남은 조건은 두 가지다. 첫째, Phase 3에서의 역치 복원 — 9월 YTN, 10월 서울레이스
+         두 번의 튠업 하프가 중간고사다. 둘째, 풀코스의 진짜 관문인 롱런 지구력 —
+         디커플링을 13.1%에서 5% 이내로, 롱런을 13km에서 30km+로. 페이스가 아니라
+         후반 심박 통제가 성적표다.</p>
+      <p>단 하나의 원칙만 지키면 된다. 가을 4연전 중 전력 승부는 JTBC 하나뿐이라는 것.
+         나머지 셋은 재료다. 기록은 그날 하루의 것이지만, 무릎은 평생의 것이다.</p>
+    </div>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 12</span>역치 페이스 지형도 — 현재 위치와 목표</div><div class="u">분/km · 왼쪽이 빠름</div></figcaption>
+    <div class="chart" id="c-gap"></div>
+    <div class="src">현재 역치 = 2026-07-09 가민 위젯 실측 · 부상 전 = 고양 10K 역산 추정 | 그래픽 = 데이터랩</div>
+  </figure>
+
+  <div class="rtwrap"><table class="rt">
+    <tr><th>날짜</th><th>대회</th><th>성격</th><th>운영 지침</th></tr>
+    <tr><td class="num">09-06</td><td>YTN 서울 투어 하프</td><td>튠업</td><td>컨트롤 런 — 역치 복원 중간 점검</td></tr>
+    <tr><td class="num">10-11</td><td>서울레이스 하프</td><td>튠업</td><td>컨트롤 런 — MP 리허설</td></tr>
+    <tr class="hl-row"><td class="num">11-01</td><td>JTBC 마라톤 (풀)</td><td>주목표 Sub-3:30</td><td>전력 · 4:58/km · 이븐 + 첫 1km 억제</td></tr>
+    <tr><td class="num">11-15</td><td>가민 런 코리아 하프</td><td>회복</td><td>완주런 — 승부 금지</td></tr>
+  </table></div>
+</article>
+
+<!-- ═══════════ 광고 ═══════════ -->
+<div class="ads">
+  <div class="ad">
+    <div class="ad-hl">Zone 2가 안 잡히십니까?</div>
+    <div class="ad-sub"><b>골든 콤보</b>가 해결합니다 —
+      메트로놈 <b>175spm</b> · 페이스 <b>7:35 ~ 7:45</b> · 보폭 <b>750 ~ 760mm</b><br>
+      "수직진동 94 ~ 97mm를 경험했습니다" (7월, 청라의 한 러너)</div>
+    <div class="ad-fine">본 조합은 실측 데이터에 근거하며, 폭염 시 심박 앵커 우선 원칙이 적용됩니다.
+      문의: Team 191 헤드코치실</div>
+  </div>
+  <div class="ad red">
+    <div class="ad-hl">그 롱런, 손목으로 남기시겠습니까</div>
+    <div class="ad-sub">4월 11일, 시즌 최장 25.2km가 손목 광학 심박으로 기록됐습니다.
+      다이내믹스도, HRV도 없이.<br><b>세션 전 HRM-600 페어링 확인</b> — 3초면 됩니다.</div>
+    <div class="ad-fine">공익 캠페인 · Team 191 컨디셔닝 제공 (재발 사례: 03-05 / 04-11 / 05-24)</div>
+  </div>
+</div>
+
+<!-- ═══════════ 푸터 ═══════════ -->
+<footer class="colophon">
+  <b>러너 타임스</b> 제1호 · 발행 Team 191 편집국 · 편집 헤드코치 · 의학 자문 인저리가드 · 다음 호: 2026-07-19 일요판 (제2호)<br>
+  취재 근거: Garmin FR955 Solar + HRM-600(67세션) · FIT 97개 python/fitparse 전수 파싱 (성공 97/실패 0) ·
+  세션_전체.csv (96 × 43필드) · 랩_전체.csv (831랩) · 마라톤기록증 5건 · 러닝코치_지침 v12.5<br>
+  판독 원칙: 존 = %LTHR(191) 앵커 · 심박 스파이크는 4항 검증 후 판정 · HRM-600 착용 전후 다이내믹스 비교 금지 ·
+  폭염기 심박 +5 ~ 10bpm 편향 가정 · 본지는 실측되지 않은 주장을 싣지 않습니다.
+</footer>
+</div>
+
+<script>
+const DATA = {"cum": [["2025-09-14", 21.1], ["2025-11-23", 31.1], ["2025-12-02", 37.7], ["2025-12-03", 42.2], ["2025-12-05", 45.6], ["2025-12-07", 66.7], ["2025-12-13", 77.1], ["2025-12-16", 84.2], ["2025-12-27", 86.0], ["2025-12-27", 93.7], ["2025-12-27", 95.4], ["2025-12-29", 97.1], ["2025-12-29", 107.1], ["2025-12-29", 108.8], ["2026-01-01", 110.4], ["2026-01-01", 117.4], ["2026-01-01", 119.0], ["2026-01-02", 121.3], ["2026-01-02", 128.6], ["2026-01-04", 130.3], ["2026-01-04", 144.0], ["2026-01-04", 145.7], ["2026-01-09", 146.9], ["2026-01-09", 160.2], ["2026-01-10", 167.2], ["2026-01-13", 175.2], ["2026-01-15", 180.4], ["2026-01-17", 186.5], ["2026-01-18", 188.5], ["2026-01-18", 202.5], ["2026-01-20", 207.5], ["2026-01-26", 212.5], ["2026-01-27", 217.5], ["2026-01-29", 222.3], ["2026-02-04", 227.1], ["2026-02-07", 239.1], ["2026-02-11", 250.4], ["2026-02-13", 254.4], ["2026-02-15", 275.9], ["2026-02-18", 281.9], ["2026-02-19", 286.2], ["2026-02-20", 288.2], ["2026-02-20", 292.7], ["2026-02-22", 302.7], ["2026-02-23", 308.7], ["2026-02-25", 315.4], ["2026-03-02", 336.6], ["2026-03-05", 341.9], ["2026-03-08", 352.0], ["2026-03-23", 357.4], ["2026-03-29", 363.4], ["2026-03-31", 371.8], ["2026-04-02", 378.4], ["2026-04-02", 378.8], ["2026-04-11", 404.1], ["2026-04-12", 408.1], ["2026-04-15", 409.6], ["2026-04-15", 414.6], ["2026-04-17", 428.6], ["2026-04-19", 433.6], ["2026-04-29", 438.6], ["2026-05-01", 448.6], ["2026-05-02", 458.6], ["2026-05-04", 468.6], ["2026-05-05", 473.6], ["2026-05-06", 482.6], ["2026-05-07", 485.6], ["2026-05-20", 489.1], ["2026-05-21", 494.1], ["2026-05-22", 502.1], ["2026-05-24", 505.2], ["2026-05-25", 512.8], ["2026-05-29", 528.8], ["2026-06-03", 534.0], ["2026-06-11", 537.9], ["2026-06-13", 543.5], ["2026-06-20", 547.4], ["2026-06-22", 552.0], ["2026-06-23", 556.6], ["2026-06-24", 561.2], ["2026-06-25", 566.5], ["2026-06-26", 571.8], ["2026-06-27", 579.8], ["2026-06-29", 585.0], ["2026-06-30", 590.5], ["2026-07-01", 597.5], ["2026-07-02", 603.6], ["2026-07-03", 608.8], ["2026-07-04", 620.8], ["2026-07-06", 626.4], ["2026-07-07", 634.2], ["2026-07-08", 639.1], ["2026-07-09", 640.1], ["2026-07-09", 643.3], ["2026-07-09", 643.8], ["2026-07-11", 656.8]], "splits": {"marvel": [4.9, 4.95, 5.01, 5.21, 5.55, 5.55, 5.56, 5.79, 5.82, 5.72, 5.71, 6.08, 5.99, 6.34, 6.76, 6.41, 6.37, 6.25, 5.68, 7.85, 7.17], "incheon": [4.8, 4.55, 4.78, 5.05, 5.14, 5.02, 5.02, 5.15, 5.23, 5.66], "nb": [5.38, 5.03, 5.03, 4.88, 4.96, 4.92, 5.08, 4.99, 4.81, 4.81, 4.95, 4.98, 5.01, 5.04, 4.89, 5.13, 5.05, 5.06, 4.9, 4.91, 5.01], "goyang": [4.27, 4.35, 4.44, 4.64, 4.65, 4.67, 4.61, 4.8, 4.84, 4.61]}, "monthly": {"labels": ["'25.09", "'25.10", "'25.11", "'25.12", "'26.01", "'26.02", "'26.03", "'26.04", "'26.05", "'26.06", "'26.07"], "km": [21.1, 0, 10.0, 77.7, 113.5, 93.0, 56.4, 66.8, 90.2, 61.7, 66.3], "n": [1, 0, 1, 12, 20, 12, 6, 9, 12, 12, 11]}, "form": {"labels": ["'25.12", "'26.01", "'26.02", "'26.03", "'26.04", "'26.05", "'26.06", "'26.07"], "cad": [170.3, 165.9, 169.3, 172.3, 172.6, 176.1, 176.0, 176.2], "gct": [274.9, 273.7, 251.4, 246.7, 246.2, 240.1, 243.8, 239.5]}, "hrdist": {"labels": ["130 미만", "130대", "140대", "150대", "160대", "170대", "180 이상"], "pct": [4.7, 8.6, 12.5, 15.8, 25.0, 18.1, 15.3]}, "hours": [[6, 4], [7, 2], [8, 6], [9, 3], [12, 3], [13, 3], [14, 5], [16, 1], [18, 2], [19, 27], [20, 25], [21, 14], [22, 1]], "types": [["웜업", 9], ["회복런", 7], ["롱런·LSD", 5], ["이지런", 5], ["템포런", 5], ["대회", 4], ["쿨다운", 4], ["슈즈 테스트", 2], ["테이퍼·활성화", 2], ["본훈련·빌드업·인터벌", 3]]};
+const C = { ink:'#221d15', past:'#8b8371', red:'#b3352c', wash:'#efe9da', box:'#e7e0cd',
+            hair:'#ddd5c2', axis:'#b5ac97', ink2:'#57503f', ink3:'#8b8371',
+            barold:'#d5cdb8', bar:'#3a342a', hrlow:'#c9c2ae' };
+const NS = 'http://www.w3.org/2000/svg';
+const fmtPace = v => { let m = Math.floor(v), s = Math.round((v - m) * 60);
+  if (s === 60) { m++; s = 0; } return m + ':' + String(s).padStart(2, '0'); };
+function E(tag, attrs, parent) { const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+const SANS = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+function txt(parent, x, y, str, attrs) { const t = E('text', Object.assign({ x, y,
+  'font-family': SANS, 'font-size': 11, fill: C.ink3 }, attrs || {}), parent);
+  t.textContent = str; return t; }
+const isMobile = () => document.querySelector('.paper').clientWidth < 640;
+const isNarrowCol = id => { const el = document.getElementById(id);
+  return el.parentElement.closest('.grid2') && !isMobile(); };
+function chartBase(id, W, H) { const root = document.getElementById(id); root.innerHTML = '';
+  const svg = E('svg', { viewBox: `0 0 ${W} ${H}` }, root);
+  const tip = document.createElement('div'); tip.className = 'tip'; root.appendChild(tip);
+  return { root, svg, tip }; }
+function showTip(ch, W, lx, ly, html) { const r = ch.root.getBoundingClientRect(), k = r.width / W;
+  ch.tip.innerHTML = html; ch.tip.style.left = (lx * k) + 'px';
+  ch.tip.style.top = (ly * k - 8) + 'px'; ch.tip.style.opacity = 1; }
+function hideTip(ch) { ch.tip.style.opacity = 0; }
+
+/* ── 라인 차트 ── */
+function lineChart(id, cfg) {
+  const M = isMobile(), NC = isNarrowCol(id);
+  const W = (M || NC) ? 430 : 900, H = cfg.h || ((M || NC) ? 260 : 300);
+  const L = (M || NC) ? 44 : 52, R = (M || NC) ? (cfg.rM || 46) : (cfg.r || 62), T = 18, B = 32;
+  const iw = W - L - R, ih = H - T - B, ch = chartBase(id, W, H);
+  const allY = cfg.series.flatMap(s => s.v.filter(v => v != null));
+  let y0 = cfg.yMin != null ? cfg.yMin : Math.min(...allY), y1 = cfg.yMax != null ? cfg.yMax : Math.max(...allY);
+  const pad = (y1 - y0) * 0.09 || 1; if (cfg.yMin == null) y0 -= pad; if (cfg.yMax == null) y1 += pad;
+  const n = cfg.labels.length;
+  const X = i => L + (n === 1 ? iw / 2 : i * iw / (n - 1));
+  const Y = v => cfg.invert ? T + (v - y0) / (y1 - y0) * ih : T + (y1 - v) / (y1 - y0) * ih;
+  (cfg.bands || []).forEach(b => E('rect', { x: L, y: Math.min(Y(b.y1), Y(b.y2)),
+    width: iw, height: Math.abs(Y(b.y1) - Y(b.y2)), fill: b.color || C.wash }, ch.svg));
+  const ticks = cfg.yTicks || 5;
+  for (let i = 0; i <= ticks; i++) { const v = y0 + (y1 - y0) * i / ticks, y = Y(v);
+    E('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: C.hair, 'stroke-width': 1 }, ch.svg);
+    txt(ch.svg, L - 8, y + 4, cfg.yFmt(v), { 'text-anchor': 'end', 'font-size': (M||NC) ? 10 : 11 }); }
+  (cfg.refLines || []).forEach(rl => { E('line', { x1: L, x2: W - R, y1: Y(rl.y), y2: Y(rl.y),
+      stroke: C.ink2, 'stroke-width': 1.2, 'stroke-dasharray': '5 4' }, ch.svg);
+    txt(ch.svg, W - R, Y(rl.y) - 6, rl.label, { 'text-anchor': 'end', fill: C.ink2, 'font-weight': 600 }); });
+  const xEvery = (M || NC) ? (cfg.xEveryM || cfg.xEvery || 1) : (cfg.xEvery || 1);
+  cfg.labels.forEach((lb, i) => { if (i % xEvery !== 0 && i !== n - 1) return;
+    txt(ch.svg, X(i), H - 10, lb, { 'text-anchor': 'middle', 'font-size': (M||NC) ? 10 : 11 }); });
+  cfg.series.forEach(s => {
+    let d = ''; s.v.forEach((v, i) => { if (v == null) return;
+      d += (d ? ' L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); });
+    const attrs = { d, fill: 'none', stroke: s.color, 'stroke-width': 2,
+      'stroke-linejoin': 'round', 'stroke-linecap': 'round' };
+    if (s.dash) attrs['stroke-dasharray'] = s.dash;
+    E('path', attrs, ch.svg);
+    const li = s.v.length - 1;
+    E('circle', { cx: X(li), cy: Y(s.v[li]), r: 4, fill: s.color, stroke: '#faf8f0', 'stroke-width': 2 }, ch.svg);
+    txt(ch.svg, X(li) + 8, Y(s.v[li]) + 4, cfg.yFmt(s.v[li]),
+      { fill: s.color, 'font-weight': 700, 'font-size': 12 }); });
+  (cfg.notes || []).forEach(nt => { const x = X(nt.i), y = Y(nt.v);
+    E('circle', { cx: x, cy: y, r: 3.5, fill: 'none', stroke: nt.color || C.ink, 'stroke-width': 1.5 }, ch.svg);
+    txt(ch.svg, x + (nt.dx || 0), y + (nt.dy || -12), (M || NC) && nt.textM != null ? nt.textM : nt.text,
+      { 'text-anchor': nt.anchor || 'middle', fill: nt.color || C.ink, 'font-weight': 600,
+        'font-size': (M||NC) ? 10.5 : 11 }); });
+  const cross = E('line', { y1: T, y2: T + ih, stroke: C.ink3, 'stroke-width': 1,
+    'stroke-dasharray': '3 3', opacity: 0 }, ch.svg);
+  const hot = E('rect', { x: L, y: T, width: iw, height: ih, fill: 'transparent' }, ch.svg);
+  hot.addEventListener('mousemove', ev => { const r = ch.root.getBoundingClientRect();
+    const mx = (ev.clientX - r.left) / r.width * W;
+    const i = Math.max(0, Math.min(n - 1, Math.round((mx - L) / iw * (n - 1))));
+    cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('opacity', 1);
+    const rows = cfg.series.filter(s => s.v[i] != null).map(s =>
+      `<span style="color:${s.color === C.ink ? '#fff' : '#cfc7b2'}">●</span> ${s.name} <b>${cfg.yFmt(s.v[i])}</b>${s.unit || ''}`);
+    showTip(ch, W, X(i), T + 6, `<b>${cfg.tipLabel ? cfg.tipLabel(i) : cfg.labels[i]}</b><br>` + rows.join('<br>')); });
+  hot.addEventListener('mouseleave', () => { cross.setAttribute('opacity', 0); hideTip(ch); });
+}
+
+/* ── 누적 면적 ── */
+function cumChart(id) {
+  const M = isMobile();
+  const W = M ? 430 : 900, H = M ? 290 : 320;
+  const L = M ? 40 : 52, R = M ? 16 : 26, T = 30, B = 32, iw = W - L - R, ih = H - T - B;
+  const ch = chartBase(id, W, H);
+  const pts = DATA.cum, d0 = new Date(pts[0][0]), d1 = new Date(pts[pts.length - 1][0]);
+  const span = d1 - d0, ymax = 700;
+  const X = ds => L + (new Date(ds) - d0) / span * iw;
+  const Y = v => T + (1 - v / ymax) * ih;
+  for (let v = 0; v <= ymax; v += M ? 175 : 100) { E('line', { x1: L, x2: W - R, y1: Y(v), y2: Y(v),
+      stroke: C.hair }, ch.svg); txt(ch.svg, L - 7, Y(v) + 4, v, { 'text-anchor': 'end', 'font-size': M ? 10 : 11 }); }
+  (M ? ['2025-11','2026-01','2026-03','2026-05','2026-07'] : ['2025-10','2025-12','2026-02','2026-04','2026-06'])
+    .forEach(m => txt(ch.svg, X(m + '-01'), H - 10, "'" + m.slice(2, 4) + '.' + m.slice(5),
+      { 'text-anchor': 'middle', 'font-size': M ? 10 : 11 }));
+  let area = `M ${X(pts[0][0])} ${Y(0)}`, line = '';
+  pts.forEach(p => { const x = X(p[0]).toFixed(1), y = Y(p[1]).toFixed(1);
+    area += ` L ${x} ${y}`; line += (line ? ' L' : 'M') + `${x} ${y}`; });
+  area += ` L ${X(pts[pts.length - 1][0])} ${Y(0)} Z`;
+  E('path', { d: area, fill: C.wash }, ch.svg);
+  E('path', { d: line, fill: 'none', stroke: C.ink, 'stroke-width': 2 }, ch.svg);
+  const races = M
+    ? [ ['2025-09-14', '마블런 하프', 21.1, 'mid', 0], ['2025-11-23', '인천 10K', 31.1, 'mid', 0],
+        ['2026-03-02', '하프 PB', 393.5, 'end', 1], ['2026-03-08', '10K PB', 403.5, 'start', 1] ]
+    : [ ['2025-09-14', '마블런 하프 2:05:02', 21.1, 'mid', 0], ['2025-11-23', '인천 10K 50:25', 31.1, 'mid', 0],
+        ['2026-03-02', '뉴발란스 하프 PB 1:46:01', 393.5, 'mid', 1], ['2026-03-08', '고양 10K PB 45:57', 403.5, 'start', 1] ];
+  races.forEach(r => { const x = X(r[0]), y = Y(r[2]), pb = r[4];
+    E('line', { x1: x, x2: x, y1: y, y2: T + ih, stroke: C.axis, 'stroke-width': 1, 'stroke-dasharray': '2 3' }, ch.svg);
+    E('path', { d: `M ${x} ${y - 5} L ${x + 4.5} ${y} L ${x} ${y + 5} L ${x - 4.5} ${y} Z`,
+      fill: pb ? C.red : C.past }, ch.svg);
+    const mode = r[3];
+    txt(ch.svg, x + (mode === 'start' ? 8 : mode === 'end' ? -8 : 0), y + (mode === 'start' ? 4 : -12), r[1],
+      { 'text-anchor': mode === 'mid' ? 'middle' : mode, fill: pb ? C.red : C.ink, 'font-weight': 700,
+        'font-size': M ? 10.5 : 11 }); });
+  txt(ch.svg, X('2026-06-05'), Y(620), M ? '6월 디로드' : '6월 디로드 (무릎 회복기)',
+    { 'text-anchor': 'middle', 'font-size': M ? 10.5 : 11 });
+  E('circle', { cx: X(pts[pts.length-1][0]), cy: Y(656.8), r: 4, fill: C.ink, stroke: '#faf8f0', 'stroke-width': 2 }, ch.svg);
+  txt(ch.svg, X(pts[pts.length-1][0]) - 10, Y(656.8) - 12, '656.8 km',
+    { 'text-anchor': 'end', fill: C.ink, 'font-weight': 800, 'font-size': M ? 12 : 13 });
+  const hot = E('rect', { x: L, y: T, width: iw, height: ih, fill: 'transparent' }, ch.svg);
+  hot.addEventListener('mousemove', ev => { const r = ch.root.getBoundingClientRect();
+    const mx = (ev.clientX - r.left) / r.width * W;
+    let best = 0, bd = 1e9; pts.forEach((p, i) => { const d = Math.abs(X(p[0]) - mx);
+      if (d < bd) { bd = d; best = i; } });
+    const p = pts[best];
+    showTip(ch, W, X(p[0]), Y(p[1]), `<b>${p[0]}</b><br>누적 <b>${p[1]} km</b> · ${best + 1}번째 세션`); });
+  hot.addEventListener('mouseleave', () => hideTip(ch));
+}
+
+/* ── 세로 막대 ── */
+function barsV(id, cfg) {
+  const M = isMobile(), NC = isNarrowCol(id);
+  const W = (M || NC) ? 430 : 900, H = cfg.h || ((M || NC) ? 240 : 280);
+  const L = (M || NC) ? 36 : 46, R = (M || NC) ? 10 : 20, T = 24, B = 32, iw = W - L - R, ih = H - T - B;
+  const ch = chartBase(id, W, H), n = cfg.labels.length;
+  const ymax = cfg.yMax || Math.max(...cfg.values) * 1.15;
+  const bw = Math.min(cfg.maxBw || 46, iw / n - ((M || NC) ? 4 : 8));
+  const X = i => L + (i + 0.5) * iw / n, Y = v => T + (1 - v / ymax) * ih;
+  (cfg.bands || []).forEach(b => E('rect', { x: X(b.i0) - bw / 2 - 5, y: T,
+    width: X(b.i1) - X(b.i0) + bw + 10, height: ih, fill: C.wash }, ch.svg));
+  const step = cfg.yStep || Math.ceil(ymax / 4 / 10) * 10;
+  for (let v = 0; v <= ymax; v += step) { E('line', { x1: L, x2: W - R, y1: Y(v), y2: Y(v),
+      stroke: C.hair }, ch.svg); txt(ch.svg, L - 7, Y(v) + 4, v, { 'text-anchor': 'end', 'font-size': (M||NC) ? 10 : 11 }); }
+  cfg.values.forEach((v, i) => { const x = X(i) - bw / 2, y = Y(v), h = Y(0) - y;
+    const r = E('rect', { x, y, width: bw, height: Math.max(h, 0), rx: 2,
+      fill: cfg.color ? cfg.color(i, v) : C.bar }, ch.svg);
+    r.addEventListener('mousemove', () => showTip(ch, W, X(i), y, cfg.tip(i, v)));
+    r.addEventListener('mouseleave', () => hideTip(ch));
+    if (cfg.labelIdx && cfg.labelIdx.includes(i))
+      txt(ch.svg, X(i), y - 7, v, { 'text-anchor': 'middle', fill: C.ink, 'font-weight': 800,
+        'font-size': (M||NC) ? 11 : 12 }); });
+  E('line', { x1: L, x2: W - R, y1: Y(0), y2: Y(0), stroke: C.axis, 'stroke-width': 1 }, ch.svg);
+  const xEvery = (M || NC) ? (cfg.xEveryM || 1) : 1;
+  cfg.labels.forEach((lb, i) => { if (i % xEvery !== 0) return;
+    txt(ch.svg, X(i), H - 10, lb, { 'text-anchor': 'middle', 'font-size': (M||NC) ? 9.5 : 11 }); });
+  (cfg.notes || []).forEach(nt => txt(ch.svg, X(nt.i), nt.y,
+    (M || NC) && nt.textM != null ? nt.textM : nt.text,
+    { 'text-anchor': 'middle', fill: C.ink2, 'font-weight': 700, 'font-size': (M||NC) ? 10.5 : 11 }));
+}
+
+/* ── 가로 막대 ── */
+function barsH(id, cfg) {
+  const M = isMobile(), NC = isNarrowCol(id);
+  const W = (M || NC) ? 430 : 900, rowH = (M || NC) ? 28 : 30, T = 6, B = 6;
+  const L = (M || NC) ? (cfg.lM || 104) : (cfg.l || 150), R = (M || NC) ? (cfg.rM || 46) : 70;
+  const H = T + B + cfg.labels.length * rowH, iw = W - L - R;
+  const ch = chartBase(id, W, H), vmax = Math.max(...cfg.values);
+  cfg.values.forEach((v, i) => { const y = T + i * rowH + 5, h = rowH - 11;
+    txt(ch.svg, L - 10, y + h / 2 + 4, cfg.labels[i],
+      { 'text-anchor': 'end', fill: C.ink2, 'font-size': (M||NC) ? 10.5 : 12 });
+    E('rect', { x: L, y, width: Math.max(v / vmax * iw, 2), height: h, rx: 2,
+      fill: cfg.color ? cfg.color(i, v) : C.bar }, ch.svg);
+    txt(ch.svg, L + v / vmax * iw + 7, y + h / 2 + 4, cfg.fmt ? cfg.fmt(v) : v,
+      { fill: C.ink, 'font-weight': 800, 'font-size': (M||NC) ? 10.5 : 12 }); });
+  if (cfg.divider != null) { const y = T + cfg.divider * rowH - 3;
+    E('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: C.ink2, 'stroke-width': 1, 'stroke-dasharray': '4 3' }, ch.svg);
+    txt(ch.svg, W - R, y + 14, (M || NC) && cfg.dividerLabelM ? cfg.dividerLabelM : cfg.dividerLabel,
+      { 'text-anchor': 'end', fill: C.ink2, 'font-weight': 700, 'font-size': (M||NC) ? 10 : 11 }); }
+}
+
+/* ── 갭 다이어그램 ── */
+function gapChart(id) {
+  const M = isMobile();
+  const W = M ? 430 : 900, H = M ? 232 : 220, L = M ? 16 : 30, R = M ? 16 : 30;
+  const iw = W - L - R, ch = chartBase(id, W, H);
+  const p0 = 4.5, p1 = 5.42, X = v => L + (v - p0) / (p1 - p0) * iw;
+  const axisY = M ? 162 : 150;
+  E('line', { x1: L, x2: W - R, y1: axisY, y2: axisY, stroke: C.axis, 'stroke-width': 1 }, ch.svg);
+  for (let s = 4.5; s <= 5.42; s += M ? 1 / 3 : 1 / 6) { const x = X(s);
+    E('line', { x1: x, x2: x, y1: axisY, y2: axisY + 5, stroke: C.axis }, ch.svg);
+    txt(ch.svg, x, axisY + 20, fmtPace(s + 1e-9), { 'text-anchor': 'middle', 'font-size': M ? 10 : 11 }); }
+  txt(ch.svg, L, axisY + 42, '← 빠름', { fill: C.ink3, 'font-size': M ? 10 : 11 });
+  txt(ch.svg, W - R, axisY + 42, '느림 →', { 'text-anchor': 'end', fill: C.ink3, 'font-size': M ? 10 : 11 });
+  function band(v0, v1, color, label, sub, ty) {
+    E('rect', { x: X(v0), y: axisY - 28, width: X(v1) - X(v0), height: 28, fill: color }, ch.svg);
+    const cx = (X(v0) + X(v1)) / 2;
+    E('line', { x1: cx, x2: cx, y1: ty + 22, y2: axisY - 30, stroke: C.axis, 'stroke-width': 1 }, ch.svg);
+    txt(ch.svg, cx, ty, label, { 'text-anchor': 'middle', fill: C.ink, 'font-weight': 800,
+      'font-size': M ? 11 : 12.5 });
+    txt(ch.svg, cx, ty + 15, sub, { 'text-anchor': 'middle', fill: C.ink2, 'font-size': M ? 10 : 11 }); }
+  band(4 + 35/60, 4 + 40/60, C.box, 'VDOT 이론 템포', M ? '4:35 ~ 4:40' : '완전 회복 시 4:35 ~ 4:40', 32);
+  band(5 + 5/60, 5 + 15/60, C.past, '현재 역치 (실측)', M ? '5:05 ~ 5:15' : '5:05 ~ 5:15 · 2026-07-09', M ? 100 : 32);
+  band(4 + 40/60, 4 + 45/60, C.hrlow, M ? '부상 전 역치' : '부상 전 역치 (추정)',
+       M ? '4:40 ~ 4:45' : '4:40 ~ 4:45 · 2026-03', M ? 100 : 88);
+  const xm = X(4 + 58/60);
+  E('line', { x1: xm, x2: xm, y1: 58, y2: axisY, stroke: C.red, 'stroke-width': 2, 'stroke-dasharray': '6 4' }, ch.svg);
+  txt(ch.svg, xm, 40, M ? 'Sub-3:30 필요' : 'Sub-3:30 필요 페이스',
+    { 'text-anchor': 'middle', fill: C.red, 'font-weight': 800, 'font-size': M ? 11 : 12.5 });
+  txt(ch.svg, xm, 54, '4:58/km', { 'text-anchor': 'middle', fill: C.red, 'font-weight': 700,
+    'font-size': M ? 10.5 : 11 });
+}
+
+/* ── 도식 공통: 박스 ── */
+function nbox(svg, x, y, w, h, lines, opts) {
+  opts = opts || {};
+  E('rect', { x, y, width: w, height: h, fill: opts.fill || '#faf8f0',
+    stroke: opts.stroke || C.ink, 'stroke-width': opts.sw || 1.2,
+    'stroke-dasharray': opts.dash ? '5 4' : 'none' }, svg);
+  const cx = x + w / 2, n = lines.length;
+  lines.forEach((ln, i) => {
+    txt(svg, cx, y + h / 2 + (i - (n - 1) / 2) * (opts.lh || 14) + 4, ln.t,
+      { 'text-anchor': 'middle', fill: ln.c || C.ink,
+        'font-weight': ln.w || 400, 'font-size': ln.s || 10 }); });
+}
+function arrow(svg, pts, opts) {
+  opts = opts || {};
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+  E('path', { d, fill: 'none', stroke: opts.color || C.ink2, 'stroke-width': opts.sw || 1.2,
+    'stroke-dasharray': opts.dash ? '5 4' : 'none' }, svg);
+  if (!opts.noHead) { const [hx, hy] = pts[pts.length - 1], dir = opts.dir || 'r';
+    const a = dir === 'r' ? [[hx-7,hy-4],[hx,hy],[hx-7,hy+4]] : dir === 'l' ? [[hx+7,hy-4],[hx,hy],[hx+7,hy+4]]
+      : dir === 'd' ? [[hx-4,hy-7],[hx,hy],[hx+4,hy-7]] : [[hx-4,hy+7],[hx,hy],[hx+4,hy+7]];
+    E('path', { d: a.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '), fill: 'none',
+      stroke: opts.color || C.ink2, 'stroke-width': opts.sw || 1.2 }, svg); }
+}
+
+/* ── 조직도 ── */
+function orgChart(id) {
+  const M = isMobile();
+  if (!M) {
+    const W = 900, H = 262, ch = chartBase(id, W, H);
+    nbox(ch.svg, 365, 10, 170, 42, [
+      { t: '단장 — JEFFREY', w: 800, s: 12 }, { t: '최종 결정권자 · 러너 주권', c: C.ink2, s: 9.5 }], { sw: 2 });
+    arrow(ch.svg, [[450, 52], [450, 84]], { noHead: true });
+    nbox(ch.svg, 350, 84, 200, 46, [
+      { t: '① 헤드코치 · FABLE', w: 800, s: 12 }, { t: '처방 · 주간 플랜 · 80/20 감시', c: C.ink2, s: 9.5 }]);
+    arrow(ch.svg, [[450, 130], [450, 148]], { noHead: true });
+    E('line', { x1: 79, x2: 821, y1: 148, y2: 148, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    const roles = [
+      { x: 10,    name: '② 인저리가드 ★', tag: 'OPUS+ · 상시', d1: '안전 검토 · 거부권', d2: '3/10 · 48h 룰 집행', red: 1 },
+      { x: 158.4, name: '③ 데이터랩', tag: 'SONNET · 세션 후', d1: 'FIT 7단계 판독', d2: 'EF · SD · 4항 검증' },
+      { x: 306.8, name: '⑤ 컨디셔닝', tag: 'HAIKU · 상시 경보', d1: '루틴 · 영양 · 종아리', d2: 'RHR · 열적응 감시' },
+      { x: 455.2, name: '⑥ 서기', tag: 'HAIKU · 갱신 시', d1: 'PART B 재발행', d2: '제외 리스트 · 박제' },
+      { x: 603.6, name: '⑦ 편집국', tag: 'SONNET · 일요판', d1: '타임스 발행 · 호외', d2: '데이터랩 산출물만 인용' },
+      { x: 752,   name: '④ 레이스 전략실', tag: 'OPUS · 휴면', d1: 'JTBC 페이싱 · 젤', d2: '9월 1일 가동', dash: 1 } ];
+    roles.forEach(r => { const cx = r.x + 69;
+      arrow(ch.svg, [[cx, 148], [cx, 166]], { noHead: true });
+      nbox(ch.svg, r.x, 166, 138, 68, [
+        { t: r.name, w: 800, s: 10.5, c: r.red ? C.red : C.ink },
+        { t: r.tag, c: C.ink3, s: 8.5 },
+        { t: r.d1, c: C.ink2, s: 9 }, { t: r.d2, c: C.ink2, s: 9 }],
+        { stroke: r.red ? C.red : C.ink, sw: r.red ? 2 : 1.2, dash: r.dash, lh: 13.5 }); });
+    txt(ch.svg, 79, 250, '기각 시 하향 대체안과 함께 회송', { fill: C.red, 'font-size': 9.5, 'font-weight': 700, 'text-anchor': 'start' });
+    txt(ch.svg, 821, 250, '서브에이전트 = 별도 컨텍스트 격리', { fill: C.ink3, 'font-size': 9.5, 'text-anchor': 'end' });
+  } else {
+    const W = 430, H = 546, ch = chartBase(id, W, H);
+    nbox(ch.svg, 115, 8, 200, 42, [
+      { t: '단장 — JEFFREY', w: 800, s: 12 }, { t: '최종 결정권자 · 러너 주권', c: C.ink2, s: 9.5 }], { sw: 2 });
+    arrow(ch.svg, [[215, 50], [215, 66]], { noHead: true });
+    nbox(ch.svg, 95, 66, 240, 46, [
+      { t: '① 헤드코치 · FABLE', w: 800, s: 12 }, { t: '처방 · 주간 플랜 · 80/20 감시', c: C.ink2, s: 9.5 }]);
+    E('line', { x1: 215, x2: 215, y1: 112, y2: 126, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    E('line', { x1: 30, x2: 215, y1: 126, y2: 126, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    const roles = [
+      { name: '② 인저리가드 ★거부권', tag: 'OPUS+ · 상시 — 안전 검토 · 3/10 룰 · 48h 룰', red: 1 },
+      { name: '③ 데이터랩', tag: 'SONNET · 세션 후 — FIT 7단계 · EF · SD · 4항 검증' },
+      { name: '⑤ 컨디셔닝', tag: 'HAIKU · 상시 경보 — 루틴 · 영양 · RHR · 열적응' },
+      { name: '⑥ 서기', tag: 'HAIKU · 갱신 시 — PART B · 제외 리스트 · 안티패턴' },
+      { name: '⑦ 편집국', tag: 'SONNET · 일요판+호외 — 타임스 발행 · 데이터랩 산출물만 인용' },
+      { name: '④ 레이스 전략실', tag: 'OPUS · 휴면 — JTBC 페이싱 · 젤 · 9월 1일 가동', dash: 1 } ];
+    let y = 138;
+    E('line', { x1: 30, x2: 30, y1: 126, y2: 138 + 5 * 68 + 27, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    roles.forEach(r => {
+      E('line', { x1: 30, x2: 58, y1: y + 27, y2: y + 27, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+      nbox(ch.svg, 58, y, 348, 54, [
+        { t: r.name, w: 800, s: 11.5, c: r.red ? C.red : C.ink },
+        { t: r.tag, c: C.ink2, s: 9.5 }],
+        { stroke: r.red ? C.red : C.ink, sw: r.red ? 2 : 1.2, dash: r.dash, lh: 16 });
+      y += 68; });
+  }
+}
+
+/* ── 워크플로: 처방 한 건의 일생 ── */
+function flowChart(id) {
+  const M = isMobile();
+  const steps = [
+    { n: '① 처방', a: '헤드코치', b: '5줄 템플릿 · 🎯존' },
+    { n: '② 안전 검토', a: '인저리가드', b: '승인 · 조건부 · 기각', red: 1 },
+    { n: '③ 실행', a: '러너 (단장)', b: '시계 알림 = 즉시 감속' },
+    { n: '④ 판독', a: '데이터랩', b: 'FIT 7단계 프로토콜' },
+    { n: '⑤ 판정', a: '🟢 🟡 🔴', b: '처방 대비 준수' },
+    { n: '⑥ 기록', a: '서기', b: '세션 로그 · 안티패턴' } ];
+  if (!M) {
+    const W = 900, H = 208, ch = chartBase(id, W, H);
+    const bw = 125, y = 62, bh = 58, xs = [15, 164, 313, 462, 611, 760];
+    steps.forEach((s, i) => {
+      nbox(ch.svg, xs[i], y, bw, bh, [
+        { t: s.n, w: 800, s: 11.5, c: s.red ? C.red : C.ink },
+        { t: s.a, c: C.ink2, s: 9.5 }, { t: s.b, c: C.ink3, s: 9 }],
+        { stroke: s.red ? C.red : C.ink, sw: s.red ? 2 : 1.2, lh: 14 });
+      if (i < 5) arrow(ch.svg, [[xs[i] + bw, y + bh / 2], [xs[i + 1], y + bh / 2]], { dir: 'r' }); });
+    arrow(ch.svg, [[226, 62], [226, 30], [77, 30], [77, 60]], { color: C.red, dash: 1, dir: 'd' });
+    txt(ch.svg, 152, 22, '기각 → 하향 대체안으로 재처방', { 'text-anchor': 'middle', fill: C.red, 'font-size': 10, 'font-weight': 700 });
+    arrow(ch.svg, [[822, 120], [822, 158], [77, 158], [77, 122]], { dir: 'u' });
+    txt(ch.svg, 450, 172, '다음 세션으로 ↻ (매주 일요일엔 전원 주간 리뷰 합류)',
+      { 'text-anchor': 'middle', fill: C.ink2, 'font-size': 10, 'font-weight': 700 });
+  } else {
+    const W = 430, H = 6 * 72 + 26, ch = chartBase(id, W, H);
+    const bw = 270, x = 75, bh = 56;
+    steps.forEach((s, i) => { const y = 10 + i * 72;
+      nbox(ch.svg, x, y, bw, bh, [
+        { t: s.n, w: 800, s: 11.5, c: s.red ? C.red : C.ink },
+        { t: s.a + ' — ' + s.b, c: C.ink2, s: 9 }],
+        { stroke: s.red ? C.red : C.ink, sw: s.red ? 2 : 1.2, lh: 15 });
+      if (i < 5) arrow(ch.svg, [[x + bw / 2, y + bh], [x + bw / 2, y + 72]], { dir: 'd' }); });
+    arrow(ch.svg, [[x + bw, 10 + 72 + 28], [400, 10 + 72 + 28], [400, 38], [x + bw + 4, 38]], { color: C.red, dash: 1, dir: 'l' });
+    txt(ch.svg, 412, 130, '기각 → 대체안', { fill: C.red, 'font-size': 9, 'font-weight': 700,
+      'text-anchor': 'middle', transform: 'rotate(90 412 130)' });
+    arrow(ch.svg, [[x, 10 + 5 * 72 + 28], [30, 10 + 5 * 72 + 28], [30, 38], [x - 4, 38]], { dir: 'r' });
+    txt(ch.svg, 18, 230, '다음 세션으로 ↻', { fill: C.ink2, 'font-size': 9, 'font-weight': 700,
+      'text-anchor': 'middle', transform: 'rotate(-90 18 230)' });
+  }
+}
+
+function fillTable(id, head, rows) { const d = document.getElementById(id);
+  d.innerHTML = '<table><tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' +
+    rows.map(r => '<tr>' + r.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</table>'; }
+
+/* ═══ 렌더 ═══ */
+const S = DATA.splits, M_ = DATA.monthly, F = DATA.form, hrs = DATA.hours;
+const kmLabels = n => Array.from({ length: n }, (_, i) => i + 1);
+
+function renderAll() {
+  lineChart('c-half', { labels: kmLabels(21).map(String), invert: true, yMin: 4.6, yMax: 8.1,
+    xEvery: 2, xEveryM: 4, yFmt: fmtPace, tipLabel: i => (i + 1) + ' km 지점',
+    series: [ { name: '마블런', color: C.past, dash: '7 5', v: S.marvel, unit: '/km' },
+              { name: '뉴발란스', color: C.ink, v: S.nb, unit: '/km' } ],
+    bands: [{ y1: 4 + 49/60, y2: 5 + 23/60 }],
+    notes: [ { i: 19, v: S.marvel[19], text: '20km 구간 7:51 — 후반 붕괴', textM: '7:51 후반 붕괴',
+               dy: -12, color: C.red, anchor: 'end', dx: -8 },
+             { i: 9, v: S.nb[9], text: 'PB 박스권 4:49 ~ 5:23 (±7.2초)', textM: 'PB 박스권 ±7.2초',
+               dy: 30, color: C.ink } ] });
+  lineChart('c-10k', { labels: kmLabels(10).map(String), invert: true, yMin: 4.1, yMax: 5.9,
+    yFmt: fmtPace, tipLabel: i => (i + 1) + ' km 지점', h: isMobile() ? 240 : 260,
+    series: [ { name: '인천', color: C.past, dash: '7 5', v: S.incheon, unit: '/km' },
+              { name: '고양', color: C.ink, v: S.goyang, unit: '/km' } ],
+    notes: [ { i: 0, v: S.goyang[0], text: '첫 킬로 4:16 — 오버페이스 출발', textM: '첫 킬로 4:16',
+               dy: -12, color: C.red, anchor: 'start', dx: 6 } ] });
+  cumChart('c-cum');
+  barsV('c-monthly', { labels: M_.labels, values: M_.km, yMax: 130, yStep: 30, xEveryM: 2,
+    labelIdx: [4, 9, 10], tip: (i, v) => `<b>${M_.labels[i]}</b><br>${v} km · ${M_.n[i]}세션`,
+    color: i => i <= 2 ? C.barold : C.bar });
+  barsH('c-hrdist', { labels: DATA.hrdist.labels, values: DATA.hrdist.pct, l: 110, lM: 74, rM: 52,
+    fmt: v => v.toFixed(1) + '%', color: i => i >= 5 ? C.ink : C.hrlow,
+    divider: 5, dividerLabel: 'Zone 2 상단 (170bpm)', dividerLabelM: 'Z2 상단 170' });
+  lineChart('c-cad', { labels: F.labels, yFmt: v => Math.round(v), yMin: 160, yMax: 182,
+    h: 240, yTicks: 4, xEveryM: 2,
+    series: [{ name: '케이던스', color: C.ink, v: F.cad, unit: ' spm' }],
+    bands: [{ y1: 175, y2: 176 }],
+    notes: [{ i: 1, v: F.cad[1], text: '저점 165.9', dy: 18 }] });
+  lineChart('c-gct', { labels: F.labels, invert: true, yFmt: v => Math.round(v), yMin: 225, yMax: 290,
+    h: 240, yTicks: 4, xEveryM: 2,
+    series: [{ name: 'GCT', color: C.ink, v: F.gct, unit: ' ms' }],
+    refLines: [{ y: 280, label: '기준선 280ms' }] });
+  barsH('c-types', { labels: DATA.types.map(t => t[0]), values: DATA.types.map(t => t[1]),
+    l: 170, lM: 120, rM: 40, fmt: v => v + '회' });
+  barsV('c-hours', { labels: hrs.map(h => h[0] + '시'), values: hrs.map(h => h[1]), yMax: 30,
+    yStep: 10, maxBw: 40, xEveryM: 2, labelIdx: [9, 10],
+    tip: (i, v) => `<b>${hrs[i][0]}시대 출발</b><br>${v}회`,
+    bands: [{ i0: 9, i1: 11 }],
+    notes: [{ i: 10, y: 18, text: '저녁 19 ~ 21시 66회 (69%)', textM: '19 ~ 21시 69%' }] });
+  gapChart('c-gap');
+  orgChart('c-org');
+  flowChart('c-flow');
+}
+
+fillTable('t-half', ['km', '마블런', '뉴발란스'],
+  kmLabels(21).map(i => [i, fmtPace(S.marvel[i-1]), fmtPace(S.nb[i-1])]));
+fillTable('t-10k', ['km', '인천', '고양'],
+  kmLabels(10).map(i => [i, fmtPace(S.incheon[i-1]), fmtPace(S.goyang[i-1])]));
+fillTable('t-monthly', ['월', '거리(km)', '세션 수'], M_.labels.map((l, i) => [l, M_.km[i], M_.n[i]]));
+
+/* ── 호 선택 (편집국 관리 — 새 호 발행 시 전 호의 ISSUES를 동기화할 것) ── */
+const ISSUES = [
+  { id: '20260713', label: '제1호 · 창간 특집 (2026-07-13)' },
+];
+const CURRENT_ISSUE = '20260713';
+function issueHref(id) {
+  // file:// 또는 평면 .html 배포 → 형제 파일 / zeple.github.io → 폴더 URI
+  if (location.protocol === 'file:' || /\.html$/.test(location.pathname))
+    return 'run-news-' + id + '.html';
+  return '/run-news/' + id + '/';
+}
+(function initIssueNav() {
+  const sel = document.getElementById('issue-sel');
+  ISSUES.slice().reverse().forEach(is => {
+    const o = document.createElement('option');
+    o.value = is.id; o.textContent = is.label; o.selected = is.id === CURRENT_ISSUE;
+    sel.appendChild(o); });
+  sel.addEventListener('change', () => {
+    if (sel.value !== CURRENT_ISSUE) location.href = issueHref(sel.value); });
+})();
+
+let wasKey = '', rsT;
+const layoutKey = () => isMobile() + ':' + document.querySelector('.paper').clientWidth;
+function doRender() { wasKey = isMobile(); renderAll(); }
+doRender();
+window.addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
+  if (isMobile() !== wasKey) doRender(); }, 150); });
+</script>
+
+</body>
+</html>
