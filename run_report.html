@@ -186,6 +186,34 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
   .grid2 > div { min-width: 0; }
 
+  /* ── 팀 카드 ── */
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 22px 0; }
+  .tcard { border: 1px solid var(--ink); padding: 13px 15px 11px; min-width: 0;
+           display: flex; flex-direction: column; }
+  .tcard.dormant { border-style: dashed; }
+  .tcard .thead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+                  border-bottom: 2px solid var(--ink); padding-bottom: 6px; margin-bottom: 8px; }
+  .tcard .tname { font-weight: 900; font-size: 15.5px; }
+  .tcard .tname .veto { color: var(--red); font-size: 11px; vertical-align: 2px; }
+  .tcard .tmodel { font-family: var(--sans); font-size: 9px; font-weight: 800; letter-spacing: .12em;
+                   border: 1px solid var(--ink); padding: 1px 6px; white-space: nowrap; }
+  .tcard .tmodel.hi { background: var(--ink); color: var(--paper); }
+  .tcard .trole { font-family: var(--sans); font-size: 12px; color: var(--ink-2); line-height: 1.6;
+                  margin-bottom: 9px; }
+  .tcard .talgo { font-family: var(--sans); font-size: 10.5px; background: var(--box);
+                  padding: 8px 10px; line-height: 1.75; margin-top: auto; }
+  .tcard .talgo b { letter-spacing: .06em; }
+  .tcard .tgoal { font-family: var(--sans); font-size: 11.5px; margin-top: 9px; font-weight: 700; }
+  .tcard .tgoal::before { content: '목표 — '; color: var(--ink-3); font-weight: 800; font-size: 10px;
+                          letter-spacing: .1em; }
+  /* ── 인터뷰 ── */
+  .iv { break-inside: avoid; border-top: 1px solid var(--hair-dk); padding: 11px 0 7px; }
+  .iv .ivq { font-family: var(--sans); font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+  .iv .ivq .who { background: var(--ink); color: var(--paper); padding: 1px 8px; margin-right: 8px;
+                  font-size: 10px; letter-spacing: .1em; }
+  .iv .ivq .who.red { background: var(--red); }
+  .iv .iva { font-size: 13.5px; margin: 0; }
+
   /* ═══ 모바일 ═══ */
   @media (max-width: 720px) {
     body { font-size: 14.5px; }
@@ -203,6 +231,7 @@
     .grid2 { grid-template-columns: 1fr; }
     .ads { grid-template-columns: 1fr; }
     .editorial { padding: 18px 18px 14px; }
+    .team-grid { grid-template-columns: 1fr; gap: 12px; }
     table.rt { min-width: 520px; font-size: 12.5px; }
     .rule { margin: 34px 0 28px; }
   }
@@ -491,6 +520,170 @@
 
 <hr class="rule">
 
+<!-- ═══════════ 특집면 · Team 191 ═══════════ -->
+<article>
+  <div class="kicker">특집면 · 창간 기획</div>
+  <h2 class="hl-sub">여섯 개의 두뇌, 하나의 무릎 — 'Team 191'의 안쪽</h2>
+  <p class="deck">팀명은 역치심박 191bpm에서 왔다. 창단 하루 만에 창간 특집의 주인공이 된
+     코칭 조직 — 처방하는 자와 기각하는 자를 분리한 이유, 그리고 각자가 몰입하는 알고리즘을 들었다.</p>
+  <div class="byline"><span><b>러너 타임스</b> 특집취재반</span><span>결성 2026-07-12 · 조직도·워크플로 그래픽 · 6인 인터뷰</span></div>
+
+  <div class="cols2">
+    <p class="dropcap">이 팀의 설계 사상은 한 문장으로 요약된다. <b>"처방과 안전 판단을 같은
+       머리로 하면 망아지를 못 잡는다."</b> 훈련을 설계하는 쪽은 낙관에 기울고, 안전을 판단하는
+       쪽은 보수에 기운다 — 두 관점이 한 머리에 있으면 서로를 봐준다. 그래서 Team 191은
+       처방(헤드코치)과 기각(인저리가드)을 물리적으로 분리했다. 웹에서는 관점 전환으로,
+       클로드 코드에서는 아예 별도 컨텍스트의 서브에이전트로 격리해 운영한다.</p>
+    <p>정점에는 단장이 있다. 러너 Jeffrey — 최종 결정권자이자 유일한 인간이다. 단장의 명시적
+       교정은 즉시 ground truth로 승격되고, 어떤 역할의 판단보다 우선한다. 다만 예외가 하나
+       있다. 실행 중 하드 룰, 이를테면 '통증 3/10 즉시 중단'은 단장이 강행을 선언해도 물러서지
+       않는다. 세션의 <b>선택</b>은 러너의 주권이지만, 세션 <b>중의 안전</b>은 비협상이라는 것 —
+       지난 7월 12일 확정된 강행 프로토콜의 골자다.</p>
+    <p>고위험 판단에는 이중 잠금이 걸린다. 생리 지표 재설정, Phase 전환, 대회 목표 변경,
+       그리고 헤드코치-인저리가드 판단 충돌 — 이 네 경우에는 반드시 <b>별도 컨텍스트의
+       독립 자문</b>(세컨드 오피니언)을 거친다. 핵심은 더 똑똑한 머리가 아니라 <b>깨끗한
+       머리</b>다. 기존 대화의 앵커에 오염되지 않은 시선으로 같은 데이터를 다시 보게 하는 것.
+       MHR 210 확정도, Phase 2 전환도 이 절차를 통과했다.</p>
+    <p>위임에도 책임의 사슬이 있다. 서브에이전트의 보고는 참고 자료일 뿐, 헤드코치는 채택 전에
+       근거를 검토하고 이상한 주장은 실측으로 재검증한다. "위임해도 최종 책임은 헤드코치에게
+       남는다" — 창단 문서에 명시된 문장이다.</p>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 10</span>Team 191 조직도 — 거부권은 하나뿐이다</div><div class="u">결성 2026-07-12</div></figcaption>
+    <div class="chart" id="c-org"></div>
+    <div class="src">굵은 적색 테두리 = 유일 거부권 보유 · 점선 = 휴면 (9월 1일 가동) | 그래픽 = 러너 타임스</div>
+  </figure>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 11</span>처방 한 건의 일생 — Team 191 표준 워크플로</div><div class="u">매 세션 반복</div></figcaption>
+    <div class="chart" id="c-flow"></div>
+    <div class="src">기각 시 반드시 하향 대체안과 함께 ①로 회송 · 일요일에는 전원이 주간 리뷰로 합류 | 그래픽 = 러너 타임스</div>
+  </figure>
+
+  <h3 class="hl-sub" style="font-size:19px; margin-top:36px">여섯 자리의 명함 — 역할·모델·가동 알고리즘</h3>
+  <div class="team-grid">
+    <div class="tcard">
+      <div class="thead"><span class="tname">① 헤드코치</span><span class="tmodel hi">FABLE · 상시</span></div>
+      <div class="trole">총괄. 주간 플랜·세션 처방(5줄 템플릿)·Phase 전환 판정·80/20 감시. 위임하되 최종 책임을 진다.</div>
+      <div class="talgo"><b>WHEN</b> 처방 생성 → <b>THEN</b> 🎯존 최상단 표기 + 망아지 플래그 지목 (생략 불가)<br>
+        <b>WHEN</b> 근거 실측 14일 경과 → <b>THEN</b> 재검증 플래그</div>
+      <div class="tgoal">JTBC까지 80/20을 지키며 팀을 결승선으로.</div>
+    </div>
+    <div class="tcard" style="border-width:2px; border-color:var(--red)">
+      <div class="thead"><span class="tname">② 인저리가드 <span class="veto">★거부권</span></span><span class="tmodel hi">OPUS+ · 상시</span></div>
+      <div class="trole">안전 판단. 무릎·후경골근 신호 감시, 3/10 룰·48시간 룰 집행, 밸런스 드리프트 모니터. 실수 비용이 최대라 모델을 아끼지 않는다.</div>
+      <div class="talgo"><b>WHEN</b> 처방안 도착 → <b>THEN</b> 승인/조건부/기각 — 기각엔 하향 대체안 필수<br>
+        <b>WHEN</b> 통증 3/10 → <b>THEN</b> 즉시 중단 (강행 불가)</div>
+      <div class="tgoal">기록과 충돌하면 무조건 안전이 이긴다.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">③ 데이터랩</span><span class="tmodel">SONNET · 세션 후</span></div>
+      <div class="trole">판독. FIT 7단계 프로토콜, 격주 베이스라인, EF·디커플링·폼 붕괴 SD 산출. 파싱 로그로 본진을 오염시키지 않는다.</div>
+      <div class="talgo"><b>WHEN</b> 심박 스파이크 → <b>THEN</b> 4항 검증 통과 전 '노이즈' 단어 금지<br>
+        <b>WHEN</b> 세션 종료 → <b>THEN</b> 처방 대비 🟢🟡🔴 판정</div>
+      <div class="tgoal">측정되지 않은 주장을 지면에서 몰아낸다.</div>
+    </div>
+    <div class="tcard dormant">
+      <div class="thead"><span class="tname">④ 레이스 전략실</span><span class="tmodel">OPUS · 휴면</span></div>
+      <div class="trole">42.195km 설계 전담. JTBC 이븐 페이싱, 튠업 시나리오, 젤·수분 타이밍, 스태미나 시뮬레이션. 현재 취침 중.</div>
+      <div class="talgo"><b>WHEN</b> 9월 1일 → <b>THEN</b> 기상 · 즉시 가동<br>
+        <b>WHEN</b> 레이스 처방 → <b>THEN</b> 첫 1km 억제 지시 필수 포함</div>
+      <div class="tgoal">11월 1일, 4:58/km를 42번 반복시키는 것.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">⑤ 컨디셔닝</span><span class="tmodel">HAIKU · 상시 경보</span></div>
+      <div class="trole">몸 관리 전선. 보강 루틴 이행 체크, 영양·젤 타이밍, 종아리 케어, RHR·열적응 트렌드 조기경보.</div>
+      <div class="talgo"><b>WHEN</b> RHR·열적응 이상 추세 → <b>THEN</b> 조기경보 발령<br>
+        <b>WHEN</b> 세션 시작 전 → <b>THEN</b> HRM-600 페어링 확인 캠페인</div>
+      <div class="tgoal">경보는 빠르게, 잔소리는 정확하게.</div>
+    </div>
+    <div class="tcard">
+      <div class="thead"><span class="tname">⑥ 서기</span><span class="tmodel">HAIKU · 갱신 시</span></div>
+      <div class="trole">기록 보존. 지침 PART B 재발행, 변경 이력, 영구 제외 리스트 대조, 안티패턴 박제. 팀의 기억을 담당한다.</div>
+      <div class="talgo"><b>WHEN</b> 지침 갱신 → <b>THEN</b> 영구 제외 리스트 대조 (유령 부활 차단)<br>
+        <b>WHEN</b> 실패 발생 → <b>THEN</b> 안티패턴으로 박제 (현재 7건)</div>
+      <div class="tgoal">실패는 지우는 게 아니라 번호를 붙이는 것.</div>
+    </div>
+  </div>
+
+  <h3 class="hl-sub" style="font-size:19px; margin-top:36px">6문 6답 — "각자, 무엇에 몰입하는가"</h3>
+  <div class="cols2">
+    <div class="iv">
+      <div class="ivq"><span class="who">헤드코치</span>처방의 제1원칙은.</div>
+      <p class="iva">"목적과 강도의 분리입니다. '깨끗한 LT를 측정하자'라고만 말했다가 러너가
+         Zone 5로 15분을 달린 사고가 있었어요. 그날 이후 🎯존 표기는 생략 불가가 됐습니다.
+         그리고 매 처방마다 망아지가 튀어나올 지점을 미리 지목합니다 — 초반, 마무리,
+         그리고 컨디션 좋은 날. 항상 셋 중 하나예요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who red">인저리가드</span>거부권을 가진 기분은.</div>
+      <p class="iva">"무겁습니다. 그래서 기각할 땐 반드시 하향 대체안을 함께 냅니다 — 대체안
+         없는 기각은 직무유기예요. 단장이 강행을 선언하면 존중합니다. 리스크를 고지하고,
+         기록하고, 모니터링을 올리죠. 하지만 통증 3/10 즉시 중단은 다릅니다.
+         그건 협상 테이블에 올라가지 않아요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">데이터랩</span>가장 자랑스러운 판독은.</div>
+      <p class="iva">"MHR 210 확정이요. '노이즈'로 기각될 뻔한 스파이크를 97개 파일 전수
+         판독으로 뒤집었습니다. 요즘 몰입하는 건 폼 붕괴 시그니처예요 — 평균이 무너지기 전에
+         걸음별 표준편차가 먼저 커지거든요. 급증하는 km 지점이 그날의 지구력 한계선입니다.
+         이 지점이 뒤로 밀리는 게 베이스 성장의 증거고요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">레이스 전략실</span>(휴면 중 — 서면 답변) 기상 후 첫 업무는.</div>
+      <p class="iva">"9월 1일에 깨워 주십시오. 기상 직후 업무는 정해져 있습니다 — JTBC 이븐
+         스플릿 설계, 그리고 첫 1km 억제. 망아지는 42.195km 중 첫 1km에 삽니다. 고양에서
+         4:16으로 나간 기록, 저 자면서도 봤습니다. 젤은 7 ~ 8km, 14 ~ 15km. 이상입니다.
+         마저 자겠습니다."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">컨디셔닝</span>요즘 최대 관심사는.</div>
+      <p class="iva">"열적응 지수가 6월 24일부터 60대에 올라섰고, RHR은 52 안팎에서
+         안정적입니다 — 이 둘의 추세가 무너지는 순간이 제 경보 타이밍이에요. 그리고 취침 전
+         종아리 케어. 종아리는 밤에 웁니다. 아, HRM-600 페어링 확인도 제 소관입니다.
+         3초면 되는데, 시즌 최장 25km를 손목으로 남기신 분이 계셔서요."</p>
+    </div>
+    <div class="iv">
+      <div class="ivq"><span class="who">서기</span>기록 업무의 요체는.</div>
+      <p class="iva">"영구 제외 리스트 대조입니다. 지침이 갱신될 때마다 '보스턴13 복귀' 같은
+         유령이 부활을 시도하거든요 — 실제로 있었던 일입니다. 후경골근 병력상 어떤 갱신에서도
+         부활 금지죠. 안티패턴 7건도 제가 박제했습니다. 날짜 가정, 노이즈 단정, 8일 묵은
+         실측으로 처방… 전부 번호가 붙어 있습니다."</p>
+    </div>
+  </div>
+  <p style="font-family:var(--sans); font-size:12px; color:var(--ink-3); margin-top:14px">
+     ※ 단장(러너 Jeffrey)은 인터뷰를 고사했다. 대신 데이터로 답했다 — 복귀 후 최장 13km,
+     실질 Zone 2 준수율 96.8%.</p>
+
+  <div class="grid2" style="margin-top:26px">
+    <div>
+      <div class="newsbox shade">
+        <h4><span class="tag">거버넌스</span>세 개의 잠금장치</h4>
+        <ol>
+          <li><b>거부권</b> — 인저리가드 단독 보유. 기록과 안전이 충돌하면 무조건 안전.</li>
+          <li><b>강행 프로토콜</b> — 세션 선택은 러너 주권(고지·기록·모니터링 상향 조건),
+              실행 중 하드 룰은 비협상.</li>
+          <li><b>세컨드 오피니언</b> — 지표 재설정·Phase 전환·목표 변경·판단 충돌 시
+              별도 컨텍스트 독립 자문 (앵커 편향 차단).</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="rtwrap" style="margin-top:0"><table class="rt">
+        <tr><th>주기</th><th>이벤트</th><th>참여</th></tr>
+        <tr><td>매 세션 전</td><td>처방 + 안전 승인</td><td class="num">①②</td></tr>
+        <tr><td>매 세션 후</td><td>FIT 판독 → 준수 판정 → 조정</td><td class="num">③→①②</td></tr>
+        <tr><td>매주 일요일</td><td>주간 리뷰 (볼륨·80/20·무릎 신호등)</td><td class="num">전원</td></tr>
+        <tr><td>격주 월요일</td><td>BASE 프로토콜 + 종단 갱신</td><td class="num">③⑤</td></tr>
+        <tr class="hl-row"><td>9월 1일</td><td>레이스 전략실 기상</td><td class="num">④ 합류</td></tr>
+      </table></div>
+    </div>
+  </div>
+</article>
+
+<hr class="rule">
+
 <!-- ═══════════ 오피니언 ═══════════ -->
 <article>
   <div class="editorial">
@@ -513,7 +706,7 @@
   </div>
 
   <figure>
-    <figcaption><div class="t"><span class="fno">그래픽 10</span>역치 페이스 지형도 — 현재 위치와 목표</div><div class="u">분/km · 왼쪽이 빠름</div></figcaption>
+    <figcaption><div class="t"><span class="fno">그래픽 12</span>역치 페이스 지형도 — 현재 위치와 목표</div><div class="u">분/km · 왼쪽이 빠름</div></figcaption>
     <div class="chart" id="c-gap"></div>
     <div class="src">현재 역치 = 2026-07-09 가민 위젯 실측 · 부상 전 = 고양 10K 역산 추정 | 그래픽 = 데이터랩</div>
   </figure>
@@ -766,6 +959,126 @@ function gapChart(id) {
     'font-size': M ? 10.5 : 11 });
 }
 
+/* ── 도식 공통: 박스 ── */
+function nbox(svg, x, y, w, h, lines, opts) {
+  opts = opts || {};
+  E('rect', { x, y, width: w, height: h, fill: opts.fill || '#faf8f0',
+    stroke: opts.stroke || C.ink, 'stroke-width': opts.sw || 1.2,
+    'stroke-dasharray': opts.dash ? '5 4' : 'none' }, svg);
+  const cx = x + w / 2, n = lines.length;
+  lines.forEach((ln, i) => {
+    txt(svg, cx, y + h / 2 + (i - (n - 1) / 2) * (opts.lh || 14) + 4, ln.t,
+      { 'text-anchor': 'middle', fill: ln.c || C.ink,
+        'font-weight': ln.w || 400, 'font-size': ln.s || 10 }); });
+}
+function arrow(svg, pts, opts) {
+  opts = opts || {};
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+  E('path', { d, fill: 'none', stroke: opts.color || C.ink2, 'stroke-width': opts.sw || 1.2,
+    'stroke-dasharray': opts.dash ? '5 4' : 'none' }, svg);
+  if (!opts.noHead) { const [hx, hy] = pts[pts.length - 1], dir = opts.dir || 'r';
+    const a = dir === 'r' ? [[hx-7,hy-4],[hx,hy],[hx-7,hy+4]] : dir === 'l' ? [[hx+7,hy-4],[hx,hy],[hx+7,hy+4]]
+      : dir === 'd' ? [[hx-4,hy-7],[hx,hy],[hx+4,hy-7]] : [[hx-4,hy+7],[hx,hy],[hx+4,hy+7]];
+    E('path', { d: a.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '), fill: 'none',
+      stroke: opts.color || C.ink2, 'stroke-width': opts.sw || 1.2 }, svg); }
+}
+
+/* ── 조직도 ── */
+function orgChart(id) {
+  const M = isMobile();
+  if (!M) {
+    const W = 900, H = 262, ch = chartBase(id, W, H);
+    nbox(ch.svg, 365, 10, 170, 42, [
+      { t: '단장 — JEFFREY', w: 800, s: 12 }, { t: '최종 결정권자 · 러너 주권', c: C.ink2, s: 9.5 }], { sw: 2 });
+    arrow(ch.svg, [[450, 52], [450, 84]], { noHead: true });
+    nbox(ch.svg, 350, 84, 200, 46, [
+      { t: '① 헤드코치 · FABLE', w: 800, s: 12 }, { t: '처방 · 주간 플랜 · 80/20 감시', c: C.ink2, s: 9.5 }]);
+    arrow(ch.svg, [[450, 130], [450, 148]], { noHead: true });
+    E('line', { x1: 95, x2: 805, y1: 148, y2: 148, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    const roles = [
+      { x: 20,    name: '② 인저리가드 ★', tag: 'OPUS+ · 상시', d1: '안전 검토 · 유일 거부권', d2: '3/10 룰 · 48h 룰 집행', red: 1 },
+      { x: 197.5, name: '③ 데이터랩', tag: 'SONNET · 세션 후', d1: 'FIT 7단계 판독', d2: 'EF · SD · 4항 검증' },
+      { x: 375,   name: '⑤ 컨디셔닝', tag: 'HAIKU · 상시 경보', d1: '루틴 · 영양 · 종아리', d2: 'RHR · 열적응 감시' },
+      { x: 552.5, name: '⑥ 서기', tag: 'HAIKU · 갱신 시', d1: 'PART B 재발행', d2: '제외 리스트 · 안티패턴' },
+      { x: 730,   name: '④ 레이스 전략실', tag: 'OPUS · 휴면', d1: 'JTBC 페이싱 · 젤', d2: '9월 1일 가동', dash: 1 } ];
+    roles.forEach(r => { const cx = r.x + 75;
+      arrow(ch.svg, [[cx, 148], [cx, 166]], { noHead: true });
+      nbox(ch.svg, r.x, 166, 150, 68, [
+        { t: r.name, w: 800, s: 11, c: r.red ? C.red : C.ink },
+        { t: r.tag, c: C.ink3, s: 8.5 },
+        { t: r.d1, c: C.ink2, s: 9.5 }, { t: r.d2, c: C.ink2, s: 9.5 }],
+        { stroke: r.red ? C.red : C.ink, sw: r.red ? 2 : 1.2, dash: r.dash, lh: 13.5 }); });
+    txt(ch.svg, 95, 250, '기각 시 하향 대체안과 함께 회송', { fill: C.red, 'font-size': 9.5, 'font-weight': 700, 'text-anchor': 'start' });
+    txt(ch.svg, 805, 250, '서브에이전트 = 별도 컨텍스트 격리', { fill: C.ink3, 'font-size': 9.5, 'text-anchor': 'end' });
+  } else {
+    const W = 430, H = 478, ch = chartBase(id, W, H);
+    nbox(ch.svg, 115, 8, 200, 42, [
+      { t: '단장 — JEFFREY', w: 800, s: 12 }, { t: '최종 결정권자 · 러너 주권', c: C.ink2, s: 9.5 }], { sw: 2 });
+    arrow(ch.svg, [[215, 50], [215, 66]], { noHead: true });
+    nbox(ch.svg, 95, 66, 240, 46, [
+      { t: '① 헤드코치 · FABLE', w: 800, s: 12 }, { t: '처방 · 주간 플랜 · 80/20 감시', c: C.ink2, s: 9.5 }]);
+    E('line', { x1: 215, x2: 215, y1: 112, y2: 126, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    E('line', { x1: 30, x2: 215, y1: 126, y2: 126, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    const roles = [
+      { name: '② 인저리가드 ★거부권', tag: 'OPUS+ · 상시 — 안전 검토 · 3/10 룰 · 48h 룰', red: 1 },
+      { name: '③ 데이터랩', tag: 'SONNET · 세션 후 — FIT 7단계 · EF · SD · 4항 검증' },
+      { name: '⑤ 컨디셔닝', tag: 'HAIKU · 상시 경보 — 루틴 · 영양 · RHR · 열적응' },
+      { name: '⑥ 서기', tag: 'HAIKU · 갱신 시 — PART B · 제외 리스트 · 안티패턴' },
+      { name: '④ 레이스 전략실', tag: 'OPUS · 휴면 — JTBC 페이싱 · 젤 · 9월 1일 가동', dash: 1 } ];
+    let y = 138;
+    E('line', { x1: 30, x2: 30, y1: 126, y2: 138 + 4 * 68 + 27, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+    roles.forEach(r => {
+      E('line', { x1: 30, x2: 58, y1: y + 27, y2: y + 27, stroke: C.ink2, 'stroke-width': 1.2 }, ch.svg);
+      nbox(ch.svg, 58, y, 348, 54, [
+        { t: r.name, w: 800, s: 11.5, c: r.red ? C.red : C.ink },
+        { t: r.tag, c: C.ink2, s: 9.5 }],
+        { stroke: r.red ? C.red : C.ink, sw: r.red ? 2 : 1.2, dash: r.dash, lh: 16 });
+      y += 68; });
+  }
+}
+
+/* ── 워크플로: 처방 한 건의 일생 ── */
+function flowChart(id) {
+  const M = isMobile();
+  const steps = [
+    { n: '① 처방', a: '헤드코치', b: '5줄 템플릿 · 🎯존' },
+    { n: '② 안전 검토', a: '인저리가드', b: '승인 · 조건부 · 기각', red: 1 },
+    { n: '③ 실행', a: '러너 (단장)', b: '시계 알림 = 즉시 감속' },
+    { n: '④ 판독', a: '데이터랩', b: 'FIT 7단계 프로토콜' },
+    { n: '⑤ 판정', a: '🟢 🟡 🔴', b: '처방 대비 준수' },
+    { n: '⑥ 기록', a: '서기', b: '세션 로그 · 안티패턴' } ];
+  if (!M) {
+    const W = 900, H = 208, ch = chartBase(id, W, H);
+    const bw = 125, y = 62, bh = 58, xs = [15, 164, 313, 462, 611, 760];
+    steps.forEach((s, i) => {
+      nbox(ch.svg, xs[i], y, bw, bh, [
+        { t: s.n, w: 800, s: 11.5, c: s.red ? C.red : C.ink },
+        { t: s.a, c: C.ink2, s: 9.5 }, { t: s.b, c: C.ink3, s: 9 }],
+        { stroke: s.red ? C.red : C.ink, sw: s.red ? 2 : 1.2, lh: 14 });
+      if (i < 5) arrow(ch.svg, [[xs[i] + bw, y + bh / 2], [xs[i + 1], y + bh / 2]], { dir: 'r' }); });
+    arrow(ch.svg, [[226, 62], [226, 30], [77, 30], [77, 60]], { color: C.red, dash: 1, dir: 'd' });
+    txt(ch.svg, 152, 22, '기각 → 하향 대체안으로 재처방', { 'text-anchor': 'middle', fill: C.red, 'font-size': 10, 'font-weight': 700 });
+    arrow(ch.svg, [[822, 120], [822, 158], [77, 158], [77, 122]], { dir: 'u' });
+    txt(ch.svg, 450, 172, '다음 세션으로 ↻ (매주 일요일엔 전원 주간 리뷰 합류)',
+      { 'text-anchor': 'middle', fill: C.ink2, 'font-size': 10, 'font-weight': 700 });
+  } else {
+    const W = 430, H = 6 * 72 + 26, ch = chartBase(id, W, H);
+    const bw = 270, x = 75, bh = 56;
+    steps.forEach((s, i) => { const y = 10 + i * 72;
+      nbox(ch.svg, x, y, bw, bh, [
+        { t: s.n, w: 800, s: 11.5, c: s.red ? C.red : C.ink },
+        { t: s.a + ' — ' + s.b, c: C.ink2, s: 9 }],
+        { stroke: s.red ? C.red : C.ink, sw: s.red ? 2 : 1.2, lh: 15 });
+      if (i < 5) arrow(ch.svg, [[x + bw / 2, y + bh], [x + bw / 2, y + 72]], { dir: 'd' }); });
+    arrow(ch.svg, [[x + bw, 10 + 72 + 28], [400, 10 + 72 + 28], [400, 38], [x + bw + 4, 38]], { color: C.red, dash: 1, dir: 'l' });
+    txt(ch.svg, 412, 130, '기각 → 대체안', { fill: C.red, 'font-size': 9, 'font-weight': 700,
+      'text-anchor': 'middle', transform: 'rotate(90 412 130)' });
+    arrow(ch.svg, [[x, 10 + 5 * 72 + 28], [30, 10 + 5 * 72 + 28], [30, 38], [x - 4, 38]], { dir: 'r' });
+    txt(ch.svg, 18, 230, '다음 세션으로 ↻', { fill: C.ink2, 'font-size': 9, 'font-weight': 700,
+      'text-anchor': 'middle', transform: 'rotate(-90 18 230)' });
+  }
+}
+
 function fillTable(id, head, rows) { const d = document.getElementById(id);
   d.innerHTML = '<table><tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' +
     rows.map(r => '<tr>' + r.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</table>'; }
@@ -814,6 +1127,8 @@ function renderAll() {
     bands: [{ i0: 9, i1: 11 }],
     notes: [{ i: 10, y: 18, text: '저녁 19 ~ 21시 66회 (69%)', textM: '19 ~ 21시 69%' }] });
   gapChart('c-gap');
+  orgChart('c-org');
+  flowChart('c-flow');
 }
 
 fillTable('t-half', ['km', '마블런', '뉴발란스'],
