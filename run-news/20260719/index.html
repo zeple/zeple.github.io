@@ -557,6 +557,8 @@
 </footer>
 </div>
 
+<script src="issues.js"></script>
+<script src="../issues.js"></script>
 <script>
 const DATA = {"lr0719": [7.6833333333, 7.6, 7.65, 7.4833333333]};
 const C = { ink:'#221d15', past:'#8b8371', red:'#b3352c', wash:'#efe9da', box:'#e7e0cd',
@@ -662,7 +664,7 @@ function issueHref(id) {
 }
 (function initIssueNav() {
   const sel = document.getElementById('issue-sel');
-  ISSUES.slice().reverse().forEach(is => {
+  (window.RUNNEWS_ISSUES || ISSUES).slice().reverse().forEach(is => {
     const o = document.createElement('option');
     o.value = is.id; o.textContent = is.label; o.selected = is.id === CURRENT_ISSUE;
     sel.appendChild(o); });

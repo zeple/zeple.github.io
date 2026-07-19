@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 최신호 리다이렉트 — 새 호 발행 시 편집국이 아래 두 곳(URL)을 갱신한다 -->
-<meta http-equiv="refresh" content="0; url=20260719/">
+<!-- 최신호 자동 리다이렉트 — issues.js 매니페스트 구동 (편집국: 이 파일은 더 이상 편집하지 않는다) -->
 <title>러너 타임스 — 최신호로 이동</title>
 <style>
   body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
@@ -13,15 +12,38 @@
   .card { background: #faf8f0; border-top: 3px double #221d15; border-bottom: 3px double #221d15;
           padding: 36px 44px; text-align: center; }
   h1 { font-size: 30px; letter-spacing: .12em; font-weight: 900; margin: 0 0 6px; }
-  p { font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif; font-size: 13px; color: #57503f; margin: 0; }
+  p { font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif; font-size: 13px; color: #57503f; margin: 0 0 4px; }
   a { color: #221d15; font-weight: 700; }
+  ul { list-style: none; padding: 0; margin: 10px 0 0; font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif;
+       font-size: 12px; }
+  li { margin: 3px 0; }
 </style>
+<script src="issues.js"></script>
 </head>
 <body>
 <div class="card">
   <h1>러너 타임스</h1>
-  <p>최신호로 이동 중입니다… 자동으로 넘어가지 않으면
-     <a href="20260719/">제2호 · 일요판 (2026-07-19)</a></p>
+  <p id="msg">최신호로 이동 중입니다…</p>
+  <ul id="list"></ul>
+  <noscript><p>자바스크립트가 꺼져 있습니다 — 주소창에 호 번호 폴더(YYYYMMDD/)를 직접 입력해주세요.</p></noscript>
 </div>
+<script>
+(function () {
+  var issues = window.RUNNEWS_ISSUES || [];
+  var list = document.getElementById('list');
+  // 폴백: 전체 호 링크 목록 (리다이렉트 차단·실패 대비)
+  issues.slice().reverse().forEach(function (is) {
+    var li = document.createElement('li'), a = document.createElement('a');
+    a.href = is.id + '/'; a.textContent = is.label; li.appendChild(a); list.appendChild(li);
+  });
+  if (issues.length) {
+    var latest = issues[issues.length - 1];
+    document.getElementById('msg').textContent = latest.label + '(으)로 이동 중입니다…';
+    location.replace(latest.id + '/');
+  } else {
+    document.getElementById('msg').textContent = '호 목록(issues.js)을 불러오지 못했습니다.';
+  }
+})();
+</script>
 </body>
 </html>
