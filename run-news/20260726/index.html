@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<title>러너 타임스 — 제3호 · 같은 속도, 다른 심장</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light;
+    --street: #d9d4c5;
+    --paper: #faf8f0;
+    --ink: #221d15;
+    --ink-2: #57503f;
+    --ink-3: #8b8371;
+    --hair: #d8d0bc;
+    --hair-dk: #b5ac97;
+    --red: #b3352c;
+    --wash: #efe9da;
+    --box: #f3efe2;
+    --serif: 'Apple Myungjo', AppleMyungjo, 'Nanum Myeongjo', 'Noto Serif KR', Batang, Charter, Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', Pretendard, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  }
+  html { background: var(--street); }
+  body { margin: 0; font-family: var(--serif); color: var(--ink); background: var(--street);
+         line-height: 1.78; font-size: 15px; -webkit-font-smoothing: antialiased;
+         -webkit-text-size-adjust: 100%; }
+  .paper { max-width: 1060px; margin: 0 auto; background: var(--paper); padding: 34px 52px 64px;
+           box-shadow: 0 2px 6px rgba(30,25,15,.18), 0 18px 60px rgba(30,25,15,.14); }
+
+  /* ── 마스트헤드 ── */
+  .topline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 18px;
+             font-family: var(--sans); font-size: 11px; color: var(--ink-2);
+             border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+  .topline b { font-weight: 700; color: var(--ink); }
+  .nameplate { text-align: center; padding: 22px 0 14px; }
+  .nameplate .hangul { font-size: clamp(46px, 8.5vw, 76px); font-weight: 900; letter-spacing: .12em;
+                       line-height: 1.05; }
+  .nameplate .latin { font-family: Georgia, 'Times New Roman', serif; font-size: 13px;
+                      letter-spacing: .42em; text-transform: uppercase; color: var(--ink-2);
+                      margin-top: 8px; }
+  .plateinfo { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 26px;
+               font-family: var(--sans); font-size: 11.5px; color: var(--ink-2);
+               border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink);
+               padding: 7px 0; margin-bottom: 6px; }
+  .plateinfo b { color: var(--ink); font-weight: 700; }
+  .issuenav label { margin-right: 7px; color: var(--ink-3); font-weight: 700; letter-spacing: .08em; }
+  .issuenav select { font-family: var(--sans); font-size: 11.5px; font-weight: 700; color: var(--ink);
+                     background: var(--paper); border: 1px solid var(--ink); border-radius: 0;
+                     padding: 1px 6px; cursor: pointer; }
+  .weatherline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 18px;
+                 font-family: var(--sans); font-size: 11.5px; color: var(--ink-2);
+                 border-bottom: 1px solid var(--hair-dk); padding: 6px 0; margin-bottom: 34px; }
+
+  /* ── 기사 공통 ── */
+  .kicker { display: inline-block; font-family: var(--sans); font-size: 11px; font-weight: 800;
+            letter-spacing: .22em; background: var(--ink); color: var(--paper);
+            padding: 3px 12px 2px; margin-bottom: 14px; }
+  .kicker.red { background: var(--red); }
+  article { margin-bottom: 58px; }
+  .hl { font-size: clamp(27px, 4.6vw, 42px); font-weight: 900; line-height: 1.32;
+        letter-spacing: -0.005em; margin: 0 0 12px; word-break: keep-all; }
+  .hl-sub { font-size: clamp(20px, 3.2vw, 26px); font-weight: 800; line-height: 1.4;
+            margin: 0 0 10px; word-break: keep-all; }
+  .deck { font-size: 16.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 14px;
+          word-break: keep-all; }
+  .byline { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3);
+            border-top: 1px solid var(--hair-dk); border-bottom: 1px solid var(--hair-dk);
+            padding: 5px 0; margin-bottom: 18px; display: flex; justify-content: space-between;
+            flex-wrap: wrap; gap: 2px 16px; }
+  .byline b { color: var(--ink-2); font-weight: 700; }
+  .cols2 { columns: 2; column-gap: 34px; column-rule: 1px solid var(--hair); }
+  .cols3 { columns: 3; column-gap: 34px; column-rule: 1px solid var(--hair); }
+  .cols2 p, .cols3 p { break-inside: avoid-column; }
+  p { margin: 0 0 13px; text-align: justify; }
+  .dropcap::first-letter { float: left; font-size: 52px; line-height: .88; font-weight: 900;
+                           padding: 5px 10px 0 0; }
+  .q { border-left: 3px solid var(--ink); padding: 2px 0 2px 14px; margin: 14px 0;
+       font-weight: 700; break-inside: avoid; }
+  .rule { border: none; border-top: 1px solid var(--ink); margin: 44px 0 34px; position: relative; }
+  .rule::after { content: '◆'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+                 background: var(--paper); padding: 0 10px; font-size: 11px; color: var(--ink); }
+
+  /* ── 스코어보드 / 박스 ── */
+  .scoreboard { border-top: 3px double var(--ink); border-bottom: 3px double var(--ink);
+                display: grid; grid-template-columns: 1fr 1fr; margin: 6px 0 22px; }
+  .score { padding: 16px 20px 14px; }
+  .score + .score { border-left: 1px solid var(--hair-dk); }
+  .score .lab { font-family: var(--sans); font-size: 10.5px; font-weight: 800; letter-spacing: .2em;
+                color: var(--ink-3); text-transform: uppercase; }
+  .score .val { font-size: clamp(34px, 6vw, 46px); font-weight: 900; line-height: 1.2;
+                font-variant-numeric: lining-nums; }
+  .score .was { font-family: var(--sans); font-size: 12px; color: var(--ink-2); }
+  .score .was s { color: var(--ink-3); }
+  .score .delta { font-family: var(--sans); font-size: 12.5px; font-weight: 800; color: var(--red); }
+  .newsbox { border: 1px solid var(--ink); padding: 16px 20px 12px; margin: 20px 0;
+             break-inside: avoid; }
+  .newsbox.shade { background: var(--box); }
+  .newsbox h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 900; }
+  .newsbox h4 .tag { font-family: var(--sans); font-size: 10px; font-weight: 800; letter-spacing: .18em;
+                     background: var(--ink); color: var(--paper); padding: 2px 8px; margin-right: 8px;
+                     vertical-align: 2px; }
+  .newsbox ul, .newsbox ol { margin: 0; padding-left: 19px; }
+  .newsbox li { margin-bottom: 6px; font-size: 13.5px; }
+
+  /* ── 그래픽(차트) ── */
+  figure { margin: 26px 0 10px; border-top: 1px solid var(--ink); padding-top: 10px;
+           break-inside: avoid; }
+  figcaption { display: flex; justify-content: space-between; align-items: baseline;
+               flex-wrap: wrap; gap: 2px 14px; margin-bottom: 10px; }
+  figcaption .t { font-family: var(--sans); font-weight: 800; font-size: 13.5px; }
+  figcaption .t .fno { color: var(--paper); background: var(--ink); font-size: 10px; font-weight: 800;
+                       letter-spacing: .1em; padding: 2px 7px; margin-right: 9px; vertical-align: 1px; }
+  figcaption .u { font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
+  .chart { position: relative; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper);
+         font-family: var(--sans); font-size: 12px; line-height: 1.5; padding: 7px 11px;
+         border-radius: 3px; opacity: 0; transition: opacity .12s; white-space: nowrap; z-index: 5;
+         transform: translate(-50%, -100%); }
+  .legend { display: flex; gap: 6px 20px; flex-wrap: wrap; font-family: var(--sans); font-size: 12px;
+            color: var(--ink-2); margin: 0 0 4px; }
+  .legend .sw { display: inline-block; width: 16px; height: 0; border-top: 3px solid;
+                vertical-align: middle; margin-right: 6px; margin-top: -2px; }
+  .legend .sw.dash { border-top-style: dashed; }
+  .src { font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); margin-top: 7px;
+         border-bottom: 1px solid var(--hair); padding-bottom: 8px; }
+  details.tbl { margin-top: 8px; font-family: var(--sans); font-size: 12px; }
+  details.tbl summary { cursor: pointer; font-weight: 700; font-size: 11px; color: var(--ink-2); }
+  details.tbl .scroll { overflow-x: auto; }
+  details.tbl table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+  details.tbl th, details.tbl td { border: 1px solid var(--hair); padding: 3px 9px; text-align: right;
+                                   font-variant-numeric: tabular-nums; }
+  details.tbl th:first-child, details.tbl td:first-child { text-align: left; }
+  details.tbl th { background: var(--box); font-weight: 700; }
+
+  /* ── 표 ── */
+  .rtwrap { overflow-x: auto; margin: 16px 0 8px;
+    background:
+      linear-gradient(90deg, var(--paper) 30%, rgba(250,248,240,0)),
+      linear-gradient(270deg, var(--paper) 30%, rgba(250,248,240,0)) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(34,29,21,.18), transparent),
+      radial-gradient(farthest-side at 100% 50%, rgba(34,29,21,.18), transparent) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 44px 100%, 44px 100%, 12px 100%, 12px 100%;
+    background-attachment: local, local, scroll, scroll; }
+  table.rt { border-collapse: collapse; width: 100%; font-size: 13px; font-family: var(--sans);
+             background: transparent; }
+  table.rt th { text-align: left; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink);
+                padding: 7px 12px 6px 0; font-size: 11px; letter-spacing: .08em; white-space: nowrap; }
+  table.rt td { border-bottom: 1px solid var(--hair); padding: 8px 12px 8px 0; vertical-align: top; }
+  table.rt td.num { font-variant-numeric: tabular-nums; }
+  table.rt tr.hl-row td { font-weight: 800; background: var(--wash); }
+
+  /* ── 체크리스트(인사동정 스타일) ── */
+  .checks { list-style: none; padding: 0; margin: 12px 0; font-family: var(--sans); }
+  .checks li { display: flex; gap: 11px; align-items: baseline; padding: 8px 2px;
+               border-bottom: 1px dotted var(--hair-dk); font-size: 13.5px; }
+  .checks .st { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; white-space: nowrap;
+                padding: 2px 8px; border: 1px solid var(--ink); }
+  .st.done { background: var(--ink); color: var(--paper); }
+  .st.wip  { background: var(--paper); color: var(--ink); }
+  .st.todo { background: var(--paper); color: var(--ink-3); border-color: var(--ink-3); }
+
+  /* ── 사설 ── */
+  .editorial { background: var(--box); border-top: 3px double var(--ink);
+               border-bottom: 3px double var(--ink); padding: 24px 30px 18px; }
+  .editorial .kicker { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
+
+  /* ── 광고 ── */
+  .ads { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; margin: 10px 0 30px; }
+  .ad { border: 2px solid var(--ink); padding: 22px 24px 18px; text-align: center;
+        position: relative; }
+  .ad::before { content: '광고'; position: absolute; top: -9px; left: 14px; background: var(--paper);
+                font-family: var(--sans); font-size: 10px; letter-spacing: .3em; color: var(--ink-3);
+                padding: 0 8px; }
+  .ad .ad-hl { font-size: 24px; font-weight: 900; margin: 4px 0 8px; word-break: keep-all; }
+  .ad .ad-sub { font-family: var(--sans); font-size: 12.5px; color: var(--ink-2); line-height: 1.7; }
+  .ad .ad-fine { font-family: var(--sans); font-size: 10px; color: var(--ink-3); margin-top: 12px;
+                 border-top: 1px solid var(--hair); padding-top: 8px; }
+  .ad.red { border-color: var(--red); }
+  .ad.red .ad-hl { color: var(--red); }
+
+  /* ── 푸터 ── */
+  footer.colophon { border-top: 3px double var(--ink); margin-top: 24px; padding-top: 14px;
+                    font-family: var(--sans); font-size: 11px; color: var(--ink-2);
+                    line-height: 1.9; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .grid2 > div { min-width: 0; }
+
+  /* ── 팀 카드 ── */
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 22px 0; }
+  .tcard { border: 1px solid var(--ink); padding: 13px 15px 11px; min-width: 0;
+           display: flex; flex-direction: column; }
+  .tcard.dormant { border-style: dashed; }
+  .tcard .thead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+                  border-bottom: 2px solid var(--ink); padding-bottom: 6px; margin-bottom: 8px; }
+  .tcard .tname { font-weight: 900; font-size: 15.5px; }
+  .tcard .tname .veto { color: var(--red); font-size: 11px; vertical-align: 2px; }
+  .tcard .tmodel { font-family: var(--sans); font-size: 9px; font-weight: 800; letter-spacing: .12em;
+                   border: 1px solid var(--ink); padding: 1px 6px; white-space: nowrap; }
+  .tcard .tmodel.hi { background: var(--ink); color: var(--paper); }
+  .tcard .trole { font-family: var(--sans); font-size: 12px; color: var(--ink-2); line-height: 1.6;
+                  margin-bottom: 9px; }
+  .tcard .talgo { font-family: var(--sans); font-size: 10.5px; background: var(--box);
+                  padding: 8px 10px; line-height: 1.75; margin-top: auto; }
+  .tcard .talgo b { letter-spacing: .06em; }
+  .tcard .tgoal { font-family: var(--sans); font-size: 11.5px; margin-top: 9px; font-weight: 700; }
+  .tcard .tgoal::before { content: '목표 — '; color: var(--ink-3); font-weight: 800; font-size: 10px;
+                          letter-spacing: .1em; }
+  /* ── 인터뷰 ── */
+  .iv { break-inside: avoid; border-top: 1px solid var(--hair-dk); padding: 11px 0 7px; }
+  .iv .ivq { font-family: var(--sans); font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+  .iv .ivq .who { background: var(--ink); color: var(--paper); padding: 1px 8px; margin-right: 8px;
+                  font-size: 10px; letter-spacing: .1em; }
+  .iv .ivq .who.red { background: var(--red); }
+  .iv .iva { font-size: 13.5px; margin: 0; }
+
+  /* ═══ 모바일 ═══ */
+  @media (max-width: 720px) {
+    body { font-size: 14.5px; }
+    .paper { padding: 20px 18px 44px; }
+    .nameplate { padding: 16px 0 10px; }
+    .nameplate .hangul { letter-spacing: .06em; }
+    .nameplate .latin { letter-spacing: .28em; font-size: 11px; }
+    .plateinfo { gap: 3px 14px; }
+    .weatherline { flex-direction: column; margin-bottom: 26px; }
+    article { margin-bottom: 44px; }
+    .deck { font-size: 15px; }
+    .cols2, .cols3 { columns: 1; }
+    .scoreboard { grid-template-columns: 1fr; }
+    .score + .score { border-left: none; border-top: 1px solid var(--hair-dk); }
+    .grid2 { grid-template-columns: 1fr; }
+    .ads { grid-template-columns: 1fr; }
+    .editorial { padding: 18px 18px 14px; }
+    .team-grid { grid-template-columns: 1fr; gap: 12px; }
+    table.rt { min-width: 520px; font-size: 12.5px; }
+    .rule { margin: 34px 0 28px; }
+  }
+  @media print { body { background: #fff; } .paper { box-shadow: none; padding: 0; } }
+</style>
+
+<div class="paper">
+
+<!-- ═══════════ 마스트헤드 ═══════════ -->
+<header>
+  <div class="topline">
+    <span>측정되지 않으면 코칭하지 않는다</span>
+    <span><b>JTBC 마라톤 D-98</b></span>
+  </div>
+  <div class="nameplate">
+    <div class="hangul">러너 타임스</div>
+    <div class="latin">The Runner Times · Data Sports Daily</div>
+  </div>
+  <div class="plateinfo">
+    <span><b>제3호 · 일요판</b></span>
+    <span>2026년 7월 26일 일요일</span>
+    <span>발행 <b>Team 191 편집국</b></span>
+    <span>취재 범위 2026.07.19 ~ 07.25</span>
+    <span class="issuenav"><label for="issue-sel">지난 호</label><select id="issue-sel" aria-label="호 선택"></select></span>
+  </div>
+  <div class="weatherline">
+    <span>차주 처방: 7/29 ST_3회차(게이트 ① 최종) · 8/1 LR_15k 단독 창</span>
+    <span>다음 이정표: Phase 3 전환 판정 — 8월 초로 이동</span>
+  </div>
+</header>
+
+<!-- ═══════════ 1면 톱 ═══════════ -->
+<article>
+  <div class="kicker">1면 · 종합</div>
+  <h1 class="hl">같은 속도, 다른 심장 — BASE 2회차, 6bpm의 증거</h1>
+  <p class="deck">트레드밀 8.0km/h, 경사 0%, 40분. 조건은 2주 전과 완전히 같았다.
+     그런데 심장은 6bpm 덜 뛰었다. 격주 베이스라인 프로토콜이 처음으로 숫자를 냈다.</p>
+  <div class="byline"><span><b>Team 191 데이터랩</b> 특별취재반</span><span>그래픽 1건 · 스코어보드</span></div>
+
+  <div class="scoreboard">
+    <div class="score">
+      <div class="lab">BASE 2회차 avgHR — 동일 속도 대비</div>
+      <div class="val">166<span style="font-size:.4em;font-weight:700"> bpm</span></div>
+      <div class="was">1회차 <s>172bpm</s> (07-06) <span class="delta">▼6bpm</span></div>
+      <div class="was">드리프트(전후반) +8 · 드리프트(5분법) +20 — 둘 다 1회차보다 개선</div>
+    </div>
+    <div class="score">
+      <div class="lab">회복력 — HRR120</div>
+      <div class="val">37</div>
+      <div class="was">7/11 23 → 7/15 26 → 7/19 34 → 7/21 38 → 7/24 37</div>
+      <div class="was">개선 후 유지 구간 진입 <span class="delta">스태미나 드레인 −2.72/km</span></div>
+    </div>
+  </div>
+
+  <div class="cols2">
+    <p class="dropcap">7월 21일 화요일, 러너는 격주 베이스라인 고정 프로토콜의 2회차를 뛰었다.
+       트레드밀 8.0km/h, 경사 0%, 40분, HRM-600 착용, 메트로놈 케이던스 175 — 7월 6일
+       1회차와 조건을 완전히 맞췄다. 결과는 <b>평균심박 166bpm</b>. 1회차의 172bpm에서
+       6bpm 낮아졌다.</p>
+    <p>같은 속도에서 심박이 낮아졌다는 것은 그 자체로 유산소 베이스가 넓어졌다는 신호다.
+       그런데 이번 2회차는 거기서 그치지 않았다. 심박 드리프트(전후반 비교)가 +12에서
+       +8로, 5분 구간법 드리프트는 +29에서 +20으로 함께 줄었다. <b>심박 수준과 드리프트가
+       동시에 개선</b>된 것 — 우연이나 컨디션 하루의 문제가 아니라는 뜻이다.</p>
+    <div class="q">"온도차 1.0°C로는 설명되지 않는 폭이다 — 이건 유산소 베이스 향상의
+       첫 종단(longitudinal) 증거다." — 데이터랩</div>
+    <p>1회차는 28.1°C, 2회차는 27.1°C — 온도차는 1.0°C에 불과했다. 이 정도 차이로는
+       6bpm의 하락도, 드리프트 개선도 설명되지 않는다는 것이 데이터랩의 판독이다. 수직진동(VO)은
+       104.0mm로 1회차 102.4mm와 비슷한 수준을 유지했지만, 트레드밀 저속 주행 특성상
+       VO는 판정 지표가 아니라 참고 지표로만 취급된다.</p>
+    <p>격주 간격으로 같은 조건을 반복 측정하는 이 프로토콜의 설계 의도가 바로 이것이다.
+       한 번의 좋은 세션이 아니라, 두 번째 측정에서 첫 번째보다 나아졌는지를 보는 것.
+       2주 간격의 1·2회차 비교에서 그 답이 처음으로 나왔다.</p>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 1</span>BASE 프로토콜 — 회차별 avgHR·드리프트</div><div class="u">bpm · 동일 속도 8.0km/h</div></figcaption>
+    <div class="legend"><span><span class="sw dash" style="border-color:var(--ink-3)"></span>1회차 (07-06)</span><span><span class="sw" style="border-color:var(--ink)"></span>2회차 (07-21)</span></div>
+    <div class="chart" id="c-base"></div>
+    <div class="src">자료: 데이터랩 판독 — 격주 베이스라인 고정 프로토콜(트레드밀 8.0km/h·경사 0%·40분·HRM-600·메트로놈175) | 그래픽 = 데이터랩</div>
+  </figure>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 주간 결산면 ═══════════ -->
+<article>
+  <div class="kicker">주간 결산면</div>
+  <h2 class="hl-sub">이번 주 결산 — 3세션 25.6km, 그리고 정당하게 포기한 롱런 하나</h2>
+  <p class="deck">7/19 ~ 25, 25.6km·3세션·188분. 직전 4주 중 가장 낮은 볼륨이지만
+     오늘 포기한 롱런이 오히려 이번 주의 가장 정확한 판단이었다.</p>
+  <div class="byline"><span><b>데이터랩 · 컨디셔닝</b> 병렬 집계</span><span>게이트 진행률 · 차주 플랜</span></div>
+
+  <div class="cols2">
+    <p class="dropcap">7월 19일부터 25일까지, 이번 주 주간 거리는 25.6km, 3세션, 총 188분.
+       직전 4주 평균(32.3 / 41.1 / 35.9 / 16.2km)과 비교해도 낮은 축에 속한다. 세션은
+       7/19 LR_14k, 7/21 BASE_2회차(트레드밀 고정), 7/24 ST_2회차 셋뿐이었다. 7/20·22·23은
+       우천과 트레드밀 도색 공사가 겹쳐 휴식·오프로 처리됐다.</p>
+    <p>그리고 7월 25일 토요일, 예정돼 있던 롱런을 러너가 출발 전에 포기했다. 사유는
+       피로. 컨디셔닝과 헤드코치가 공동으로 이 결정을 판정했고, 결론은 <b>"정당한 신호
+       대응"</b>이었다. 억지로 채운 거리보다 멈춘 판단이 데이터로 더 정확했다는 것 —
+       지난 호 1면의 14km 정지와 같은 계열의 결정이다.</p>
+    <p>안전 지표는 이번 주도 전 구간 청신호였다. 무릎 신호등은 3세션 전부 무증상, 좌우
+       밸런스는 50.34 ~ 51.07 범위 안에서 안정적으로 움직였다. 안정 시 심박(RHR)도
+       52 ~ 54bpm 정상 범위를 유지했다.</p>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="newsbox shade">
+        <h4><span class="tag">회복력 트렌드</span>HRR120 · 스태미나 드레인 5일 궤적</h4>
+        <ul class="checks" style="margin:0">
+          <li><span class="st done">완료</span><span>HRR120 7/11 23 → 7/24 37 — 개선 후 유지 국면</span></li>
+          <li><span class="st done">완료</span><span>스태미나 드레인 −2.46 → −2.72/km — 완만한 개선</span></li>
+          <li><span class="st done">완료</span><span>80/20 고강도 비중 22.5% 🟢 준수</span></li>
+          <li><span class="st done">완료</span><span>LR_14k 175+ 체류 0초 — 실질 Z2 준수율 100%</span></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="newsbox">
+        <h4><span class="tag">이번 주</span>세션 로그 (7/19 ~ 25)</h4>
+        <ul>
+          <li><b>일(19)</b> LR_14k — Z2 준수율 100%, 175+ 체류 0초</li>
+          <li><b>화(21)</b> BASE_2회차 — avgHR 166, 드리프트 개선 (1면)</li>
+          <li><b>목(24)</b> ST_2회차 — 부분 통과, 폼 붕괴 시그니처 확인</li>
+          <li><b>월·수·목</b> 휴식·오프 — 우천 + 트레드밀 도색공사</li>
+          <li><b>토(25)</b> LR 예정 → 피로로 출발 전 포기, "정당한 신호 대응"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="rtwrap"><table class="rt">
+    <tr><th>요일</th><th>세션</th><th>비고</th></tr>
+    <tr class="hl-row"><td>일</td><td>LR_14k</td><td>175+ 체류 0초 · 실질 Z2 준수율 100%</td></tr>
+    <tr><td>월</td><td>휴식</td><td>우천</td></tr>
+    <tr><td>화</td><td>BASE_2회차</td><td>트레드밀 고정 · avgHR 166 (▼6bpm) · 드리프트 개선</td></tr>
+    <tr><td>수</td><td>오프</td><td>트레드밀 도색공사</td></tr>
+    <tr><td>목</td><td>ST_2회차</td><td>메인 20분 통짜 부분 통과 · 폼 붕괴 시그니처</td></tr>
+    <tr><td>금</td><td>휴식</td><td>-</td></tr>
+    <tr><td>토</td><td>LR 예정 → 포기</td><td>피로 — 정당한 신호 대응 (컨디셔닝·헤드코치 공동 판정)</td></tr>
+  </table></div>
+
+  <div class="newsbox" style="margin-top:22px">
+    <h4><span class="tag">차주</span>7/26 ~ 8/1 플랜 (주간 목표 41 ~ 45km)</h4>
+    <ul>
+      <li><b>일(26)</b> 휴식</li>
+      <li><b>월(27)</b> E_6k + 스트라이드</li>
+      <li><b>화(28)</b> 휴식 or R_4k</li>
+      <li><b>수(29)</b> ST_3회차 — 게이트 ① 최종 판정</li>
+      <li><b>목(30)</b> 휴식</li>
+      <li><b>금(31)</b> E_6k + 스트라이드</li>
+      <li><b>토(8/1)</b> LR_15k — 단독 창</li>
+    </ul>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 데이터면 ═══════════ -->
+<article>
+  <div class="kicker">데이터면</div>
+  <h2 class="hl-sub">20분의 균열 — ST_2회차, 심박은 통과했지만 페이스는 못 지켰다</h2>
+  <p class="deck">메인 20분 통짜 4개 랩 중 심박축은 4랩 전부 게이트를 통과했다.
+     그러나 페이스 밴드에 정확히 착지한 랩은 하나도 없었다 — 앞은 빠르고 뒤는 무너졌다.</p>
+  <div class="byline"><span><b>데이터랩</b> 판독</span><span>메인 20분 · 3.42km · 야간 30.5 ~ 31°C</span></div>
+
+  <div class="cols2">
+    <p class="dropcap">7월 24일 목요일 밤, ST_2회차의 메인 세트는 20분 통짜 3.42km였다.
+       페이스 밴드는 5:45 ~ 5:50/km, 심박 게이트는 170 ~ 181bpm으로 설정됐다. 결과는
+       <b>부분 통과(🟡)</b> — 4개 랩의 심박은 전부 게이트 안에 들어왔지만, 페이스가 밴드에
+       착지한 랩은 단 하나도 없었다.</p>
+    <p>랩3은 5:44(🟡, 밴드보다 빠름) HR 173(🟢), 랩4는 5:43(🟡, 더 빠름) HR 175(🟢),
+       랩5는 5:56(🟡, 밴드보다 느림) HR 172(🟢), 그리고 랩6은 5:56이 아니라 6:14까지
+       느려지며 <b>🔴</b>를 찍었다 — HR은 179로 여전히 게이트 안이었다. 요약하면 앞
+       두 랩은 오버페이스, 뒤 두 랩은 실속. 심장은 끝까지 버텼는데 다리가 먼저
+       못 버틴 형태다.</p>
+    <div class="q">"후반 SD 증가율 — 케이던스 +68%, GCT +52%, VO +35%. 급증점은 랩6,
+       3km 부근. 페이스 이탈 시점과 정확히 겹친다." — 데이터랩</div>
+    <p>이번 세션에서 데이터랩이 새로 잡아낸 것은 <b>폼 붕괴 시그니처</b>다. 후반부로
+       갈수록 케이던스·GCT·수직진동(VO)의 표준편차(SD)가 각각 68%, 52%, 35% 급증했고,
+       그 급증이 시작되는 지점이 랩6, 즉 3km 부근이었다. 이 지점은 페이스가 5:56에서
+       6:14로 무너지기 시작한 시점과 정확히 일치한다. 데이터랩은 이를 "그날 지구력
+       한계 마커"로 규정했다 — 심박이 아니라 폼 안정성이 먼저 무너지는 지점을 랩 단위로
+       특정할 수 있게 됐다는 뜻이다.</p>
+    <p>세션은 야간 30.5 ~ 31°C에서 진행됐다. 무더위 속에서도 심박축 4랩 전부가 게이트
+       안에 머물렀다는 점은 긍정적이나, 페이스축의 밴드 미착지는 게이트 ① 서브템포
+       이중 게이트 최종 판정을 다음 회차로 넘기는 근거가 됐다(게이트 현황 참조).</p>
+  </div>
+
+  <figure>
+    <figcaption><div class="t"><span class="fno">그래픽 2</span>ST_2회차 메인 20분 — 랩별 페이스·심박</div><div class="u">랩3 ~ 6 · 밴드 5:45 ~ 5:50 / 게이트 170 ~ 181</div></figcaption>
+    <div class="legend"><span><span class="sw" style="border-color:var(--ink)"></span>페이스(min/km)</span><span><span class="sw dash" style="border-color:var(--red)"></span>심박(bpm, 우축 대응)</span></div>
+    <div class="chart" id="c-st2"></div>
+    <div class="src">자료: 데이터랩 판독 — 메인 20분 통짜 3.42km, 랩3~6 · 후반 SD 급증점 랩6(3km 부근) | 그래픽 = 데이터랩</div>
+  </figure>
+
+  <div class="rtwrap"><table class="rt">
+    <tr><th>랩</th><th>페이스</th><th>밴드 판정</th><th>HR</th><th>게이트 판정</th></tr>
+    <tr><td>3</td><td class="num">5:44</td><td>🟡</td><td class="num">173</td><td>🟢</td></tr>
+    <tr><td>4</td><td class="num">5:43</td><td>🟡</td><td class="num">175</td><td>🟢</td></tr>
+    <tr><td>5</td><td class="num">5:56</td><td>🟡</td><td class="num">172</td><td>🟢</td></tr>
+    <tr class="hl-row"><td>6</td><td class="num">6:14</td><td>🔴</td><td class="num">179</td><td>🟢</td></tr>
+  </table></div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 정정 보도 ═══════════ -->
+<article>
+  <div class="newsbox shade" style="border-width:2px">
+    <h4><span class="tag" style="background:var(--red)">정정 보도</span>"HRM-600 착용 0/3" 오경보 — 기각, 실제 착용률 3/3</h4>
+    <div class="cols2" style="margin-top:6px">
+      <p style="font-size:13.5px">컨디셔닝 보고가 FIT 파일의 device product 코드 <b>4025</b>
+         (FR955 시계 본체 코드)를 손목 광학 센서로 오독해 "HRM-600 착용 0/3 · 페어링
+         긴급 점검"이라는 오경보를 냈다. 이 오독은 파생 오류로도 번져 "HRR·스태미나
+         미확보"까지 잘못 전파됐다.</p>
+      <p style="font-size:13.5px">헤드코치가 직접 실측 검증에 나섰다. product <b>4607</b>
+         존재 확인, hrv 메시지 수천 건 기록 확인, GCT 좌우 밸런스 정상 범위 확인 —
+         3중 확인을 모두 통과했다. 결론은 <b>기각</b>. 실제 착용률은 <b>3/3</b>이다.
+         이 사건은 안티패턴 #8로 지침서에 박제됐다.</p>
+    </div>
+    <p style="font-size:13.5px; margin-top:4px">부수적으로, 지난 세션들에서 관측된
+       랩7 max심박 190 기록도 재검증됐다. 센서 불량이 아니라 <b>랩 경계 귀속
+       아티팩트</b>로 확정 — 피크 심박의 실제 발생 위치는 랩6 내부였다.</p>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ Phase 3 게이트 면 ═══════════ -->
+<article>
+  <div class="kicker">게이트 현황</div>
+  <h2 class="hl-sub">Phase 3 전환, 8월 초로 이동 — "실패가 아니라 정상 순서"</h2>
+  <p class="deck">7/27 예정이었던 전환 판정 시점에 5항목 중 확정 통과는 1항목뿐이다.
+     그러나 데이터랩은 이를 "BASE 개선이 볼륨보다 먼저 온 정상 순서"로 읽는다.</p>
+  <div class="byline"><span><b>데이터랩 · 헤드코치</b> 종합 판정</span><span>5항목 진행률</span></div>
+
+  <div class="cols2">
+    <p class="dropcap">7월 27일로 예정됐던 Phase 3 전환 판정 시점에서 게이트 5항목을
+       전수 점검한 결과, 확정 통과는 증상 게이트 하나뿐이었다. 나머지 4항목은 진행 중이거나
+       미충족 상태다. 이에 따라 <b>7/27 시점 Phase 3 전환은 불가</b>하며, 전환 판정은
+       8월 초로 이동한다.</p>
+    <p>다만 데이터랩은 이를 실패로 규정하지 않는다. 이번 주 1면의 BASE 2회차 결과 —
+       같은 속도에서 심박 6bpm 하락 — 가 먼저 도착했고, 주간 볼륨 게이트가 아직 못
+       따라온 것은 "BASE 개선이 볼륨보다 먼저 온 정상 순서"라는 것이 판정의 요지다.</p>
+  </div>
+
+  <div class="newsbox">
+    <h4><span class="tag">5항목 진행률</span>Phase 3 전환 게이트</h4>
+    <ul class="checks" style="margin:0">
+      <li><span class="st wip">진행</span><span>① 서브템포 3회 이중 게이트 — 2회 실시 (7/15 🟢 / 7/24 🟡), 심박축 통과·페이스축 미달</span></li>
+      <li><span class="st wip">진행</span><span>② 롱런 16km — 14km 완주·디커플링 4.5% / 16km 미도달</span></li>
+      <li><span class="st wip">진행</span><span>③ GCT 밸런스 이지런 롤링 5 — 유효 표본 1건(LR_14k 50.85 ~ 51.07)</span></li>
+      <li><span class="st todo">대기</span><span>④ 주간 볼륨 43km × 3주 — 0/4주 (최고 41.1km)</span></li>
+      <li><span class="st done">완료</span><span>⑤ 증상 게이트 🟢</span></li>
+    </ul>
+  </div>
+</article>
+
+<hr class="rule">
+
+<!-- ═══════════ 오피니언 ═══════════ -->
+<article>
+  <div class="editorial">
+    <div class="kicker">사설</div>
+    <h2 class="hl-sub">같은 조건, 다른 심장이 말해주는 것</h2>
+    <div class="cols2">
+      <p>이번 주의 진짜 뉴스는 25.6km라는 숫자가 아니라 166이라는 숫자다. 트레드밀
+         8.0km/h, 경사 0%, 40분 — 2주 전과 완전히 같은 조건에서 심장이 6bpm 덜 뛰었다.
+         온도차 1.0°C로는 설명되지 않는 폭이라는 데이터랩의 판독은, 이 팀이 세운
+         '측정되지 않으면 코칭하지 않는다'는 원칙이 처음으로 종단(longitudinal) 증거를
+         냈다는 뜻이다.</p>
+      <p>토요일 롱런을 포기한 결정도 같은 원칙의 연장선에 있다. 억지로 채운 거리는
+         숫자는 늘려도 데이터는 늘리지 않는다. 피로 신호에 정직하게 반응한 것이 이번
+         주의 두 번째로 정확한 판단이었다 — 지난 호 14km 정지와 마찬가지로, 절제가
+         기록을 만든다는 이 지면의 오래된 원칙이 다시 확인됐다.</p>
+      <p>Phase 3 전환이 8월 초로 미뤄진 것을 실패로 읽을 필요는 없다. 볼륨이 먼저
+         쌓이고 베이스가 나중에 따라오는 것보다, 베이스가 먼저 다져지고 볼륨이 그
+         위에 얹히는 편이 부상 위험 면에서 더 안전한 순서다. 서두르지 않은 대가로
+         받은 것이 심박 6bpm이라면, 이번 주는 손해 본 주가 아니다.</p>
+      <p>D-98. 다음 주 수요일 ST_3회차가 게이트 ①의 최종 판정을 낸다. 그리고 8월 1일
+         LR_15k가 단독 창으로 잡혔다 — 다음 호는 그 결과를 지면에 담는다.</p>
+    </div>
+  </div>
+</article>
+
+<!-- ═══════════ 광고 ═══════════ -->
+<div class="ads">
+  <div class="ad">
+    <div class="ad-hl">그날의 진실은 device product 코드에 없습니다</div>
+    <div class="ad-sub"><b>3중 확인 캠페인</b> —
+      4025는 시계, 4607은 심박벨트입니다.<br>
+      숫자 하나로 결론 내리지 않는 것, 그것이 데이터랩의 일입니다.</div>
+    <div class="ad-fine">정정 보도 후원 · Team 191 데이터랩 제공 · 안티패턴 #8</div>
+  </div>
+  <div class="ad red">
+    <div class="ad-hl">멈추는 것도 훈련입니다</div>
+    <div class="ad-sub"><b>정당한 신호 대응</b> — 피로한 날 출발선 앞에서
+      돌아서는 결정, 저희는 응원합니다.<br>
+      8월 1일, 컨디션이 준비되면 다시 만납니다.</div>
+    <div class="ad-fine">공익 캠페인 · Team 191 컨디셔닝 · 헤드코치 공동 제공</div>
+  </div>
+</div>
+
+<!-- ═══════════ 푸터 ═══════════ -->
+<footer class="colophon">
+  <b>러너 타임스</b> 제3호 · 일요판 · 발행 Team 191 편집국 · 편집 헤드코치 · 의학 자문 인저리가드 · 다음 호: Phase 3 전환 판정 시 호외 가능 (8월 초) · 정기호: 2026-08-02 일요판(제4호) 예정<br>
+  취재 근거: 2026-07-19 ~ 07-25 세션 데이터 · 데이터랩 판독(BASE 회차 비교·ST 랩 게이트·폼 붕괴 SD) · 컨디셔닝 회복력 트렌드(HRR120·스태미나 드레인) · 헤드코치 정정 보도 실측 검증 · 러닝코치_지침 최신판<br>
+  판독 원칙: 존 = %LTHR(191) 앵커 · 심박 앵커 단방향 원칙 · 저속 세션 해석 규칙 · 편집국은 데이터랩 산출물만 인용 ·
+  본지는 실측되지 않은 주장을 싣지 않습니다.
+</footer>
+</div>
+
+<script src="issues.js"></script>
+<script src="../issues.js"></script>
+<script>
+const DATA = {
+  base: { hr1: 172, hr2: 166, drift1a: 12, drift2a: 8, drift1b: 29, drift2b: 20 },
+  st2: {
+    laps: ['랩3', '랩4', '랩5', '랩6'],
+    pace: [5 + 44/60, 5 + 43/60, 5 + 56/60, 6 + 14/60],
+    hr: [173, 175, 172, 179]
+  }
+};
+const C = { ink:'#221d15', past:'#8b8371', red:'#b3352c', wash:'#efe9da', box:'#e7e0cd',
+            hair:'#ddd5c2', axis:'#b5ac97', ink2:'#57503f', ink3:'#8b8371',
+            barold:'#d5cdb8', bar:'#3a342a', hrlow:'#c9c2ae' };
+const NS = 'http://www.w3.org/2000/svg';
+const fmtPace = v => { let m = Math.floor(v), s = Math.round((v - m) * 60);
+  if (s === 60) { m++; s = 0; } return m + ':' + String(s).padStart(2, '0'); };
+function E(tag, attrs, parent) { const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+const SANS = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+function txt(parent, x, y, str, attrs) { const t = E('text', Object.assign({ x, y,
+  'font-family': SANS, 'font-size': 11, fill: C.ink3 }, attrs || {}), parent);
+  t.textContent = str; return t; }
+const isMobile = () => document.querySelector('.paper').clientWidth < 640;
+const isNarrowCol = id => { const el = document.getElementById(id);
+  return el.parentElement.closest('.grid2') && !isMobile(); };
+function chartBase(id, W, H) { const root = document.getElementById(id); root.innerHTML = '';
+  const svg = E('svg', { viewBox: `0 0 ${W} ${H}` }, root);
+  const tip = document.createElement('div'); tip.className = 'tip'; root.appendChild(tip);
+  return { root, svg, tip }; }
+function showTip(ch, W, lx, ly, html) { const r = ch.root.getBoundingClientRect(), k = r.width / W;
+  ch.tip.innerHTML = html; ch.tip.style.left = (lx * k) + 'px';
+  ch.tip.style.top = (ly * k - 8) + 'px'; ch.tip.style.opacity = 1; }
+function hideTip(ch) { ch.tip.style.opacity = 0; }
+
+/* ── 라인 차트 ── */
+function lineChart(id, cfg) {
+  const M = isMobile(), NC = isNarrowCol(id);
+  const W = (M || NC) ? 430 : 900, H = cfg.h || ((M || NC) ? 260 : 300);
+  const L = (M || NC) ? 44 : 52, R = (M || NC) ? (cfg.rM || 46) : (cfg.r || 62), T = 18, B = 32;
+  const iw = W - L - R, ih = H - T - B, ch = chartBase(id, W, H);
+  const allY = cfg.series.flatMap(s => s.v.filter(v => v != null));
+  let y0 = cfg.yMin != null ? cfg.yMin : Math.min(...allY), y1 = cfg.yMax != null ? cfg.yMax : Math.max(...allY);
+  const pad = (y1 - y0) * 0.09 || 1; if (cfg.yMin == null) y0 -= pad; if (cfg.yMax == null) y1 += pad;
+  const n = cfg.labels.length;
+  const X = i => L + (n === 1 ? iw / 2 : i * iw / (n - 1));
+  const Y = v => cfg.invert ? T + (v - y0) / (y1 - y0) * ih : T + (y1 - v) / (y1 - y0) * ih;
+  (cfg.bands || []).forEach(b => E('rect', { x: L, y: Math.min(Y(b.y1), Y(b.y2)),
+    width: iw, height: Math.abs(Y(b.y1) - Y(b.y2)), fill: b.color || C.wash }, ch.svg));
+  const ticks = cfg.yTicks || 5;
+  for (let i = 0; i <= ticks; i++) { const v = y0 + (y1 - y0) * i / ticks, y = Y(v);
+    E('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: C.hair, 'stroke-width': 1 }, ch.svg);
+    txt(ch.svg, L - 8, y + 4, cfg.yFmt(v), { 'text-anchor': 'end', 'font-size': (M||NC) ? 10 : 11 }); }
+  (cfg.refLines || []).forEach(rl => { E('line', { x1: L, x2: W - R, y1: Y(rl.y), y2: Y(rl.y),
+      stroke: C.ink2, 'stroke-width': 1.2, 'stroke-dasharray': '5 4' }, ch.svg);
+    txt(ch.svg, W - R, Y(rl.y) - 6, rl.label, { 'text-anchor': 'end', fill: C.ink2, 'font-weight': 600 }); });
+  const xEvery = (M || NC) ? (cfg.xEveryM || cfg.xEvery || 1) : (cfg.xEvery || 1);
+  cfg.labels.forEach((lb, i) => { if (i % xEvery !== 0 && i !== n - 1) return;
+    txt(ch.svg, X(i), H - 10, lb, { 'text-anchor': 'middle', 'font-size': (M||NC) ? 10 : 11 }); });
+  cfg.series.forEach(s => {
+    let d = ''; s.v.forEach((v, i) => { if (v == null) return;
+      d += (d ? ' L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); });
+    const attrs = { d, fill: 'none', stroke: s.color, 'stroke-width': 2,
+      'stroke-linejoin': 'round', 'stroke-linecap': 'round' };
+    if (s.dash) attrs['stroke-dasharray'] = s.dash;
+    E('path', attrs, ch.svg);
+    const li = s.v.length - 1;
+    E('circle', { cx: X(li), cy: Y(s.v[li]), r: 4, fill: s.color, stroke: '#faf8f0', 'stroke-width': 2 }, ch.svg);
+    txt(ch.svg, X(li) + 8, Y(s.v[li]) + 4, cfg.yFmt(s.v[li]),
+      { fill: s.color, 'font-weight': 700, 'font-size': 12 }); });
+  (cfg.notes || []).forEach(nt => { const x = X(nt.i), y = Y(nt.v);
+    E('circle', { cx: x, cy: y, r: 3.5, fill: 'none', stroke: nt.color || C.ink, 'stroke-width': 1.5 }, ch.svg);
+    txt(ch.svg, x + (nt.dx || 0), y + (nt.dy || -12), (M || NC) && nt.textM != null ? nt.textM : nt.text,
+      { 'text-anchor': nt.anchor || 'middle', fill: nt.color || C.ink, 'font-weight': 600,
+        'font-size': (M||NC) ? 10.5 : 11 }); });
+  const cross = E('line', { y1: T, y2: T + ih, stroke: C.ink3, 'stroke-width': 1,
+    'stroke-dasharray': '3 3', opacity: 0 }, ch.svg);
+  const hot = E('rect', { x: L, y: T, width: iw, height: ih, fill: 'transparent' }, ch.svg);
+  hot.addEventListener('mousemove', ev => { const r = ch.root.getBoundingClientRect();
+    const mx = (ev.clientX - r.left) / r.width * W;
+    const i = Math.max(0, Math.min(n - 1, Math.round((mx - L) / iw * (n - 1))));
+    cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('opacity', 1);
+    const rows = cfg.series.filter(s => s.v[i] != null).map(s =>
+      `<span style="color:${s.color === C.ink ? '#fff' : '#cfc7b2'}">●</span> ${s.name} <b>${cfg.yFmt(s.v[i])}</b>${s.unit || ''}`);
+    showTip(ch, W, X(i), T + 6, `<b>${cfg.tipLabel ? cfg.tipLabel(i) : cfg.labels[i]}</b><br>` + rows.join('<br>')); });
+  hot.addEventListener('mouseleave', () => { cross.setAttribute('opacity', 0); hideTip(ch); });
+}
+
+/* ═══ 렌더 ═══ */
+function renderAll() {
+  const B = DATA.base;
+  lineChart('c-base', { labels: ['1회차 (07-06)', '2회차 (07-21)'], invert: false,
+    yMin: 155, yMax: 180, yFmt: v => Math.round(v) + '', tipLabel: i => i === 0 ? '1회차 07-06' : '2회차 07-21',
+    h: isMobile() ? 240 : 260,
+    series: [ { name: 'avgHR', color: C.ink, v: [B.hr1, B.hr2], unit: 'bpm' } ],
+    notes: [ { i: 1, v: B.hr2, text: '▼6bpm — 동일 조건 대비', textM: '▼6bpm',
+               dy: -16, color: C.red, anchor: 'end', dx: -4 } ] });
+
+  const S = DATA.st2;
+  lineChart('c-st2', { labels: S.laps, invert: true, yMin: 5.6, yMax: 6.3,
+    yFmt: fmtPace, tipLabel: i => S.laps[i], h: isMobile() ? 240 : 260,
+    bands: [ { y1: 5 + 45/60, y2: 5 + 50/60, color: C.wash } ],
+    series: [ { name: '페이스', color: C.ink, v: S.pace, unit: '/km' } ],
+    notes: [ { i: 3, v: S.pace[3], text: '랩6 6:14 — 밴드 이탈·SD 급증점', textM: '6:14 이탈',
+               dy: -14, color: C.red, anchor: 'end', dx: -6 } ] });
+}
+
+/* ── 호 선택 (편집국 관리 — 새 호 발행 시 전 호의 ISSUES를 동기화할 것) ── */
+const ISSUES = [
+  { id: '20260713', label: '제1호 · 창간 특집 (2026-07-13)' },
+  { id: '20260719', label: '제2호 · 일요판 (2026-07-19)' },
+  { id: '20260726', label: '제3호 · 일요판 (2026-07-26)' },
+];
+const CURRENT_ISSUE = '20260726';
+function issueHref(id) {
+  // file:// 또는 평면 .html 배포 → 형제 파일 / zeple.github.io → 폴더 URI
+  if (location.protocol === 'file:' || /\.html$/.test(location.pathname))
+    return 'run-news-' + id + '.html';
+  return '/run-news/' + id + '/';
+}
+(function initIssueNav() {
+  const sel = document.getElementById('issue-sel');
+  (window.RUNNEWS_ISSUES || ISSUES).slice().reverse().forEach(is => {
+    const o = document.createElement('option');
+    o.value = is.id; o.textContent = is.label; o.selected = is.id === CURRENT_ISSUE;
+    sel.appendChild(o); });
+  sel.addEventListener('change', () => {
+    if (sel.value !== CURRENT_ISSUE) location.href = issueHref(sel.value); });
+})();
+
+let wasKey = '', rsT;
+const layoutKey = () => isMobile() + ':' + document.querySelector('.paper').clientWidth;
+function doRender() { wasKey = isMobile(); renderAll(); }
+doRender();
+window.addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => {
+  if (isMobile() !== wasKey) doRender(); }, 150); });
+</script>
+
+</body>
+</html>
