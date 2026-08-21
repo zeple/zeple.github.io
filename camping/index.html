@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>캠핑장 예약 도구함</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --ground:#F7F5F0;
+    --raise:#FFFFFF;
+    --sink:#EDEAE3;
+    --line:#DAD5CA;
+    --ink:#1B231F;
+    --ink-soft:#5A6660;
+    --ink-faint:#8A948E;
+    --ember:#D2551F;
+    --ember-soft:#F0E0D6;
+    --moss:#2E7D5B;
+    --moss-soft:#DDEBE4;
+    --shadow:0 1px 2px rgba(27,35,31,.06),0 8px 24px rgba(27,35,31,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1613;
+      --raise:#182220;
+      --sink:#131C19;
+      --line:#2A3733;
+      --ink:#E8EFEA;
+      --ink-soft:#9AA8A1;
+      --ink-faint:#6B7A73;
+      --ember:#F0793D;
+      --ember-soft:#301A0F;
+      --moss:#5FBF8F;
+      --moss-soft:#132720;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1613; --raise:#182220; --sink:#131C19; --line:#2A3733;
+    --ink:#E8EFEA; --ink-soft:#9AA8A1; --ink-faint:#6B7A73;
+    --ember:#F0793D; --ember-soft:#301A0F; --moss:#5FBF8F; --moss-soft:#132720;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px rgba(0,0,0,.25);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    font-size:16px; line-height:1.7; letter-spacing:-.01em;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px}
+
+  /* ── 헤더 ── */
+  header{padding:72px 0 48px}
+  .eyebrow{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ember); margin:0 0 14px;
+  }
+  h1{
+    font-family:'Gabarito',system-ui,sans-serif;
+    font-size:clamp(38px,7vw,58px); font-weight:900; line-height:1.05;
+    letter-spacing:-.03em; margin:0 0 16px; text-wrap:balance;
+  }
+  .lede{font-size:17px; color:var(--ink-soft); margin:0; max-width:52ch}
+
+  /* ── 도구 카드 ── */
+  .tools{display:grid; gap:16px; margin:0 0 56px}
+  @media(min-width:640px){.tools{grid-template-columns:1fr 1fr}}
+  .tool{
+    display:flex; flex-direction:column; gap:10px;
+    background:var(--raise); border:1px solid var(--line); border-radius:14px;
+    padding:22px; box-shadow:var(--shadow); text-decoration:none; color:inherit;
+    transition:transform .16s ease, border-color .16s ease;
+  }
+  .tool:hover{transform:translateY(-2px); border-color:var(--ember)}
+  .tool:focus-visible{outline:2px solid var(--ember); outline-offset:3px}
+  .tool .site{
+    font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);
+  }
+  .tool h2{
+    font-family:'Gabarito',system-ui,sans-serif; font-size:22px; font-weight:700;
+    margin:0; letter-spacing:-.02em;
+  }
+  .tool p{margin:0; font-size:14px; color:var(--ink-soft); flex:1}
+  .tool .go{
+    font-size:14px; font-weight:600; color:var(--ember);
+    display:flex; align-items:center; gap:6px;
+  }
+  .tool .go svg{transition:transform .16s ease}
+  .tool:hover .go svg{transform:translateX(3px)}
+
+  /* ── 타임라인 ── */
+  .section-label{
+    font-family:'JetBrains Mono',monospace; font-size:12px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint);
+    padding-bottom:12px; border-bottom:1px solid var(--line); margin:0 0 32px;
+  }
+  .flow{list-style:none; margin:0 0 56px; padding:0; display:grid; gap:0}
+  .flow li{display:grid; grid-template-columns:auto 1fr; gap:20px; position:relative}
+  .flow .marker{display:flex; flex-direction:column; align-items:center; gap:0}
+  .flow .dot{
+    width:34px; height:34px; border-radius:50%; flex:none;
+    display:grid; place-items:center;
+    background:var(--sink); border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600;
+    color:var(--ink-soft);
+  }
+  .flow li:last-child .rail{display:none}
+  .rail{width:1px; flex:1; background:var(--line); min-height:16px}
+  .flow .body{padding-bottom:28px}
+  .flow h3{
+    font-family:'Gabarito',system-ui,sans-serif; font-size:17px; font-weight:700;
+    margin:5px 0 6px; letter-spacing:-.01em;
+  }
+  .flow p{margin:0; font-size:14.5px; color:var(--ink-soft)}
+  .flow li.key .dot{background:var(--ember); border-color:var(--ember); color:#fff}
+
+  /* ── 도구 표시 ── */
+  .chip{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600;
+    padding:2px 8px; border-radius:5px; white-space:nowrap;
+    background:var(--moss-soft); color:var(--moss); border:1px solid transparent;
+  }
+  .chip.b{background:var(--ember-soft); color:var(--ember)}
+
+  /* ── 주의 ── */
+  .notes{
+    background:var(--sink); border:1px solid var(--line); border-radius:14px;
+    padding:24px 26px; margin:0 0 56px;
+  }
+  .notes h2{
+    font-family:'Gabarito',system-ui,sans-serif; font-size:16px; font-weight:700;
+    margin:0 0 14px; letter-spacing:-.01em;
+  }
+  .notes dl{margin:0; display:grid; gap:14px}
+  .notes dt{font-size:14px; font-weight:600; margin:0 0 2px}
+  .notes dd{margin:0; font-size:14px; color:var(--ink-soft)}
+
+  code{
+    font-family:'JetBrains Mono',monospace; font-size:.88em;
+    background:var(--sink); padding:2px 6px; border-radius:4px;
+    border:1px solid var(--line);
+  }
+  .notes code{background:var(--raise)}
+
+  footer{
+    border-top:1px solid var(--line); padding:28px 0 64px;
+    font-size:13px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  footer a{color:var(--ink-soft)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Reservation Toolkit</p>
+  <h1>캠핑장 예약 도구함</h1>
+  <p class="lede">
+    오픈 시각에 맞춰 자동으로 진입하고, 원하는 사이트를 우선순위대로 잡습니다.
+    서버 시간을 기준으로 움직이니 PC 시계가 어긋나 있어도 괜찮습니다.
+  </p>
+</header>
+
+<div class="tools">
+  <a class="tool" href="thankyou.html">
+    <span class="site">thankqcamping.com</span>
+    <h2>땡큐캠핑</h2>
+    <p>북마클릿을 만들어 씁니다. 페이지를 넘나들며 진입·사이트 선택·정보 입력을 클릭으로 처리합니다.</p>
+    <span class="go">생성기 열기
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </a>
+
+  <a class="tool" href="camfit.html">
+    <span class="site">camfit.co.kr</span>
+    <h2>캠핏</h2>
+    <p>사이트 안에 패널을 띄웁니다. 검색부터 예약 확정까지 한 화면에서 끝나고, 서버 시계가 함께 표시됩니다.</p>
+    <span class="go">도우미 설치
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </a>
+</div>
+
+<p class="section-label">땡큐캠핑 — 예약 당일</p>
+<ol class="flow">
+  <li>
+    <span class="marker"><span class="dot">1</span><span class="rail"></span></span>
+    <div class="body">
+      <h3>대기열이 생기기 전에 미리 들어가기</h3>
+      <p><span class="chip">🚪 사전 진입</span> 을 누르면 지정한 날짜로 예약 페이지에 바로 들어갑니다. 오픈이 임박하면 대기열이 앞을 막으므로 그전에 자리를 잡아 둡니다. <strong>잔여 사이트가 있는 평일</strong>로 고르세요 — 자리가 없으면 진입 자체가 막힙니다.</p>
+    </div>
+  </li>
+  <li class="key">
+    <span class="marker"><span class="dot">2</span><span class="rail"></span></span>
+    <div class="body">
+      <h3>오픈 전에 눌러 두기</h3>
+      <p><span class="chip b">🏕 캠핑예약</span> 을 누르면 오픈 시각까지 기다렸다가 스스로 시작합니다. 빈자리가 날 때까지 0.6초 간격으로 다시 조회하고, 잡히는 순간 상세 페이지로 넘어갑니다.</p>
+    </div>
+  </li>
+  <li>
+    <span class="marker"><span class="dot">3</span></span>
+    <div class="body">
+      <h3>넘어간 화면에서 한 번 더</h3>
+      <p>같은 북마크를 다시 누르면 차량번호·할인·약관이 채워지고 저장까지 진행됩니다. 확인창은 자동으로 넘어갑니다.</p>
+    </div>
+  </li>
+</ol>
+
+<p class="section-label">캠핏 — 준비부터 예약까지</p>
+<ol class="flow">
+  <li>
+    <span class="marker"><span class="dot">1</span><span class="rail"></span></span>
+    <div class="body">
+      <h3>캠핏에 로그인한 채로 패널 열기</h3>
+      <p>북마크를 누르면 화면 오른쪽에 패널이 열립니다. 상단에 서버 시계가 함께 표시되어 오픈까지 남은 시간을 눈으로 확인할 수 있습니다.</p>
+    </div>
+  </li>
+  <li>
+    <span class="marker"><span class="dot">2</span><span class="rail"></span></span>
+    <div class="body">
+      <h3>캠핑장 → 구역 → 날짜 → 사이트</h3>
+      <p>이름으로 검색해 고르면 구역과 사이트가 차례로 채워집니다. 사이트는 <strong>누른 순서가 곧 우선순위</strong>이고, 그 날짜에 예약이 막힌 자리는 흐리게 표시됩니다.</p>
+    </div>
+  </li>
+  <li>
+    <span class="marker"><span class="dot">3</span><span class="rail"></span></span>
+    <div class="body">
+      <h3>요금 후보 만들기</h3>
+      <p>구역 요금표로 금액을 계산합니다. 주말을 어디까지로 보는지가 캠핑장마다 달라, 해석이 갈리는 경우를 모두 후보로 넣습니다.</p>
+    </div>
+  </li>
+  <li class="key">
+    <span class="marker"><span class="dot">4</span></span>
+    <div class="body">
+      <h3>예약 시작</h3>
+      <p>오픈까지 기다렸다가 우선순위대로 시도합니다. 후보 금액과 실시간 계산 금액을 <strong>동시에</strong> 보내, 맞는 쪽이 통과합니다. 진행 상황은 패널 로그에 그대로 남습니다.</p>
+    </div>
+  </li>
+</ol>
+
+<div class="notes">
+  <h2>알아 두면 좋은 것</h2>
+  <dl>
+    <dt>로그인이 먼저입니다</dt>
+    <dd>두 도구 모두 로그인된 세션을 그대로 씁니다. 예약 당일 미리 로그인해 두세요.</dd>
+
+    <dt>땡큐캠핑 유저스크립트를 쓴다면</dt>
+    <dd>크롬 <code>chrome://extensions</code> → Tampermonkey 세부정보에서 <strong>사용자 스크립트 허용</strong>을 켜야 주입됩니다. 꺼져 있으면 아무 일도 일어나지 않습니다.</dd>
+
+    <dt>캠핏은 누르는 즉시 확정됩니다</dt>
+    <dd>무통장 결제로 바로 요청하며 중간 확인 절차가 없습니다. 날짜와 인원을 확인한 뒤 시작하세요. 멈추려면 <code>중지</code> 버튼이나 <code>stopCf()</code>.</dd>
+
+    <dt>같은 자리가 두 번 잡힐 수 있습니다</dt>
+    <dd>금액 후보를 동시에 보내는 구조라 둘 이상이 통과할 여지가 있습니다. 그런 경우 로그에 경고가 남으니 예약 내역을 확인하세요.</dd>
+
+    <dt>진입용 날짜와 예약 날짜는 별개입니다</dt>
+    <dd>사전 진입은 페이지에 들어가기 위한 수단이라 아무 날짜나 됩니다. 실제로 잡을 날짜는 <strong>캠핑 일정</strong>에 따로 넣으세요.</dd>
+
+    <dt>설정을 바꾸면 다시 만들어야 합니다</dt>
+    <dd>사이트 우선순위나 날짜를 고쳤다면 북마클릿을 새로 생성해 기존 북마크를 교체하세요.</dd>
+  </dl>
+</div>
+
+<footer>
+  <span>개인용 예약 보조 도구</span>
+  <span>서버 시간 동기화 · 우선순위 선택 · 자동 재시도</span>
+</footer>
+
+</div>
+</body>
+</html>
