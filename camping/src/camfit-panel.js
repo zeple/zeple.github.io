@@ -60,15 +60,22 @@
     + 'background:#16181c;color:#e8e8ea;font:13px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;'
     + 'box-shadow:-4px 0 24px rgba(0,0,0,.4);display:flex;flex-direction:column}'
     + '#cfPanel *{box-sizing:border-box}'
-    + '#cfHead{padding:14px 16px;border-bottom:1px solid #2a2d33;display:flex;align-items:center;gap:8px}'
-    + '#cfHead b{font-size:15px;flex:1}'
-    + '#cfClock{font:12px/1 ui-monospace,monospace;color:#4ade80;padding:5px 9px;'
-    + 'background:#1f2229;border-radius:5px;letter-spacing:.5px}'
+    + '#cfHead{padding:12px 16px;border-bottom:1px solid #2a2d33}'
+    + '#cfTitle{display:flex;align-items:center;gap:8px}'
+    + '#cfTitle b{font-size:15px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+    + '#cfStatus{display:flex;align-items:center;gap:6px;margin-top:8px}'
+    // 카운트다운이 숨어도 시계가 왼쪽으로 튀지 않도록 남는 폭을 밀어냅니다.
+    + '#cfStatus .sp{flex:1}'
+    + '#cfClock,#cfCount{font:12px/1 ui-monospace,monospace;padding:5px 9px;'
+    + 'background:#1f2229;border-radius:5px;letter-spacing:.5px;white-space:nowrap;'
+    + 'display:flex;align-items:baseline;gap:6px}'
+    + '#cfClock{color:#4ade80}'
     + '#cfClock.off{color:#8a8f98}'
-    + '#cfCount{font:12px/1 ui-monospace,monospace;color:#fbbf24;padding:5px 9px;'
-    + 'background:#1f2229;border-radius:5px;letter-spacing:.5px;white-space:nowrap}'
-    + '#cfCount.past{color:#f87171}'
-    + '#cfCount.soon{color:#4ade80}'
+    + '#cfCount{color:#fbbf24;flex:1;justify-content:center}'
+    + '#cfCount.soon{color:#4ade80;background:#14301f}'
+    // 라벨은 값보다 한 단계 죽여서, 값이 먼저 읽히게 합니다.
+    + '#cfStatus .k{font:11px/1 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:#8a8f98;letter-spacing:0}'
+    + '#cfCount .k{color:inherit;opacity:.75}'
     + '#cfBody{flex:1;overflow-y:auto;padding:16px}'
     + '.cfStep{border:1px solid #2a2d33;border-radius:10px;padding:14px;margin-bottom:12px}'
     + '.cfStep h3{margin:0 0 4px;font-size:13px;color:#4ade80}'
@@ -112,14 +119,17 @@
   document.head.appendChild(style);
 
   var body = h('div', { id: 'cfBody' });
-  var clock = h('div', { id: 'cfClock' }, ['--:--:--']);
+  var clockTime = h('span', { class: 'v' }, ['--:--:--']);
+  var clock = h('div', { id: 'cfClock' }, [h('span', { class: 'k' }, ['서버 시간']), clockTime]);
   var countdown = h('div', { id: 'cfCount', style: 'display:none' }, ['']);
+  var spacer = h('div', { class: 'sp' }, []);
   var panel = h('div', { id: 'cfPanel' }, [
     h('div', { id: 'cfHead' }, [
-      h('b', {}, ['🏕 캠핏 예약 도우미']),
-      countdown,
-      clock,
-      h('button', { class: 'sub', onclick: function () { closePanel(); } }, ['닫기'])
+      h('div', { id: 'cfTitle' }, [
+        h('b', {}, ['🏕 캠핏 예약 도우미']),
+        h('button', { class: 'sub', onclick: function () { closePanel(); } }, ['닫기'])
+      ]),
+      h('div', { id: 'cfStatus' }, [countdown, spacer, clock])
     ]),
     body
   ]);
@@ -141,38 +151,59 @@
   function pad(n) { return String(n).padStart(2, '0'); }
   function tickClock() {
     var d = serverNow();
-    clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    clockTime.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
     tickCountdown(d);
   }
 
-  // 오픈 일시까지 남은 시간을 헤더에 표시합니다.
-  // 입력한 년월일이 실제로 어떻게 해석됐는지 실행 전에 눈으로 확인할 수 있습니다.
+  // 예약 시작을 누르면 그때 확정된 오픈 일시까지 남은 시간을 헤더에 표시합니다.
+  // 대기 중에만 보여주므로, 평소에는 숨어 있습니다.
+  var cdTarget = null;
+
+  function startCountdown(target) {
+    cdTarget = target;
+    tickCountdown(serverNow());
+  }
+
+  function stopCountdown() {
+    cdTarget = null;
+    countdown.style.display = 'none';
+  }
+
   function tickCountdown(now) {
-    var target = openTarget(v('odate'), v('otime'));
-    if (!target) { countdown.style.display = 'none'; return; }
+    if (!cdTarget) { countdown.style.display = 'none'; return; }
 
     countdown.style.display = '';
-    countdown.title = '오픈 ' + target.toLocaleString('ko-KR');
+    countdown.title = '오픈 ' + cdTarget.toLocaleString('ko-KR');
 
-    var left = target - now;
+    var left = cdTarget - now;
     if (left <= 0) {
-      countdown.className = 'past';
-      countdown.textContent = '오픈 지남 ' + fmtSpan(-left) + ' 경과';
+      // 오픈 시각이 되면 카운트다운을 끝내고 진행 상황에 자리를 내줍니다.
+      countdown.className = 'soon';
+      setKV(countdown, '', '오픈!');
       return;
     }
     countdown.className = left <= 60000 ? 'soon' : '';
-    countdown.textContent = 'D-' + fmtSpan(left);
+    setKV(countdown, '시작까지', fmtSpan(left));
+  }
+
+  // 라벨과 값을 한 배지 안에 같은 모양으로 채웁니다.
+  function setKV(el, label, value) {
+    el.textContent = '';
+    if (label) el.appendChild(h('span', { class: 'k' }, [label]));
+    el.appendChild(h('span', { class: 'v' }, [value]));
   }
 
   // 밀리초를 "2일 03:14:05" 형태로 (하루 미만이면 일 표기는 생략)
+  // 시계는 지나간 초를 버리고 보여주므로, 남은 시간은 올려야 둘의 합이 맞습니다.
+  // (22:35:12 에 자정까지면 01:24:48 — 12 + 48 = 60)
   function fmtSpan(ms) {
-    var t = Math.floor(ms / 1000);
+    var t = Math.ceil(ms / 1000);
     var days = Math.floor(t / 86400);
     var hhmmss = pad(Math.floor(t / 3600) % 24) + ':' + pad(Math.floor(t / 60) % 60) + ':' + pad(t % 60);
     return (days ? days + '일 ' : '') + hhmmss;
   }
   clock.classList.add('off');
-  clock.textContent = '동기화 중';
+  clockTime.textContent = '동기화 중';
   syncClock().then(function (off) {
     clock.classList.remove('off');
     clock.title = '서버 시간 (보정 ' + (off / 1000).toFixed(1) + '초)';
@@ -210,6 +241,117 @@
   // 요청이 겹칠 때 마지막 것만 반영하기 위한 번호
   var searchSeq = 0, zoneSeq = 0, siteSeq = 0;
 
+  // ── URL 로 현재 캠핑장 알아내기 ──
+  // /camp/{캠핑장ID} 또는 /camp/{캠핑장ID}/{구역ID} 형태입니다.
+  // 캠핑장 상세 화면에서 열면 검색을 건너뛰고 바로 다음 단계로 갑니다.
+  var pending = null;
+
+  function readUrl() {
+    var m = location.pathname.match(/\/camp\/([0-9a-f]{24})(?:\/([0-9a-f]{24}))?/i);
+    if (!m) return null;
+    return { campId: m[1], zoneId: m[2] || null };
+  }
+
+  // 캠핑장 상세 — 이름을 정확히 얻는 경로입니다.
+  // /v1 이 아닌 proxy 경로라 api() 대신 직접 부릅니다.
+  function fetchCampName(campId) {
+    return fetch('https://api.camfit.co.kr/proxy/api/v1/app/experiences/camp/' + campId, {
+      headers: { 'Accept': 'application/json', 'Authorization': 'Bearer ' + TOKEN }
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { return d ? pickName(d) : ''; })
+      .catch(function () { return ''; });
+  }
+
+  // 응답 어딘가에 있는 캠핑장 이름을 집어냅니다.
+  // 구조를 단정할 수 없어 흔한 자리를 차례로 봅니다.
+  function pickName(d) {
+    var boxes = [d, d.data, d.camp, d.result, d.experience,
+                 d.data && d.data.camp, d.data && d.data.result];
+    for (var i = 0; i < boxes.length; i++) {
+      var b = boxes[i];
+      if (!b || typeof b !== 'object') continue;
+      var nm = b.campName || b.name || b.title;
+      if (typeof nm === 'string' && nm.trim()) return nm.trim();
+    }
+    return '';
+  }
+
+  // 캠핑장 이름 찾기 — 화면에서 먼저 훑고, 실패하면 API 로 확인합니다.
+  // 이름은 표시용이라 못 찾아도 ID 로 진행할 수 있습니다.
+  function campNameFromPage() {
+    // 상세 페이지의 제목. 캠핏은 og:title 에 캠핑장 이름을 넣습니다.
+    var og = document.querySelector('meta[property="og:title"]');
+    var t = og && og.content && og.content.trim();
+    if (ok(t)) return clean(t);
+
+    var el = document.querySelector('h1, h2, [class*="campName"], [class*="CampName"]');
+    t = el && el.textContent.trim();
+    if (ok(t)) return clean(t);
+
+    // 마지막으로 <title> — "캠핑장이름 : 캠핏" 같은 꼬리를 떼어 냅니다.
+    t = document.title && document.title.trim();
+    return ok(t) ? clean(t) : '';
+
+    function ok(x) { return x && x.length > 1 && x.length < 40; }
+    function clean(x) { return x.split(/\s*[|:·]\s*/)[0].trim(); }
+  }
+
+  // 구역 응답이나 검색 API 에서 캠핑장 이름을 건집니다.
+  function campNameFromApi(zonesResponse) {
+    var d = zonesResponse;
+    var c = d && (d.camp || d.campInfo || d.data && d.data.camp);
+    var nm = c && (c.name || c.title);
+    if (nm) return Promise.resolve(nm);
+    if (d && typeof d.campName === 'string') return Promise.resolve(d.campName);
+
+    // 구역 하나가 캠핑장 정보를 물고 있는 경우도 있습니다.
+    var list = Array.isArray(d) ? d : (d && (d.zones || d.results || d.data) || []);
+    for (var i = 0; i < list.length; i++) {
+      var z = list[i];
+      var zc = z && (z.camp || z.campInfo);
+      if (zc && (zc.name || zc.title)) return Promise.resolve(zc.name || zc.title);
+      if (z && typeof z.campName === 'string' && z.campName) return Promise.resolve(z.campName);
+    }
+    return Promise.resolve('');
+  }
+
+  // 이름이 있을 때만 "○○ · " 을 앞에 붙입니다.
+  function showCampIn(el, nm) {
+    el.textContent = '';
+    if (!nm) return;
+    el.appendChild(h('b', {}, [nm]));
+    el.appendChild(document.createTextNode(' · '));
+  }
+
+  // 화면에 캠핑장 이름을 반영합니다.
+  function setCampName(nm) {
+    if (!nm || nm === state.camp.name) return;
+    state.camp.name = nm;
+    msg(s0Msg, '이 페이지의 캠핑장으로 시작합니다 — ' + nm, 'ok');
+    // 이름이 늦게 도착해도 Step 1 안내가 함께 갱신되도록 합니다.
+    showCampIn(s1Camp, nm);
+  }
+
+  function enterFromUrl() {
+    var u = readUrl();
+    if (!u) return false;
+
+    pending = u;
+    var nm = campNameFromPage();
+    state.camp = { id: u.campId, name: nm || u.campId };
+
+    // Step 0 은 접어 두되, 다른 캠핑장을 고를 수 있게 남겨 둡니다.
+    s0.classList.add('done');
+    msg(s0Msg, '이 페이지의 캠핑장으로 시작합니다' + (nm ? ' — ' + nm : ''), 'ok');
+
+    // 이름은 캠핑장 상세에서 확인합니다. 화면에서 주운 값보다 정확합니다.
+    fetchCampName(u.campId).then(setCampName);
+
+    loadZones();
+    return true;
+  }
+
   function doSearch() {
     var kw = searchInput.value.trim();
     if (!kw) { msg(s0Msg, '검색어를 입력하세요.', 'err'); return; }
@@ -241,6 +383,7 @@
             it.classList.add('on');
             state.camp = { id: id, name: nm };
             s0.classList.add('done');
+            showCampIn(s1Camp, nm);
             loadZones();
           });
           s0List.appendChild(it);
@@ -256,8 +399,10 @@
   var s1 = h('div', { class: 'cfStep', style: 'display:none' });
   var s1List = h('div', { class: 'cfList' });
   var s1Msg = h('div');
+  // 어느 캠핑장의 구역을 보고 있는지 함께 보여 줍니다.
+  var s1Camp = h('span', { class: 'campNm' }, []);
   s1.appendChild(h('h3', {}, ['Step 1 · 구역 선택']));
-  s1.appendChild(h('p', {}, ['예약할 구역을 고르세요.']));
+  s1.appendChild(h('p', {}, [s1Camp, '예약할 구역을 고르세요.']));
   s1.appendChild(s1Msg);
   s1.appendChild(s1List);
   body.appendChild(s1);
@@ -267,6 +412,11 @@
     s1List.innerHTML = '';
     msg(s1Msg, '구역을 불러오는 중...', '');
 
+    // URL 로 들어온 경우, 목록을 그리면서 해당 구역을 찾아 둡니다.
+    var want = pending;
+    var matched = null;
+    pending = null;
+
     var p = new URLSearchParams({
       id: state.camp.id, adult: 2, teen: 0, child: 0,
       startTimestamp: 0, endTimestamp: 0, limit: 100, skip: 0
@@ -275,6 +425,12 @@
     var seq = ++zoneSeq;
     api('/camps/zones/' + state.camp.id + '?' + p).then(function (d) {
       if (seq !== zoneSeq) return;
+
+      // URL 로 들어와 이름을 아직 모르면 응답에서 건져 봅니다.
+      if (want && state.camp.name === state.camp.id) {
+        campNameFromApi(d).then(setCampName);
+      }
+
       var list = Array.isArray(d) ? d : (d.zones || d.results || d.data || []);
       s1List.innerHTML = '';
       if (!list.length) { msg(s1Msg, '구역이 없습니다. 응답: ' + JSON.stringify(d).slice(0, 200), 'err'); return; }
@@ -287,26 +443,39 @@
           h('div', { class: 'nm' }, [nm]),
           h('div', { class: 'sub' }, [id])
         ]);
-        it.addEventListener('click', function () {
-          s1List.querySelectorAll('.cfItem').forEach(function (x) { x.classList.remove('on'); });
-          it.classList.add('on');
-          state.zone = { id: id, name: nm };
-          s1.classList.add('done');
-          // 요금표가 담긴 구역 상세를 받아 둡니다.
-          zoneInfo = null;
-          api('/zones/' + id + '?id=' + id + '&adult=2&teen=0&child=0')
-            .then(function (z) { zoneInfo = z; })
-            .catch(function () { /* 실패하면 수동 입력으로 진행합니다. */ });
-          // 날짜를 정한 뒤 조회하므로 카드만 열어 둡니다.
-          s2.style.display = '';
-          s2Chips.innerHTML = '';
-          state.picked = [];
-          msg(s2Msg, '날짜를 확인하고 사이트 조회를 누르세요.', '');
-          s2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
+        it.addEventListener('click', function () { chooseZone(it, id, nm); });
         s1List.appendChild(it);
+
+        // URL 에 구역 ID 가 있으면 그 구역을 눌러 둡니다.
+        if (want && want.zoneId === id) matched = it;
       });
+
+      if (matched) matched.click();
+      else if (want && want.zoneId) msg(s1Msg, list.length + '개 구역 — URL 의 구역을 찾지 못해 직접 골라야 합니다.', 'err');
     }).catch(function (e) { msg(s1Msg, '구역 조회 실패: ' + e.message, 'err'); });
+  }
+
+  // 구역이 정해졌을 때 — 클릭이든 URL 자동 선택이든 같은 경로를 씁니다.
+  function chooseZone(it, id, nm) {
+    s1List.querySelectorAll('.cfItem').forEach(function (x) { x.classList.remove('on'); });
+    it.classList.add('on');
+    state.zone = { id: id, name: nm };
+    s1.classList.add('done');
+    // 요금표가 담긴 구역 상세를 받아 둡니다.
+    zoneInfo = null;
+    api('/zones/' + id + '?id=' + id + '&adult=2&teen=0&child=0')
+      .then(function (z) {
+        zoneInfo = z;
+        // 구역 상세에도 캠핑장 정보가 실려 오므로, 아직 이름을 모르면 여기서 채웁니다.
+        if (state.camp.name === state.camp.id) campNameFromApi(z).then(setCampName);
+      })
+      .catch(function () { /* 실패하면 수동 입력으로 진행합니다. */ });
+    // 날짜를 정한 뒤 조회하므로 카드만 열어 둡니다.
+    s2.style.display = '';
+    s2Chips.innerHTML = '';
+    state.picked = [];
+    msg(s2Msg, '날짜를 확인하고 사이트 조회를 누르세요.', '');
+    s2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // ── Step 2: 사이트 선택 ──
@@ -412,7 +581,10 @@
   function field(label, id, val, type) {
     var wrap = h('div');
     wrap.appendChild(h('div', { style: 'font-size:11px;color:#8a8f98;margin-bottom:3px' }, [label]));
-    wrap.appendChild(h('input', { type: type || 'text', id: 'cf_' + id, value: val }));
+    var attrs = { type: type || 'text', id: 'cf_' + id, value: val };
+    // 시각은 초까지 지정할 수 있어야 합니다 (기본 UI 는 분 단위까지만 보여 줍니다).
+    if (type === 'time') attrs.step = '1';
+    wrap.appendChild(h('input', attrs));
     return wrap;
   }
 
@@ -576,11 +748,23 @@
   // 오픈 날짜(YYYY-MM-DD) + 오픈 시각(HH:MM:SS)을 하나의 Date로 만듭니다.
   // 날짜를 빼먹으면 "오늘 그 시각"으로 해석돼 엉뚱한 날 즉시 돌진하므로,
   // 년월일과 시분초를 모두 명시적으로 지정합니다.
+  // "YYYY-MM-DD" + "HH:MM[:SS]" 을 Date 로 만듭니다.
+  // 어느 한 쪽이라도 비거나 형식이 틀리면 null — 시각이 빈 칸일 때
+  // 자정으로 해석돼 엉뚱한 때에 시작하는 것을 막습니다.
   function openTarget(dateStr, timeStr) {
-    var d = (dateStr || '').split('-').map(Number);
-    var t = (timeStr || '').split(':').map(Number);
-    if (d.length !== 3 || d.some(isNaN)) return null;
-    return new Date(d[0], d[1] - 1, d[2], t[0] || 0, t[1] || 0, t[2] || 0, 0);
+    var dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr || '').trim());
+    var tm = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(String(timeStr || '').trim());
+    if (!dm || !tm) return null;
+
+    var y = +dm[1], mo = +dm[2], d = +dm[3];
+    var hh = +tm[1], mi = +tm[2], ss = +(tm[3] || 0);
+    if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+    if (hh > 23 || mi > 59 || ss > 59) return null;
+
+    var dt = new Date(y, mo - 1, d, hh, mi, ss, 0);
+    // 2026-02-31 처럼 넘겨짚은 날짜는 다른 날로 굴러가므로 걸러 냅니다.
+    if (dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+    return dt;
   }
 
   // 쉼표로 구분된 금액 후보를 숫자 배열로 만듭니다.
@@ -599,6 +783,8 @@
     var prices = parsePrices(priceInput.value);
     if (!prices.length) { msg(genMsg, '결제 금액을 하나 이상 입력하세요.', 'err'); return null; }
     if (!v('odate')) { msg(genMsg, '오픈 날짜를 입력하세요.', 'err'); return null; }
+    // 시각을 비우면 자정(00:00)으로 해석되어 엉뚱한 때에 시작합니다.
+    if (!v('otime')) { msg(genMsg, '오픈 시각을 입력하세요.', 'err'); return null; }
     return {
       prices: prices,
       sites: state.picked.slice(),
@@ -618,7 +804,7 @@
   function log(text, kind) {
     logBox.style.display = '';
     var line = h('div', { class: 'cfLine' + (kind ? ' ' + kind : '') }, [
-      h('span', { class: 'ts' }, [clock.textContent]), text
+      h('span', { class: 'ts' }, [clockTime.textContent]), text
     ]);
     logBox.appendChild(line);
     logBox.scrollTop = logBox.scrollHeight;
@@ -758,6 +944,7 @@
     running = on;
     runBtn.style.display = on ? 'none' : '';
     stopBtn.style.display = on ? '' : 'none';
+    if (!on) stopCountdown();
   }
 
   runBtn.addEventListener('click', function () {
@@ -791,6 +978,7 @@
       return;
     }
 
+    startCountdown(target);
     msg(genMsg, '오픈까지 대기 중 — ' + target.toLocaleString('ko-KR'), 'ok');
     log('오픈까지 ' + Math.floor(left / 86400000) + '일 ' +
         Math.floor(left / 3600000 % 24) + '시간 ' +
@@ -930,7 +1118,11 @@
       '    // 오픈 일시(년월일 + 시분초)까지 대기합니다.',
       '    const [yy, mo, dd] = C.openDate.split("-").map(Number);',
       '    const [hh, mm, ss] = C.openTime.split(":").map(Number);',
-      '    const target = new Date(yy, mo - 1, dd, hh || 0, mm || 0, ss || 0, 0);',
+      '    if ([yy, mo, dd, hh, mm].some(Number.isNaN)) {',
+      '        console.log("오픈 날짜/시각이 올바르지 않습니다:", C.openDate, C.openTime);',
+      '        return;',
+      '    }',
+      '    const target = new Date(yy, mo - 1, dd, hh, mm, ss || 0, 0);',
       '    const left = target - now();',
       '',
       '    // 5분 넘게 지난 일시면 날짜를 잘못 넣은 것으로 보고 중단합니다.',
@@ -959,4 +1151,8 @@
       '})();'
     ].join('\n');
   }
+
+  // ── 시작 ──
+  // 캠핑장 상세 페이지에서 열었으면 검색을 건너뜁니다.
+  if (!enterFromUrl()) searchInput.focus();
 })();
