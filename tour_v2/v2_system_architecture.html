@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>방구석 탈출 v2 — Architecture & Data Blueprint</title>
+  <meta name="description" content="Vercel + Supabase(PostgreSQL/PostGIS) + Claude Code CLI 기반의 방구석 탈출 v2 아키텍처와 데이터 파이프라인 문서" />
+  <style>
+    :root{
+      --bg:#f7f4ee;
+      --paper:#fffdfa;
+      --paper-2:#fbf7f1;
+      --ink:#191815;
+      --muted:#716d65;
+      --line:#e6ded3;
+      --brand:#e34a12;
+      --brand-2:#ff6a1a;
+      --brand-soft:#fff0e7;
+      --green:#215b43;
+      --green-soft:#eaf4ee;
+      --violet:#7155a6;
+      --violet-soft:#f1ecfb;
+      --gold:#9a6d18;
+      --gold-soft:#f8f0dc;
+      --danger:#a52a2a;
+      --shadow:0 18px 50px rgba(58,41,20,.07);
+      --radius:20px;
+      --radius-sm:12px;
+      --max:1200px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(227,74,18,.06), transparent 28rem),
+        radial-gradient(circle at 96% 12%, rgba(33,91,67,.05), transparent 26rem),
+        var(--bg);
+      color:var(--ink);
+      font-family:Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height:1.68;
+    }
+    a{color:inherit}
+    .serif{
+      font-family:"MaruBuri", "Noto Serif KR", "Nanum Myeongjo", Georgia, serif;
+      letter-spacing:-.025em;
+    }
+    .shell{max-width:var(--max); margin:0 auto; padding:0 24px 80px}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background:rgba(247,244,238,.86);
+      border-bottom:1px solid rgba(230,222,211,.85);
+    }
+    .topbar-inner{
+      max-width:var(--max); margin:0 auto; padding:14px 24px;
+      display:flex; align-items:center; gap:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; white-space:nowrap;
+    }
+    .door{
+      width:28px;height:32px;border:2px solid var(--brand);border-radius:4px;
+      position:relative; display:inline-block;
+    }
+    .door:after{
+      content:"";position:absolute;right:5px;top:14px;width:3px;height:3px;border-radius:50%;background:var(--brand);
+    }
+    nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+    nav a{
+      text-decoration:none; color:var(--muted); font-size:14px; font-weight:650;
+      padding:8px 11px; border-radius:999px;
+    }
+    nav a:hover{background:var(--paper); color:var(--ink)}
+    .hero{
+      padding:72px 0 42px;
+      display:grid;grid-template-columns:1.1fr .9fr; gap:40px; align-items:end;
+    }
+    .eyebrow{
+      color:var(--brand); font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+    }
+    h1{
+      margin:10px 0 18px; font-size:clamp(42px,6vw,76px); line-height:1.06; font-weight:700;
+    }
+    .hero p{font-size:18px;color:var(--muted);max-width:760px;margin:0}
+    .hero-note{
+      border:1px solid var(--line);background:rgba(255,253,250,.72);
+      border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);
+    }
+    .hero-note strong{display:block;font-size:15px;margin-bottom:6px}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .tag{
+      border:1px solid var(--line);border-radius:999px;padding:7px 11px;
+      background:var(--paper);font-size:12px;font-weight:700;color:var(--muted);
+    }
+    .tag.brand{color:var(--brand);border-color:#f2b59c;background:var(--brand-soft)}
+    .tag.green{color:var(--green);border-color:#cbe1d3;background:var(--green-soft)}
+    .tag.violet{color:var(--violet);border-color:#ddd1f3;background:var(--violet-soft)}
+    .section{margin-top:28px}
+    .section-head{
+      display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:16px
+    }
+    .section h2{margin:0;font-size:30px;line-height:1.2}
+    .section-head p{margin:0;color:var(--muted);font-size:14px;max-width:540px}
+    .card{
+      background:rgba(255,253,250,.96); border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow); padding:26px;
+    }
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .principle h3{font-size:17px;margin:0 0 5px}
+    .principle p{font-size:14px;color:var(--muted);margin:0}
+    .num{
+      width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;
+      background:var(--brand);color:#fff;font-weight:800;font-size:13px;margin-bottom:14px;
+    }
+    .architecture{
+      padding:30px;background:linear-gradient(180deg,#fffefa 0%,#fbf6ee 100%);
+    }
+    .arch-runtime,.arch-offline{
+      display:grid;gap:12px;align-items:center;justify-items:center
+    }
+    .arch-runtime{grid-template-columns:1fr 50px 1.2fr 50px 1.1fr}
+    .arch-offline{grid-template-columns:repeat(11,minmax(54px,1fr));margin-top:22px}
+    .node{
+      width:100%; min-height:92px; display:flex;flex-direction:column;justify-content:center;align-items:center;
+      text-align:center;border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px;
+    }
+    .node .small{font-size:12px;color:var(--muted);margin-top:5px}
+    .node.brand-node{border-color:#f0b39b;background:var(--brand-soft)}
+    .node.green-node{border-color:#c8ddcf;background:var(--green-soft)}
+    .node.violet-node{border-color:#d9cff0;background:var(--violet-soft)}
+    .arrow{color:#aaa;font-size:24px;text-align:center}
+    .divider-label{
+      margin:22px 0 8px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase
+    }
+    .rule{
+      display:flex;align-items:center;justify-content:center;min-height:70px;
+      background:#1d1b18;color:#fff;border-radius:14px;padding:14px;text-align:center;font-weight:700
+    }
+    .rule code{color:#ffd8c7}
+    pre{
+      overflow:auto;background:#1f1e1b;color:#f5f1e8;border-radius:14px;padding:18px 20px;
+      border:1px solid #33302b;font-size:13px;line-height:1.65
+    }
+    code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace}
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+    th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+    th{background:var(--paper-2);font-size:12px;letter-spacing:.03em}
+    tr:last-child td{border-bottom:none}
+    .pipeline{
+      display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:stretch
+    }
+    .step{
+      border:1px solid var(--line);background:#fff;border-radius:14px;padding:15px;text-align:center;min-height:104px
+    }
+    .step b{display:block;font-size:14px}
+    .step span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+    .step.ai{background:var(--violet-soft);border-color:#d9cff0}
+    .step.human{background:var(--gold-soft);border-color:#ead8a5}
+    .step.publish{background:var(--green-soft);border-color:#c8ddcf}
+    .folder{
+      background:#211f1c;color:#f2eee7;border-radius:14px;padding:18px;font-size:13px;overflow:auto
+    }
+    .callout{
+      border-left:4px solid var(--brand);background:var(--brand-soft);padding:16px 18px;border-radius:0 12px 12px 0;
+    }
+    .callout.green{border-left-color:var(--green);background:var(--green-soft)}
+    .callout.violet{border-left-color:var(--violet);background:var(--violet-soft)}
+    .callout strong{display:block;margin-bottom:4px}
+    .command{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+      background:#1e1c19;color:#fff;border-radius:13px;padding:13px 15px;margin:8px 0
+    }
+    .command code{font-size:13px}
+    .command .desc{font-size:12px;color:#c9c1b5;text-align:right}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0;padding:0;list-style:none}
+    .checklist li{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px;font-size:14px}
+    .checklist li:before{content:"✓";color:var(--green);font-weight:900;margin-right:8px}
+    .footer{margin-top:46px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:20px}
+    @media (max-width:900px){
+      .hero,.grid-2,.grid-3{grid-template-columns:1fr}
+      .arch-runtime{grid-template-columns:1fr}
+      .arch-offline{grid-template-columns:1fr}
+      .arrow{transform:rotate(90deg)}
+      .pipeline{grid-template-columns:1fr 1fr}
+      nav{display:none}
+    }
+    @media (max-width:600px){
+      .shell{padding:0 16px 56px}
+      .topbar-inner{padding:12px 16px}
+      .hero{padding:46px 0 24px}
+      h1{font-size:42px}
+      .pipeline{grid-template-columns:1fr}
+      .checklist{grid-template-columns:1fr}
+      .card{padding:20px}
+      .section-head{display:block}
+      .section-head p{margin-top:8px}
+    }
+    @media print{
+      .topbar{position:static}
+      body{background:#fff}
+      .card,.hero-note{box-shadow:none}
+      nav{display:none}
+      .section{break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="door"></span><span>방구석 탈출 v2</span></div>
+      <nav>
+        <a href="#principles">원칙</a>
+        <a href="#architecture">아키텍처</a>
+        <a href="#database">DB</a>
+        <a href="#versioning">Raw Versioning</a>
+        <a href="#pipeline">Claude Pipeline</a>
+        <a href="#commands">Commands</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Architecture · Data · Human-in-the-loop</div>
+        <h1 class="serif">작게 시작하고,<br/>데이터는 단단하게.</h1>
+        <p>방구석 탈출 v2는 Vercel + Supabase(PostgreSQL/PostGIS)를 런타임의 최소 구성으로 두고,
+          정적 데이터는 Raw JSON을 버전 관리하면서 Claude Code CLI로 수집·분석·검수 후 명시적으로 publish합니다.</p>
+        <div class="tag-row">
+          <span class="tag brand">Vercel</span>
+          <span class="tag green">Supabase + PostGIS</span>
+          <span class="tag violet">Claude Code CLI</span>
+          <span class="tag">Immutable Raw JSON</span>
+          <span class="tag">Human Approval</span>
+        </div>
+      </div>
+      <aside class="hero-note">
+        <strong>핵심 한 줄</strong>
+        런타임에는 AI·배치 시스템을 넣지 않고, 정적 지식은 오프라인에서 만들어 검증된 release만 DB에 반영합니다.
+        <div class="tag-row">
+          <span class="tag">No Kafka</span>
+          <span class="tag">No Worker</span>
+          <span class="tag">No Redis initially</span>
+          <span class="tag">No batch server</span>
+        </div>
+      </aside>
+    </section>
+
+    <section id="principles" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">01 · Principles</div><h2 class="serif">설계 원칙</h2></div>
+        <p>현재 단계에서 중요한 것은 인프라 복잡도가 아니라 데이터 품질, 추천 신뢰성, 지도 탐색 경험입니다.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card principle"><span class="num">1</span><h3>운영 경로 최소화</h3><p>Browser → Vercel → Supabase → Response. 런타임 요청에 LLM·수집 작업을 넣지 않습니다.</p></div>
+        <div class="card principle"><span class="num">2</span><h3>UI와 DB 분리</h3><p>UI → Application Service → Repository → Supabase 경계를 유지합니다.</p></div>
+        <div class="card principle"><span class="num">3</span><h3>Code / AI / Human 분업</h3><p>Code는 사실과 규칙, AI는 의미와 해석, Human은 최종 publish 승인을 담당합니다.</p></div>
+        <div class="card principle"><span class="num">4</span><h3>Raw는 절대 버리지 않기</h3><p>Raw JSON은 DB 이전을 위한 임시 파일이 아니라 데이터 lineage와 rollback의 원천입니다.</p></div>
+        <div class="card principle"><span class="num">5</span><h3>Static / Dynamic 분리</h3><p>관광지·교육·AI enrichment는 정적 파이프라인, 날씨·혼잡도 등은 런타임 context로 분리합니다.</p></div>
+        <div class="card principle"><span class="num">6</span><h3>확장 지점만 확보</h3><p>처음부터 미래 인프라를 구현하지 않고, 필요할 때 cache·worker·recommendation service를 추가합니다.</p></div>
+      </div>
+    </section>
+
+    <section id="architecture" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">02 · Architecture</div><h2 class="serif">전체 아키텍처</h2></div>
+        <p>서비스 런타임과 오프라인 데이터 제작 경로를 명확하게 분리합니다.</p>
+      </div>
+      <div class="card architecture">
+        <div class="divider-label">Runtime Serving Path</div>
+        <div class="arch-runtime">
+          <div class="node"><b>사용자 Browser</b><span class="small">Web / Mobile Web</span></div>
+          <div class="arrow">→</div>
+          <div class="node brand-node"><b>Vercel / Next.js</b><span class="small">UI · RSC/SSR · Route Handlers · App Service · Cache</span></div>
+          <div class="arrow">→</div>
+          <div class="node green-node"><b>Supabase</b><span class="small">PostgreSQL · PostGIS · future Auth/RLS</span></div>
+        </div>
+
+        <div class="divider-label">Offline Data Workflow</div>
+        <div class="arch-offline">
+          <div class="node"><b>Open Data</b><span class="small">TourAPI · 교육부 · 기존 JSON</span></div><div class="arrow">→</div>
+          <div class="node"><b>Raw JSON</b><span class="small">immutable</span></div><div class="arrow">→</div>
+          <div class="node"><b>Normalize</b><span class="small">deterministic</span></div><div class="arrow">→</div>
+          <div class="node violet-node"><b>Claude Code</b><span class="small">semantic enrichment</span></div><div class="arrow">→</div>
+          <div class="node"><b>Validate / Diff</b><span class="small">automatic + semantic</span></div><div class="arrow">→</div>
+          <div class="node green-node"><b>Release</b><span class="small">explicit publish</span></div>
+        </div>
+
+        <div style="height:16px"></div>
+        <div class="rule"><code>Code = 사실·규칙 &nbsp;&nbsp; AI = 의미·해석 &nbsp;&nbsp; Human = 최종 승인</code></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">03 · Responsibilities</div><h2 class="serif">역할 분리</h2></div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Vercel / Next.js</h3>
+          <ul>
+            <li>웹·반응형 UI</li>
+            <li>SSR/RSC · Route Handler</li>
+            <li>검색/추천 orchestration</li>
+            <li>Next.js Cache / Revalidation</li>
+            <li>Supabase 접근을 서버 레이어로 제한</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Supabase</h3>
+          <ul>
+            <li>PostgreSQL serving DB</li>
+            <li>PostGIS 공간 검색</li>
+            <li>dataset release / provenance</li>
+            <li>향후 Auth · RLS · user data</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Claude Code</h3>
+          <ul>
+            <li>연령 적합도 추론</li>
+            <li>유모차·실내 보조 판정</li>
+            <li>교육과정 연결 후보</li>
+            <li>semantic diff 검토</li>
+            <li>오류 후보 검수</li>
+          </ul>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="callout">
+        <strong>Claude가 하지 않는 일</strong>
+        좌표 파싱, ID 매칭, 중복 제거, schema validation, 날짜/숫자 정규화, DB upsert 조건 판단은 deterministic code가 담당합니다.
+      </div>
+    </section>
+
+    <section id="database" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">04 · Supabase + PostGIS</div><h2 class="serif">Serving DB 설계</h2></div>
+        <p>자주 검색하는 안정 필드는 컬럼으로, 아직 변화가 많은 속성은 JSONB로 둡니다.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>places</h3>
+<pre><code>create extension if not exists postgis;
+
+create table places (
+  id bigint generated by default as identity primary key,
+  source text not null,
+  source_id text not null,
+  name text not null,
+  address text,
+  sido text,
+  sigungu text,
+  lat double precision,
+  lng double precision,
+  location geography(Point, 4326),
+  theme_key text,
+  overview text,
+  attributes jsonb not null default '{}'::jsonb,
+  source_updated_at timestamptz,
+  published_release_id uuid,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(source, source_id)
+);
+
+create index places_location_gix
+  on places using gist(location);</code></pre>
+        </div>
+        <div class="card">
+          <h3>place_enrichment</h3>
+<pre><code>create table place_enrichment (
+  place_id bigint primary key
+    references places(id) on delete cascade,
+  age_groups text[],
+  stroller_friendly boolean,
+  indoor boolean,
+  themes text[],
+  curriculum jsonb,
+  confidence numeric(4,3),
+  model text,
+  analysis_version text,
+  generated_at timestamptz,
+  published_release_id uuid
+);</code></pre>
+          <div class="callout green">
+            <strong>원천 사실과 AI 추론을 분리</strong>
+            UI에서도 공공데이터 / AI 분석 / 정보 없음 상태를 정직하게 표현할 수 있습니다.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">05 · Data Types</div><h2 class="serif">Static Knowledge vs Dynamic Context</h2></div>
+      </div>
+      <table>
+        <thead><tr><th>구분</th><th>예시</th><th>처리 방식</th></tr></thead>
+        <tbody>
+          <tr><td><b>Static Knowledge</b></td><td>관광지, 교육과정, 국가유산, 테마, 추천 연령, 유모차 적합성, 설명 기반 enrichment</td><td>Raw JSON → Claude Code → 검증 → Supabase publish</td></tr>
+          <tr><td><b>Dynamic Context</b></td><td>날씨, 미세먼지, 실시간 혼잡도, 당일 행사 상태</td><td>향후 Vercel 서버에서 외부 API 호출 + 짧은 캐시</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="versioning" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">06 · Mandatory</div><h2 class="serif">Raw JSON Versioning</h2></div>
+        <p>Raw JSON은 immutable source artifact로 취급합니다. 한번 생성된 payload는 수정하지 않습니다.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>권장 디렉터리</h3>
+          <div class="folder"><pre style="margin:0;background:transparent;border:0;padding:0"><code>data/
+├── raw/
+│   ├── tour-api/
+│   │   └── 2026-09-04/
+│   │       └── 20260904T103000+0900/
+│   │           ├── payload.json
+│   │           ├── request.json
+│   │           ├── metadata.json
+│   │           └── sha256.txt
+│   └── curriculum/
+├── normalized/
+│   └── &lt;run-id&gt;/
+├── enriched/
+│   └── &lt;run-id&gt;/
+├── reports/
+│   └── &lt;run-id&gt;/
+│       ├── diff.json
+│       ├── validation.json
+│       └── summary.md
+└── releases/
+    └── vYYYY.MM.DD.N/
+        ├── manifest.json
+        ├── checksums.sha256
+        ├── places.jsonl
+        └── enrichment.jsonl</code></pre></div>
+        </div>
+        <div class="card">
+          <h3>Raw 규칙</h3>
+          <ul class="checklist">
+            <li>생성된 raw payload는 수정 금지</li>
+            <li>동일 데이터 재수집도 새 run 생성</li>
+            <li>request / metadata / checksum 함께 보존</li>
+            <li>normalized·enriched는 run-id로 분리</li>
+            <li>release는 immutable artifact</li>
+            <li>rollback은 이전 release 재-publish</li>
+          </ul>
+          <div style="height:12px"></div>
+          <div class="callout violet">
+            <strong>Data Lineage</strong>
+            원본 → 정규화 → AI 분석 → 검증 → release → DB까지 어느 단계에서 데이터가 변했는지 추적할 수 있어야 합니다.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pipeline" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">07 · Claude Code</div><h2 class="serif">Human-in-the-loop Data Pipeline</h2></div>
+        <p>주 1회 또는 월 1회 개발자가 직접 실행하고, 검증된 release만 운영 DB에 반영합니다.</p>
+      </div>
+
+      <div class="pipeline">
+        <div class="step"><b>1. Collect</b><span>Raw 응답 그대로 저장</span></div>
+        <div class="step"><b>2. Normalize</b><span>ID·좌표·null·날짜 정리</span></div>
+        <div class="step"><b>3. Diff</b><span>new / changed / removed</span></div>
+        <div class="step ai"><b>4. Claude</b><span>semantic enrichment</span></div>
+        <div class="step"><b>5. Validate</b><span>자동 + semantic 검증</span></div>
+        <div class="step human"><b>6. Human Review</b><span>warning 확인 / 승인</span></div>
+        <div class="step publish"><b>7. Publish</b><span>Supabase + Git tag</span></div>
+      </div>
+
+      <div style="height:18px"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Collect / Normalize / Diff</h3>
+<pre><code>npm run data:collect -- --source tour-api
+npm run data:collect -- --source curriculum
+
+npm run data:normalize -- --run &lt;run-id&gt;
+npm run data:diff -- --run &lt;run-id&gt;</code></pre>
+          <p>AI 분석은 기본적으로 <b>new + changed</b>만 대상으로 합니다. 전체 19,000건을 매번 재분석하지 않습니다.</p>
+        </div>
+        <div class="card">
+          <h3>Semantic Enrichment 결과 예</h3>
+<pre><code>{
+  "placeId": "...",
+  "ageGroups": ["infant", "elementary_low"],
+  "strollerFriendly": true,
+  "indoor": false,
+  "themes": ["history", "walking"],
+  "confidence": 0.87,
+  "evidence": [
+    "평지 산책로",
+    "유모차 관련 시설 설명"
+  ],
+  "analysisVersion": "place-enrichment-v2",
+  "model": "claude-current",
+  "generatedAt": "2026-09-04T10:30:00+09:00"
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">08 · Validation Gate</div><h2 class="serif">Publish 전 안전장치</h2></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>자동 Validation</h3>
+          <ul>
+            <li>required fields</li>
+            <li>unique source/source_id</li>
+            <li>좌표 범위 / enum validity</li>
+            <li>orphan relation / JSON schema</li>
+            <li>duplicate / checksum</li>
+            <li>record count anomaly</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Semantic Validation</h3>
+          <ul>
+            <li>실내인데 명백한 야외 코스</li>
+            <li>유모차 가능인데 장거리 등산 코스</li>
+            <li>source category와 테마 충돌</li>
+            <li>낮은 confidence</li>
+            <li>전 release 대비 대량 변경</li>
+          </ul>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <table>
+        <thead><tr><th>Gate</th><th>초기 권장 기준</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>삭제 비율</td><td>&gt; 전체의 2%</td><td>STOP</td></tr>
+          <tr><td>전체 레코드 감소</td><td>&gt; 3%</td><td>STOP</td></tr>
+          <tr><td>AI 주요 boolean 변경</td><td>&gt; 20%</td><td>REVIEW REQUIRED</td></tr>
+          <tr><td>Validation error</td><td>1건 이상</td><td>STOP</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="commands" class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">09 · Claude Commands</div><h2 class="serif">운영 커맨드</h2></div>
+        <p>refresh와 publish를 분리하고, publish는 항상 명시적인 사용자 승인 뒤에 수행합니다.</p>
+      </div>
+      <div class="card">
+        <div class="command"><code>claude</code><span class="desc">프로젝트 루트에서 Claude Code 시작</span></div>
+        <div class="command"><code>/data-refresh all diff</code><span class="desc">일반적인 전체 소스 증분 갱신</span></div>
+        <div class="command"><code>/data-refresh tour-api diff</code><span class="desc">TourAPI만 증분 갱신</span></div>
+        <div class="command"><code>/data-refresh all full reason=analysis-version-v3</code><span class="desc">분석 버전 변경 시 전체 재분석</span></div>
+        <div class="command"><code>/data-publish v2026.09.04.1</code><span class="desc">검증된 release를 명시적으로 publish</span></div>
+      </div>
+
+      <div style="height:14px"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Refresh 결과 예</h3>
+<pre><code>DATA REFRESH RESULT
+
+Run ID:             20260904T103000+0900
+Release Candidate:  v2026.09.04.1
+Raw:                19,146
+Normalized:         19,120
+New:                41
+Changed:            72
+Removed:            3
+AI analyzed:        113
+Validation errors:  0
+Warnings:           27
+
+Production modified: NO</code></pre>
+        </div>
+        <div class="card">
+          <h3>Publish 계획 예</h3>
+<pre><code>PUBLISH PLAN
+
+Target:              banggu-production
+Current release:     v2026.08.31.1
+New release:         v2026.09.04.1
+
+New records:         41
+Changed records:     72
+Removed records:     3
+
+Validation errors:   0
+Warnings:            27
+
+Rollback release:    v2026.08.31.1</code></pre>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="callout green">
+        <strong>Publish 원칙</strong>
+        승인 전 DB write 금지. 완료 후 DB count 검증 → dataset_releases 기록 → manifest publish 상태 갱신 → Git commit → <code>dataset/vYYYY.MM.DD.N</code> tag 생성.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">10 · Rollback</div><h2 class="serif">Rollback은 “수정”이 아니라 “재배포”</h2></div>
+      </div>
+      <div class="card">
+        <p>운영 데이터가 잘못되었을 때 수동 SQL로 값을 고치지 않습니다. 이전 검증 release를 다시 publish합니다.</p>
+        <div class="command"><code>/data-publish v2026.08.31.1</code><span class="desc">이전 release 재배포</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div><div class="eyebrow">11 · Initial Stack</div><h2 class="serif">지금 당장 필요한 것은 이것뿐</h2></div>
+      </div>
+      <div class="grid-3">
+        <div class="card principle"><h3>Runtime</h3><p><b>Vercel + Next.js</b><br/>UI · API · orchestration · cache</p></div>
+        <div class="card principle"><h3>Data Serving</h3><p><b>Supabase + PostGIS</b><br/>place query · geo query · releases</p></div>
+        <div class="card principle"><h3>Offline Workbench</h3><p><b>Git + Raw JSON + Claude Code CLI</b><br/>collect · diff · enrich · validate · publish</p></div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="callout">
+        <strong>처음부터 넣지 않는 것</strong>
+        Kafka · SQS · Worker 서버 · ECS · Kubernetes · Redis · Elasticsearch · 별도 Batch Server · 별도 Recommendation Service · Vector DB
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>방구석 탈출 v2 · Architecture & Data Blueprint</span>
+      <span>Vercel · Supabase/PostGIS · Claude Code · Versioned Raw JSON</span>
+    </footer>
+  </main>
+</body>
+</html>

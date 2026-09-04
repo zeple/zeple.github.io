@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>방구석 탈출 v2 — UI/UX Design Guide</title>
+<meta name="description" content="방구석 탈출 v2 사용자 UI/UX 디자인 가이드"/>
+<style>
+:root{
+  --bg:#f7f2e9;
+  --paper:#fffdf9;
+  --paper2:#fbf7ef;
+  --ink:#171714;
+  --muted:#716d66;
+  --line:#e7ded2;
+  --orange:#e34a12;
+  --orange2:#ff6b1b;
+  --orangeSoft:#fff0e8;
+  --green:#245a43;
+  --greenSoft:#eaf4ee;
+  --purple:#7450a8;
+  --purpleSoft:#f2ecfb;
+  --sand:#9f7b36;
+  --sandSoft:#f8f0df;
+  --blue:#39749c;
+  --blueSoft:#eaf3f8;
+  --danger:#b23a2d;
+  --r1:10px; --r2:14px; --r3:20px; --r4:28px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --shadow1:0 8px 24px rgba(56,39,18,.05);
+  --shadow2:0 18px 52px rgba(56,39,18,.08);
+  --max:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:
+  radial-gradient(circle at 10% 0%,rgba(227,74,18,.055),transparent 24rem),
+  radial-gradient(circle at 95% 10%,rgba(36,90,67,.045),transparent 22rem),
+  var(--bg);
+  color:var(--ink);
+  font-family:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.65;
+}
+.serif{font-family:"MaruBuri","Noto Serif KR","Nanum Myeongjo",Georgia,serif;letter-spacing:-.025em}
+.top{
+  position:sticky;top:0;z-index:50;
+  background:rgba(247,242,233,.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(231,222,210,.9);
+}
+.topin{max-width:var(--max);margin:auto;padding:13px 22px;display:flex;align-items:center;gap:18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:850;white-space:nowrap}
+.door{width:26px;height:30px;border:2px solid var(--orange);border-radius:4px;position:relative}
+.door:after{content:"";position:absolute;right:5px;top:13px;width:3px;height:3px;border-radius:50%;background:var(--orange)}
+nav{margin-left:auto;display:flex;gap:5px;flex-wrap:wrap}
+nav a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;padding:7px 10px;border-radius:999px}
+nav a:hover{background:var(--paper);color:var(--ink)}
+main{max-width:var(--max);margin:auto;padding:0 22px 80px}
+.hero{padding:68px 0 38px;display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:end}
+.eye{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);font-weight:850}
+h1{font-size:clamp(44px,6vw,76px);line-height:1.06;margin:8px 0 16px}
+.hero p{font-size:18px;color:var(--muted);max-width:760px;margin:0}
+.quote{border:1px solid var(--line);background:rgba(255,253,249,.86);border-radius:var(--r3);padding:22px 24px;box-shadow:var(--shadow1)}
+.quote b{display:block;margin-bottom:6px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.pill{font-size:12px;font-weight:750;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;color:var(--muted)}
+.pill.o{color:var(--orange);border-color:#f0b69f;background:var(--orangeSoft)}
+.pill.g{color:var(--green);border-color:#cbe0d2;background:var(--greenSoft)}
+.pill.p{color:var(--purple);border-color:#ddd2f0;background:var(--purpleSoft)}
+.sec{margin-top:28px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:15px}
+.head h2{margin:0;font-size:30px;line-height:1.25}
+.head p{margin:0;color:var(--muted);font-size:14px;max-width:560px}
+.card{background:rgba(255,253,249,.96);border:1px solid var(--line);border-radius:var(--r3);box-shadow:var(--shadow1);padding:24px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.num{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:13px;font-weight:850;margin-bottom:12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.swatch{border-radius:13px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.swatch i{display:block;height:64px}
+.swatch span{display:block;padding:9px 10px;font-size:12px}
+.type-sample{padding:20px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.type-sample .display{font-size:36px;line-height:1.25;margin-bottom:10px}
+.type-sample .ui{font-size:19px;font-weight:650;margin-bottom:8px}
+.type-sample .body{font-size:15px;color:var(--muted)}
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+th{font-size:12px;background:var(--paper2);letter-spacing:.03em}
+tr:last-child td{border-bottom:none}
+.mock{
+  border:1px solid var(--line);border-radius:20px;background:#fff;padding:14px;box-shadow:var(--shadow1)
+}
+.mockbar{height:38px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 6px 10px;margin-bottom:10px}
+.dot{width:9px;height:9px;border-radius:50%;background:#ddd}
+.desktop{
+  display:grid;grid-template-columns:310px minmax(360px,1fr) 390px;gap:10px;height:520px
+}
+.pane{border:1px solid var(--line);border-radius:15px;background:var(--paper);overflow:hidden;position:relative}
+.pane h4{margin:0;padding:14px 15px;border-bottom:1px solid var(--line);font-size:14px}
+.listrow{display:grid;grid-template-columns:74px 1fr;gap:10px;padding:10px;border-bottom:1px solid var(--line)}
+.thumb{height:62px;border-radius:9px;background:linear-gradient(135deg,#c7d9b7,#88a37b)}
+.smallline{height:9px;background:#e9e5df;border-radius:999px;margin:5px 0;width:80%}
+.smallline.w55{width:55%}
+.minipills{display:flex;gap:5px;margin-top:7px}
+.minipills i{height:16px;width:54px;border-radius:999px;background:var(--greenSoft);border:1px solid #d2e4d7}
+.map{background:
+  linear-gradient(90deg,transparent 0 14%,#eee7dc 14% 15%,transparent 15% 40%,#eee7dc 40% 41%,transparent 41%),
+  linear-gradient(0deg,transparent 0 18%,#eee7dc 18% 19%,transparent 19% 62%,#eee7dc 62% 63%,transparent 63%),
+  #f4f0e6;
+}
+.pin{position:absolute;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--green);box-shadow:0 3px 8px rgba(0,0,0,.16)}
+.pin:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;left:10px;top:10px}
+.pin.sel{background:var(--orange);width:34px;height:34px}
+.detailHero{height:145px;background:linear-gradient(135deg,#bbd7a8,#8ab38a 45%,#6f9a71)}
+.detailbody{padding:15px}
+.detailtitle{font-size:25px;margin:4px 0 8px}
+.cta{height:44px;background:var(--orange);color:#fff;border-radius:11px;display:grid;place-items:center;font-size:14px;font-weight:800;margin-top:10px}
+.mobilewrap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.phone{width:100%;max-width:320px;margin:auto;border:8px solid #20201f;border-radius:36px;background:#fff;overflow:hidden;box-shadow:var(--shadow2)}
+.phonein{min-height:590px;position:relative;background:#fff}
+.phhead{padding:17px 14px 10px;border-bottom:1px solid var(--line)}
+.search{height:42px;border:1px solid var(--line);border-radius:999px;color:#999;display:flex;align-items:center;padding:0 14px;font-size:12px;margin-top:10px}
+.phmap{height:300px;background:
+ linear-gradient(40deg,transparent 0 28%,#e8dfce 28% 30%,transparent 30% 66%,#e8dfce 66% 68%,transparent 68%),
+ #f3efe5;position:relative}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:26px 26px 0 0;border-top:1px solid var(--line);padding:10px 14px 14px;box-shadow:0 -16px 38px rgba(52,39,23,.10)}
+.handle{width:44px;height:4px;background:#d5d2cc;border-radius:999px;margin:0 auto 12px}
+.mrow{display:grid;grid-template-columns:56px 1fr;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}
+.mthumb{height:48px;border-radius:9px;background:linear-gradient(135deg,#c9dcb7,#8da67e)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:11px;background:#fff}
+.chip.on{border-color:var(--orange);color:var(--orange);background:var(--orangeSoft);font-weight:750}
+.filterbody{padding:18px 15px 84px}
+.filterbody h5{font-size:15px;margin:17px 0 9px}
+.filterfooter{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 13px}
+.states{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.state{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;min-height:136px}
+.state b{display:block;font-size:13px;margin-bottom:7px}
+.state span{font-size:12px;color:var(--muted)}
+.do{border-left:4px solid var(--green);background:var(--greenSoft);padding:14px 16px;border-radius:0 12px 12px 0}
+.dont{border-left:4px solid var(--danger);background:#fbedea;padding:14px 16px;border-radius:0 12px 12px 0}
+.rule{display:grid;grid-template-columns:165px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.rule:last-child{border:0}
+.rule b{font-size:13px}
+.kpi{font-size:28px;font-weight:800;color:var(--orange)}
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+@media(max-width:1000px){.hero,.g2,.g3,.g4{grid-template-columns:1fr}.desktop{grid-template-columns:1fr;height:auto}.desktop .pane{min-height:260px}.mobilewrap{grid-template-columns:1fr}.swatches{grid-template-columns:repeat(3,1fr)}nav{display:none}.states{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){main{padding:0 16px 55px}.topin{padding:12px 16px}.hero{padding:44px 0 24px}h1{font-size:42px}.swatches,.states{grid-template-columns:1fr 1fr}.head{display:block}.head p{margin-top:8px}.rule{grid-template-columns:1fr;gap:3px}}
+@media print{.top{position:static}body{background:#fff}.card,.mock{box-shadow:none}nav{display:none}.sec{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="logo"><span class="door"></span>방구석 탈출 v2 · UI/UX Guide</div>
+    <nav>
+      <a href="#principles">원칙</a><a href="#visual">Visual</a><a href="#responsive">Responsive</a>
+      <a href="#patterns">Patterns</a><a href="#trust">Trust</a><a href="#states">States</a><a href="#a11y">A11y</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div>
+    <div class="eye">User Experience · Product Design System</div>
+    <h1 class="serif">고민은 줄이고,<br/>나들이의 기대는 키운다.</h1>
+    <p>방구석 탈출 v2의 디자인은 “지도 앱”처럼 보이는 것이 목표가 아닙니다.
+       아이와 어디 갈지 막막한 순간, 추천을 빠르게 이해하고 직접 탐색하고 싶을 때는 지도와 검색이 자연스럽게 이어지는 경험을 만듭니다.</p>
+    <div class="tags">
+      <span class="pill o">Recommendation-first</span><span class="pill g">Map exploration</span>
+      <span class="pill p">Editorial Serif</span><span class="pill">Pretendard UI</span><span class="pill">Data Trust</span>
+    </div>
+  </div>
+  <aside class="quote">
+    <b>제품 경험 한 줄</b>
+    고민하기 싫으면 <strong>추천 3곳</strong>.<br/>
+    직접 찾고 싶으면 <strong>검색 + 지도 + 조건</strong>.
+    <div class="tags"><span class="pill">Passive Discovery</span><span class="pill">Active Discovery</span></div>
+  </aside>
+</section>
+
+<section id="principles" class="sec">
+  <div class="head">
+    <div><div class="eye">01 · Experience Principles</div><h2 class="serif">경험 설계 원칙</h2></div>
+    <p>기능 수보다 판단 속도와 신뢰를 우선합니다.</p>
+  </div>
+  <div class="g3">
+    <div class="card"><span class="num">1</span><h3>추천이 먼저</h3><p>처음부터 목록 19,000개를 보여주는 대신 오늘의 추천과 큐레이션을 1급 시민으로 둡니다.</p></div>
+    <div class="card"><span class="num">2</span><h3>검색은 항상 빠르게</h3><p>모바일 검색창은 상단 고정. PC 검색은 전역 헤더에서 접근합니다.</p></div>
+    <div class="card"><span class="num">3</span><h3>지도는 맥락, 목록은 판단</h3><p>지도는 위치 관계를 보여주고 목록/상세는 선택을 돕습니다. 지도 때문에 목록 상태가 사라지면 안 됩니다.</p></div>
+    <div class="card"><span class="num">4</span><h3>정보는 계층화</h3><p>제목 → 핵심 메타 → 추천 이유 → 상세 설명. 모든 정보를 같은 굵기·같은 색으로 말하지 않습니다.</p></div>
+    <div class="card"><span class="num">5</span><h3>데이터는 정직하게</h3><p>AI 추론, 원천 사실, 정보 없음 상태를 구분합니다. “모름”을 가짜 숫자로 채우지 않습니다.</p></div>
+    <div class="card"><span class="num">6</span><h3>브랜드는 행동에 일관되게</h3><p>Primary CTA는 브랜드 오렌지로 통일. 카테고리 색은 태그·아이콘·마커에만 씁니다.</p></div>
+  </div>
+</section>
+
+<section id="visual" class="sec">
+  <div class="head">
+    <div><div class="eye">02 · Visual Language</div><h2 class="serif">따뜻한 에디토리얼 + 명확한 기능 UI</h2></div>
+    <p>세리프는 감정과 큐레이션을, Pretendard는 탐색과 조작을 담당합니다.</p>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <h3>Typography</h3>
+      <div class="type-sample">
+        <div class="display serif">오늘은 어디로 나가볼까요.</div>
+        <div class="ui">서울 살곶이 다리 · 영유아 OK · 유모차 편함</div>
+        <div class="body">한강을 따라 천천히 걸으며 아이와 함께 역사와 자연을 경험할 수 있어요.</div>
+      </div>
+      <table style="margin-top:12px">
+        <thead><tr><th>역할</th><th>Font</th><th>권장</th></tr></thead>
+        <tbody>
+          <tr><td>Display / 큐레이션</td><td>MaruBuri / Noto Serif KR</td><td>32~56px / 600~700</td></tr>
+          <tr><td>페이지 제목</td><td>Pretendard</td><td>22~28px / 650</td></tr>
+          <tr><td>카드 제목</td><td>Pretendard</td><td>18~19px / 600</td></tr>
+          <tr><td>본문</td><td>Pretendard</td><td>15~16px / 400</td></tr>
+          <tr><td>라벨 / 태그</td><td>Pretendard</td><td>12~13px / 450~550</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Color System</h3>
+      <div class="swatches">
+        <div class="swatch"><i style="background:#e34a12"></i><span><b>Brand Orange</b><br/>#E34A12</span></div>
+        <div class="swatch"><i style="background:#245a43"></i><span><b>Deep Green</b><br/>#245A43</span></div>
+        <div class="swatch"><i style="background:#7450a8"></i><span><b>Accent Purple</b><br/>#7450A8</span></div>
+        <div class="swatch"><i style="background:#f7f2e9"></i><span><b>Warm Ivory</b><br/>#F7F2E9</span></div>
+        <div class="swatch"><i style="background:#fffdf9"></i><span><b>Paper</b><br/>#FFFDF9</span></div>
+        <div class="swatch"><i style="background:#171714"></i><span><b>Ink</b><br/>#171714</span></div>
+      </div>
+      <div class="do" style="margin-top:14px"><b>Do</b><br/>오렌지 = 주요 행동 · 선택 완료 · 브랜드 기억</div>
+      <div class="dont" style="margin-top:10px"><b>Don't</b><br/>길찾기 버튼을 테마마다 보라/초록/청록으로 바꾸지 않습니다.</div>
+    </div>
+  </div>
+
+  <div class="g3" style="margin-top:16px">
+    <div class="card"><h3>Radius</h3><p>Chip 999px · Button 10~12px · Card 14px · Sheet/Panel 20~28px</p></div>
+    <div class="card"><h3>Elevation</h3><p>지도 위 패널만 shadow. 패널 안 카드는 border/tonal surface 중심으로.</p></div>
+    <div class="card"><h3>Icon</h3><p>기능 UI는 1.5~1.75px line icon. 이모지는 큐레이션/놀이성 콘텐츠에만 제한.</p></div>
+  </div>
+</section>
+
+<section id="responsive" class="sec">
+  <div class="head">
+    <div><div class="eye">03 · Responsive Layout</div><h2 class="serif">PC는 비교, 모바일은 한 손 탐색</h2></div>
+    <p>동일한 기능을 억지로 축소하지 않고 각 화면 크기에서 최적의 정보 구조를 사용합니다.</p>
+  </div>
+
+  <div class="card">
+    <h3>Desktop · 1200px 이상</h3>
+    <div class="mock" style="margin-top:12px">
+      <div class="mockbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="desktop">
+        <div class="pane">
+          <h4>추천 / 전체 둘러보기 · 검색 · 결과 목록</h4>
+          <div class="listrow"><div class="thumb"></div><div><b>서울 살곶이 다리</b><div class="smallline"></div><div class="minipills"><i></i><i></i></div></div></div>
+          <div class="listrow"><div class="thumb"></div><div><b>서울상상나라</b><div class="smallline"></div><div class="minipills"><i></i><i></i></div></div></div>
+          <div class="listrow"><div class="thumb"></div><div><b>북한산 자락길</b><div class="smallline"></div><div class="minipills"><i></i></div></div></div>
+        </div>
+        <div class="pane map">
+          <span class="pin sel" style="left:48%;top:42%"></span>
+          <span class="pin" style="left:28%;top:26%"></span>
+          <span class="pin" style="left:67%;top:62%;background:var(--purple)"></span>
+        </div>
+        <div class="pane">
+          <div class="detailHero"></div>
+          <div class="detailbody">
+            <div class="detailtitle">서울 살곶이 다리</div>
+            <div class="chips"><span class="chip on">역사 탐방</span><span class="chip">영유아 OK</span><span class="chip">유모차 편함</span></div>
+            <div style="height:12px"></div>
+            <b>이곳을 추천한 이유</b>
+            <div class="smallline"></div><div class="smallline"></div><div class="smallline w55"></div>
+            <div class="cta">길찾기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="pill">Left 300~340px</span><span class="pill">Map fluid</span><span class="pill">Detail 380~420px</span>
+      <span class="pill o">3-pane only ≥1200px</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Tablet / Narrow Desktop · 900~1199px</h3>
+    <p>3분할 금지. 상세가 열리면 목록을 밀어내거나 지도 위 오버레이로 전환합니다. 지도에 실제 보이는 영역 기준 padding을 적용합니다.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Mobile · 400px 기준</h3>
+    <div class="mobilewrap" style="margin-top:12px">
+      <div>
+        <div class="phone">
+          <div class="phonein">
+            <div class="phhead"><b>방구석 탈출</b><div class="search">⌕ 장소, 키워드로 검색</div></div>
+            <div class="phmap"><span class="pin sel" style="left:49%;top:34%"></span><span class="pin" style="left:28%;top:54%"></span></div>
+            <div class="sheet">
+              <div class="handle"></div>
+              <b>이 지역 12곳</b>
+              <div class="mrow"><div class="mthumb"></div><div><b>서울 살곶이 다리</b><div class="smallline"></div></div></div>
+              <div class="mrow"><div class="mthumb"></div><div><b>서울상상나라</b><div class="smallline"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <p style="text-align:center;color:var(--muted);font-size:12px">검색 상단 고정 + 지도 + 3단 Bottom Sheet</p>
+      </div>
+      <div>
+        <div class="phone">
+          <div class="phonein">
+            <div class="phhead"><b>오늘의 추천</b><div class="serif" style="font-size:25px;margin-top:12px">오늘은 어디로 나가볼까요.</div></div>
+            <div style="padding:14px">
+              <div class="thumb" style="height:150px"></div>
+              <h3 style="margin:12px 0 4px">서울어린이대공원</h3>
+              <div class="chips"><span class="chip on">영유아 OK</span><span class="chip">유모차 편함</span></div>
+              <div class="smallline" style="margin-top:12px"></div><div class="smallline w55"></div>
+              <div class="cta">다시 탈출!</div>
+            </div>
+          </div>
+        </div>
+        <p style="text-align:center;color:var(--muted);font-size:12px">Passive Discovery는 지도보다 추천이 먼저</p>
+      </div>
+      <div>
+        <div class="phone">
+          <div class="phonein">
+            <div class="filterbody">
+              <div class="serif" style="font-size:28px;margin-bottom:4px">오늘 조건 고르기</div>
+              <span style="font-size:12px;color:var(--muted)">아이와 함께 가기 좋은 장소를 찾아드릴게요.</span>
+              <h5>누구랑</h5><div class="chips"><span class="chip on">영유아</span><span class="chip">초등 저학년</span><span class="chip">초등 고학년</span></div>
+              <h5>어떤 상황인가요?</h5><div class="chips"><span class="chip on">유모차·평지</span><span class="chip">비와도 OK</span><span class="chip">실컷 뛰어놀기</span></div>
+              <h5>무엇을 볼까</h5><div class="chips"><span class="chip">숲·공원</span><span class="chip on">역사 탐방</span><span class="chip">체험·배우기</span><span class="chip">물놀이</span></div>
+            </div>
+            <div class="filterfooter"><div class="cta">결과 보기 (12곳)</div></div>
+          </div>
+        </div>
+        <p style="text-align:center;color:var(--muted);font-size:12px">즉시 반영 + CTA는 “닫기/결과 수 확인” 역할</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="patterns" class="sec">
+  <div class="head">
+    <div><div class="eye">04 · Core Patterns</div><h2 class="serif">핵심 인터랙션 패턴</h2></div>
+  </div>
+  <div class="card">
+    <div class="rule"><b>검색</b><span>모바일은 항상 상단. 검색 입력 시 지도/조건보다 검색 결과를 우선 보여줍니다.</span></div>
+    <div class="rule"><b>Bottom Sheet</b><span><b>min / peek / expanded</b> 3단 유지. drag handle과 header 영역에 user-select:none, touch-action:none.</span></div>
+    <div class="rule"><b>지도 이동</b><span>사용자가 직접 움직인 경우에만 “이 지역에서 다시 찾기”를 노출. 프로그램matic panTo/setBounds는 재검색 억제.</span></div>
+    <div class="rule"><b>목록 ↔ 지도</b><span>카드 선택 시 marker highlight + map pan. marker 선택 시 해당 카드 scrollIntoView + selection state.</span></div>
+    <div class="rule"><b>필터</b><span>순서: <b>누구랑 → 상황 → 테마</b>. 그룹 내부 OR, 그룹 간 AND. 조건 변경은 즉시 반영하고 CTA는 “결과 보기 (N곳)”.</span></div>
+    <div class="rule"><b>카드 밀도</b><span>기본 리스트는 가로형 약 120~140px 높이. 태그는 최대 2개. 방문 여부는 badge가 아니라 row state로.</span></div>
+    <div class="rule"><b>상세 CTA</b><span>Primary: 길찾기(브랜드 오렌지). Secondary: 가봤어요. 저장은 별도 기능 정의 전까지 신규 추가하지 않음.</span></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="head">
+    <div><div class="eye">05 · Card & Detail</div><h2 class="serif">카드와 상세 정보 위계</h2></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <h3>List Card</h3>
+      <table>
+        <tbody>
+          <tr><td><b>1순위</b></td><td>장소명</td></tr>
+          <tr><td><b>2순위</b></td><td>지역 · 거리(기준이 있을 때만)</td></tr>
+          <tr><td><b>3순위</b></td><td>태그 최대 2개</td></tr>
+          <tr><td><b>추천 규칙</b></td><td>AI 분석 &gt; 편의시설 1개 &gt; 대표 테마 1개</td></tr>
+          <tr><td><b>방문 상태</b></td><td>체크/opacity/border 등 row state</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Place Detail</h3>
+      <ol>
+        <li>Hero image (없으면 대표 이미지 재사용, 그것도 없으면 category placeholder)</li>
+        <li>장소명 · 테마 · 연령/편의 태그</li>
+        <li>주소</li>
+        <li>현재 보유 데이터 기준 핵심 판단: <b>추천 연령 + 유모차</b></li>
+        <li>추천 이유</li>
+        <li>원천 데이터가 있을 때만 운영시간·요금·주차·화장실 추가</li>
+        <li>함께 들르기 좋은 곳</li>
+        <li>Sticky CTA: 가봤어요 / 길찾기</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="trust" class="sec">
+  <div class="head">
+    <div><div class="eye">06 · Data Trust UX</div><h2 class="serif">신뢰할 수 있는 정보 표현</h2></div>
+    <p>데이터 가용성보다 더 중요한 것은 사용자가 “어디까지 믿어도 되는지” 알 수 있게 하는 것입니다.</p>
+  </div>
+  <div class="g3">
+    <div class="card"><h3>원천 사실</h3><p>주소·공식 운영정보 등은 일반 정보로 표현. 필요 시 “업데이트 YYYY.MM” 보조 표기.</p></div>
+    <div class="card"><h3>AI 추론</h3><p>`AI 분석` 또는 `예상` 라벨을 사용. confidence가 낮으면 핵심 CTA 판단 근거로 쓰지 않음.</p></div>
+    <div class="card"><h3>정보 없음</h3><p>빈 공간이나 임의 추정 대신 “정보 없음 / 준비 중”을 정상 상태로 표현.</p></div>
+  </div>
+  <div style="margin-top:14px" class="dont"><b>금지</b><br/>실제 데이터가 없는데 “무료”, “1~2시간”, “주차 가능”처럼 확정적으로 보여주지 않습니다.</div>
+</section>
+
+<section id="states" class="sec">
+  <div class="head">
+    <div><div class="eye">07 · States</div><h2 class="serif">예외 상태도 디자인의 일부</h2></div>
+  </div>
+  <div class="states">
+    <div class="state"><b>Loading</b><span>지도/리스트 skeleton. 기존 결과를 갑자기 비우지 않음.</span></div>
+    <div class="state"><b>No Results</b><span>“조건 하나를 완화하면 23곳을 더 볼 수 있어요.”처럼 recovery 제공.</span></div>
+    <div class="state"><b>Location Denied</b><span>현재 지도 중심 기준 탐색으로 fallback + 권한 설정 안내.</span></div>
+    <div class="state"><b>Map Error</b><span>목록 탐색은 유지. 지도만 재시도/오류 표시.</span></div>
+    <div class="state"><b>No Image</b><span>카테고리 tone + icon + place name placeholder.</span></div>
+    <div class="state"><b>AI Unavailable</b><span>AI 배지/추천 이유 일부 숨김. 원천 데이터만으로 UI 유지.</span></div>
+    <div class="state"><b>Visited</b><span>row state와 체크. 추천에서는 자동 제외 정책 유지.</span></div>
+    <div class="state"><b>Restored Filters</b><span>재방문 시 조건 칩을 목록 상단에 노출해 복원 사실을 명확히 함.</span></div>
+  </div>
+</section>
+
+<section id="a11y" class="sec">
+  <div class="head">
+    <div><div class="eye">08 · Accessibility</div><h2 class="serif">접근성 기본선</h2></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <h3>Interaction</h3>
+      <ul>
+        <li>모든 터치 타깃 최소 44×44px</li>
+        <li>닫힌 조건 시트/비활성 상세에 inert 적용</li>
+        <li>모달 open 시 focus 이동, close 시 trigger로 복귀</li>
+        <li>focus-visible 유지</li>
+        <li>prefers-reduced-motion 유지</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Semantic Structure</h3>
+      <ul>
+        <li>카드 전체를 role=button으로 만들지 않음</li>
+        <li>장소 제목은 실제 deep link anchor</li>
+        <li>후기/지도/공유 아이콘에 텍스트 라벨 제공</li>
+        <li>색상만으로 테마/상태를 구분하지 않음</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="head">
+    <div><div class="eye">09 · Voice & Copy</div><h2 class="serif">부모의 말로 말하기</h2></div>
+  </div>
+  <div class="g2">
+    <div class="do"><b>유지할 언어</b><br/>방구석 탈출 · 다시 탈출! · 비와도 OK · 실컷 뛰어놀기 · 여기 가봤어요</div>
+    <div class="dont"><b>피할 언어</b><br/>검색 조건 · 카테고리 필터 · 콘텐츠 유형 · 데이터셋 상태 등 시스템 용어를 전면에 노출하지 않기</div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="head">
+    <div><div class="eye">10 · UX Acceptance</div><h2 class="serif">출시 판단 기준</h2></div>
+  </div>
+  <div class="g4">
+    <div class="card"><div class="kpi">≥80%</div><p>신규 사용자 5명+ 중 5초 노출 후 “아이와 갈 곳 추천/탐색 서비스”로 이해</p></div>
+    <div class="card"><div class="kpi">↑</div><p>상세 진입률<br/>추천/목록 → 상세</p></div>
+    <div class="card"><div class="kpi">↑</div><p>길찾기 전환율<br/>상세 → 길찾기</p></div>
+    <div class="card"><div class="kpi">↑</div><p>필터 완료율<br/>조건 시트 → 결과 보기</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="head">
+    <div><div class="eye">11 · First Release Scope</div><h2 class="serif">v2 첫 릴리스에서 바꿀 것</h2></div>
+  </div>
+  <table>
+    <thead><tr><th>Priority</th><th>내용</th><th>비고</th></tr></thead>
+    <tbody>
+      <tr><td><b>P0</b></td><td>브랜드 오렌지 CTA 통일</td><td>카테고리 색과 행동 색 분리</td></tr>
+      <tr><td><b>P0</b></td><td>지도 programmatic move 재검색 억제</td><td>목록 상태 손실 방지</td></tr>
+      <tr><td><b>P0</b></td><td>검색 상단 고정 + 모바일 3단 sheet 유지</td><td>기존 구현 존중</td></tr>
+      <tr><td><b>P0</b></td><td>필터 순서 누구랑 → 상황 → 테마</td><td>CTA “결과 보기 (N곳)”</td></tr>
+      <tr><td><b>P0</b></td><td>카드 가로형·태그 최대 2개</td><td>비교 밀도 개선</td></tr>
+      <tr><td><b>P0</b></td><td>타이포 위계 재설계</td><td>Serif display + Pretendard UI</td></tr>
+      <tr><td><b>P1</b></td><td>상세 정보 구조 개선</td><td>연령/유모차 우선, 나머지는 데이터 확보 후</td></tr>
+      <tr><td><b>P1</b></td><td>상태/권한/오류 UX</td><td>loading, empty, denied, no-image</td></tr>
+      <tr><td><b>P2</b></td><td>저장, 코스, 동적 컨텍스트</td><td>별도 feature spec</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <span>방구석 탈출 v2 · User UI/UX Design Guide</span>
+  <span>Recommendation-first · Map exploration · Trustworthy data</span>
+</footer>
+</main>
+</body>
+</html>
