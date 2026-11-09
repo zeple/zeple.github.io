@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스카이캡슐 예매 도우미 설치</title>
+<style>
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;
+max-width:640px;margin:50px auto 80px;padding:0 20px;line-height:1.7;color:#1c1c1e}
+h1{font-size:22px;margin-bottom:2px}
+p.sub{color:#6b6b70;margin-top:0;font-size:14px}
+a.bm{display:inline-block;background:#1f5fbf;color:#fff;padding:13px 30px;border-radius:8px;
+text-decoration:none;font-weight:700;font-size:16px;margin:16px 0}
+ol{padding-left:20px}li{margin:8px 0}
+code{background:#f0f0f2;padding:2px 6px;border-radius:4px;font-size:13px}
+.card{border:1px solid #dcdce0;border-radius:10px;padding:18px 20px;margin:22px 0}
+.card h2{font-size:15px;margin:0 0 8px}
+textarea{width:100%;height:80px;font:10px/1.4 ui-monospace,monospace;
+border:1px solid #cdcdd2;border-radius:7px;padding:10px;background:#fafafa;color:inherit}
+.warn{background:#fff8e6;border:1px solid #ead6a8;padding:13px 16px;font-size:13px;border-radius:8px;margin-top:24px}
+@media (prefers-color-scheme:dark){
+body{color:#e8e8ea}.card{border-color:#3a3a3e}
+code{background:#2c2c30}textarea{background:#1f1f22;border-color:#3a3a3e}
+.warn{background:#2e2718;border-color:#4a3f24}}
+</style>
+</head>
+<body>
+
+<h1>🚡 스카이캡슐 예매 도우미</h1>
+<p class="sub">해운대 블루라인파크 예매 페이지 안에 패널을 띄워 설정하고, 지정한 시각에 날짜 → 회차 → 권종 → 결제수단 → 예매자 정보 → 약관 → 결제하기까지 한 번에 진행합니다.</p>
+
+<div class="card">
+<h2>설치</h2>
+<p style="font-size:14px;margin:0">아래 버튼을 <b>북마크바로 드래그</b>하세요.</p>
+<a class="bm" id="bm" href="#">🚡 스카이캡슐 도우미</a>
+<p style="font-size:13px;color:#6b6b70;margin:0">드래그가 안 되면 아래 전체를 복사해 북마크를 직접 만들고 URL 칸에 붙여넣으세요.</p>
+<textarea id="out" readonly onclick="this.select()"></textarea>
+</div>
+
+<div class="card">
+<h2>사용 순서</h2>
+<ol>
+<li><a href="https://www.tbluelinepark.com/ticket/GD2100036" target="_blank" rel="noopener">스카이캡슐(미포 출발) 예매 페이지</a>를 엽니다. 청사포 출발 등 같은 예매 시스템의 다른 상품 페이지에서도 쓸 수 있습니다.</li>
+<li>북마크 <b>🚡 스카이캡슐 도우미</b>를 누르면 오른쪽에 패널이 열립니다. 다시 누르면 닫힙니다.</li>
+<li>탑승일·회차·권종·매수·결제수단·예매자 정보를 입력합니다. <b>잔여 보기</b>로 그 날짜의 회차별 남은 자리를 확인할 수 있습니다.</li>
+<li><b>타이머 날짜·시각</b>을 정하고 <b>⏰ 타이머 실행</b>을 누르면 서버 시간 기준으로 그 시각에 진행합니다. 바로 하려면 <b>지금 실행</b>.</li>
+<li>결제 창(카드 결제)이 열리면 직접 결제합니다.</li>
+</ol>
+<p style="font-size:13px;color:#6b6b70;margin:0">한 번 실행하면 한 번만 시도합니다. 매진이거나 실패하면 이유가 로그에 남고, <b>다시 시도</b>로 다시 할 수 있습니다.</p>
+</div>
+
+<div class="warn">
+<b>기다리는 동안 이 탭을 화면에 띄워 두세요.</b> 브라우저는 뒤에 숨은 탭의 타이머를 늦추기 때문에, 다른 탭을 보고 있으면 몇 초~1분 늦게 실행될 수 있습니다.
+오래 열어 둔 페이지는 세션이 끊길 수 있으니 실행 몇 분 전에 새로고침하고 패널을 다시 여는 것을 권합니다(입력값은 남아 있습니다).<br><br>
+<b>알림창은 자동으로 넘깁니다.</b> 실행 중 사이트의 알림창·확인창은 띄우지 않고 "확인"으로 처리하며 내용은 로그에 남깁니다.
+"결제하시겠습니까?" 확인창도 자동 승인되니 결제수단·매수를 미리 확인하세요. 실패일 수 있는 알림은 ⚠️ 노란색으로 표시됩니다.<br><br>
+<b>입력값 저장</b> — 예매자 정보는 예매 사이트의 브라우저 저장소(이 컴퓨터)에만 저장되고 다른 곳으로 보내지 않습니다. 패널의 <b>저장된 정보 지우기</b>로 지울 수 있습니다.
+광고성 정보 수신 동의는 체크하지 않고 필수 약관에만 동의합니다.
+</div>
+
+<script>
+// ── 예매 페이지에서 실행되는 패널 ──
+// 이 함수의 소스를 그대로 북마클릿으로 만듭니다. 사이트의 전역 함수(chooseDate, reserveProc 등)와 jQuery 를 씁니다.
+function bluelinePanel() {
+  var ID = 'blPanel';
+  var prev = document.getElementById(ID);
+  if (prev) { prev.__close(); return; }
+  if (typeof chooseDate !== 'function' || typeof reserveProc !== 'function' || !window.jQuery) {
+    alert('블루라인파크 예매 페이지에서 눌러주세요.');
+    return;
+  }
+  var $ = window.jQuery;
+  var KEY = 'blPanel.cfg';
+
+  function h(tag, attrs, kids) {
+    var el = document.createElement(tag);
+    for (var k in (attrs || {})) {
+      if (k === 'style') el.style.cssText = attrs[k];
+      else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), attrs[k]);
+      else el.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return el;
+  }
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  // ── 모양 ──
+  var css = ''
+    + '#blPanel{position:fixed;top:0;right:0;width:380px;height:100vh;z-index:2147483647;display:flex;flex-direction:column;'
+    + 'background:#16181c;color:#e8e8ea;font:13px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;'
+    + 'box-shadow:-4px 0 24px rgba(0,0,0,.4);text-align:left}'
+    + '#blPanel *{box-sizing:border-box;font-family:inherit;letter-spacing:0}'
+    + '#blHead{padding:12px 16px;border-bottom:1px solid #2a2d33}'
+    + '#blTitle{display:flex;align-items:center;gap:8px}#blTitle b{flex:1;font-size:15px}'
+    + '#blStat{display:flex;gap:6px;margin-top:8px}'
+    + '#blStat>div{font:12px/1 ui-monospace,monospace;padding:6px 9px;background:#1f2229;border-radius:5px;white-space:nowrap}'
+    + '#blClock{color:#4ade80;margin-left:auto}#blCount{color:#fbbf24;flex:1;text-align:center}'
+    + '#blStat .k{font:11px/1 -apple-system,sans-serif;color:#8a8f98;margin-right:6px}'
+    + '#blBody{flex:1;overflow-y:auto;padding:14px 16px}'
+    + '#blPanel .sec{border:1px solid #2a2d33;border-radius:10px;padding:12px 14px;margin-bottom:12px}'
+    + '#blPanel .sec h3{margin:0 0 6px;font-size:13px;color:#4ade80}'
+    + '#blPanel .lb{font-size:11px;color:#8a8f98;margin:8px 0 3px}'
+    + '#blPanel input,#blPanel select{width:100%;height:auto;padding:7px 9px;font-size:13px;border:1px solid #3a3d44;border-radius:6px;'
+    + 'background:#1f2229;color:#e8e8ea;margin:0}'
+    + '#blPanel input[type=checkbox]{width:auto;margin:3px 6px 0 0}'
+    + '#blPanel .row{display:flex;gap:8px}#blPanel .row>*{flex:1;min-width:0}'
+    + '#blPanel button{background:#1f5fbf;color:#fff;border:0;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}'
+    + '#blPanel button:hover{filter:brightness(1.1)}'
+    + '#blPanel button.sub{background:#2a2d33;color:#c8ccd4;font-weight:500;padding:6px 11px;font-size:12px}'
+    + '#blPanel .hint{font-size:11px;color:#8a8f98;margin-top:4px}'
+    + '#blLog{max-height:220px;overflow-y:auto;margin-top:4px;padding:8px;background:#1f2229;border:1px solid #2a2d33;'
+    + 'border-radius:6px;font:11px/1.6 ui-monospace,monospace}'
+    + '#blLog .ts{color:#6b7280;margin-right:6px}';
+  var style = h('style', { id: ID + 'Css' }, [css]);
+  document.head.appendChild(style);
+
+  // ── 골격 ──
+  var clockV = h('span', {}, ['--:--:--']);
+  var countEl = h('div', { id: 'blCount', style: 'display:none' });
+  var body = h('div', { id: 'blBody' });
+  var panel = h('div', { id: ID }, [
+    h('div', { id: 'blHead' }, [
+      h('div', { id: 'blTitle' }, [h('b', {}, ['🚡 스카이캡슐 예매 도우미']),
+        h('button', { class: 'sub', onclick: function () { closePanel(); } }, ['닫기'])]),
+      h('div', { id: 'blStat' }, [countEl, h('div', { id: 'blClock' }, [h('span', { class: 'k' }, ['서버 시간']), clockV])])
+    ]),
+    body
+  ]);
+  document.body.appendChild(panel);
+
+  function field(label, id, attrs) {
+    attrs = attrs || {};
+    attrs.id = 'bl_' + id;
+    return h('div', {}, [h('div', { class: 'lb' }, [label]), h('input', attrs)]);
+  }
+  function select(label, id, options) {
+    var s = h('select', { id: 'bl_' + id }, options.map(function (o) { return h('option', { value: o[0] }, [o[1]]); }));
+    return h('div', {}, [h('div', { class: 'lb' }, [label]), s]);
+  }
+  function v(id) { var e = document.getElementById('bl_' + id); return e ? (e.type === 'checkbox' ? e.checked : e.value) : ''; }
+
+  // 회차: 1회차 08:30 부터 20회차 18:00 까지 30분 간격입니다.
+  var hm = function (m) { return pad(Math.floor(m / 60)) + ':' + pad(m % 60); };
+  var slots = [];
+  for (var i = 0; i < 20; i++) {
+    var st = 8 * 60 + 30 + i * 30;
+    slots.push([hm(st), (i + 1) + '회차 (' + hm(st) + ' ~ ' + hm(st + 30) + ')']);
+  }
+
+  var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  var iso = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+
+  // 1) 예매 정보
+  var peekBtn = h('button', { class: 'sub', style: 'margin-top:8px' }, ['잔여 보기']);
+  body.appendChild(h('div', { class: 'sec' }, [
+    h('h3', {}, ['예매 정보']),
+    h('div', { class: 'row' }, [field('탑승일', 'date', { type: 'date', value: iso(tomorrow) }),
+      select('회차', 'time', slots)]),
+    peekBtn,
+    h('div', { class: 'row' }, [
+      select('권종', 'ticket', [['2인 탑승권', '편도 2인 탑승권'], ['3인 탑승권', '편도 3인 탑승권'], ['4인 탑승권', '편도 4인 탑승권']]),
+      field('매수', 'count', { type: 'number', min: '1', max: '10', value: '1' })]),
+    h('div', { class: 'hint' }, ['탑승권 1장에 그 인원이 함께 탑니다. 3명이면 3인 탑승권 1장.']),
+    select('결제수단', 'pay', [['CARD', '신용카드'], ['DIRECTBANK', '실시간계좌이체'], ['FOREIGNCARD', '해외발행 카드']])
+  ]));
+
+  // 2) 예매자 정보
+  var wipeBtn = h('button', { class: 'sub', style: 'margin-top:10px' }, ['저장된 정보 지우기']);
+  body.appendChild(h('div', { class: 'sec' }, [
+    h('h3', {}, ['예매자 정보']),
+    field('예매자 이름', 'name', { type: 'text', autocomplete: 'off' }),
+    h('div', { class: 'lb' }, ['휴대폰 번호 (010 - ____ - ____)']),
+    h('div', { class: 'row' }, [h('input', { id: 'bl_m2', type: 'text', inputmode: 'numeric', maxlength: '4', autocomplete: 'off' }),
+      h('input', { id: 'bl_m3', type: 'text', inputmode: 'numeric', maxlength: '4', autocomplete: 'off' })]),
+    field('이메일 (선택)', 'email', { type: 'email', autocomplete: 'off' }),
+    field('예매 비밀번호 (숫자 4자리, 예매 확인·취소용)', 'pwd', { type: 'password', inputmode: 'numeric', maxlength: '4', autocomplete: 'off' }),
+    h('label', { style: 'display:flex;align-items:flex-start;font-size:12px;margin-top:10px;color:#c8ccd4' }, [
+      h('input', { id: 'bl_auto', type: 'checkbox', checked: 'checked' }),
+      h('span', {}, ['마지막에 결제하기까지 누르기 (결제 금액 확인창은 자동 승인, 카드 결제는 직접)'])]),
+    wipeBtn
+  ]));
+
+  // 3) 실행
+  // "예약"은 티켓 예매와 헷갈리니, 시각을 정해 두는 쪽은 "타이머"라고 부릅니다.
+  var armBtn = h('button', {}, ['⏰ 타이머 실행']);
+  var nowBtn = h('button', { class: 'sub' }, ['지금 실행']);
+  var stopBtn = h('button', { class: 'sub', style: 'display:none' }, ['중지']);
+  var logBox = h('div', { id: 'blLog' });
+  var logWrap = h('div', { style: 'display:none;margin-top:10px' }, [
+    h('div', { style: 'display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#8a8f98' }, ['실행 로그',
+      h('button', { class: 'sub', style: 'padding:3px 9px;font-size:11px', onclick: function () { logBox.innerHTML = ''; logWrap.style.display = 'none'; } }, ['로그 지우기'])]),
+    logBox
+  ]);
+  body.appendChild(h('div', { class: 'sec' }, [
+    h('h3', {}, ['실행']),
+    h('div', { class: 'row' }, [field('타이머 날짜', 'odate', { type: 'date', value: iso(new Date()) }),
+      field('타이머 시각 (서버 시간)', 'otime', { type: 'time', step: '1', value: '10:00:00' })]),
+    h('div', { style: 'display:flex;gap:8px;margin-top:10px' }, [nowBtn, armBtn, stopBtn]),
+    logWrap
+  ]));
+
+  // ── 입력값 저장 ── 이 사이트의 브라우저 저장소에만 남습니다.
+  var FIELDS = ['date', 'time', 'ticket', 'count', 'pay', 'name', 'm2', 'm3', 'email', 'pwd', 'auto', 'odate', 'otime'];
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved) FIELDS.forEach(function (k) {
+      var e = document.getElementById('bl_' + k);
+      if (!(k in saved) || !e) return;
+      if (e.type === 'checkbox') e.checked = !!saved[k]; else e.value = saved[k];
+    });
+  } catch (e) {}
+  body.addEventListener('input', save);
+  body.addEventListener('change', save);
+  function save() {
+    var o = {};
+    FIELDS.forEach(function (k) { o[k] = v(k); });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {}
+  }
+  wipeBtn.addEventListener('click', function () {
+    ['name', 'm2', 'm3', 'email', 'pwd'].forEach(function (k) { document.getElementById('bl_' + k).value = ''; });
+    save();
+    log('예매자 정보를 지웠습니다.');
+  });
+
+  // ── 로그 ──
+  function log(text, kind) {
+    logWrap.style.display = '';
+    var d = now();
+    var line = h('div', { style: 'color:' + ({ err: '#ff8f8f', ok: '#7ee0a0', warn: '#fbbf24' }[kind] || '#c8ccd4') }, [
+      h('span', { class: 'ts' }, [pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) + '.' + String(d.getMilliseconds()).padStart(3, '0')]),
+      text]);
+    logBox.appendChild(line);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  // ── 서버 시계 ──
+  // 응답의 Date 헤더로 PC 시계 오차를 잽니다. Date 헤더는 초 단위(아래는 버림)라 실제 서버 시각은
+  // 그 값부터 1초 사이 어딘가입니다. 0.5초를 더해 오차를 ±0.5초로 줄이고, 왕복 지연의 절반을 더합니다.
+  var offset = 0;
+  function now() { return new Date(Date.now() + offset); }
+  function syncClock() {
+    var t0 = Date.now();
+    return fetch(location.href, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      var t1 = Date.now(), hd = r.headers.get('Date');
+      if (!hd) throw new Error('Date 헤더 없음');
+      offset = new Date(hd).getTime() + 500 + (t1 - t0) / 2 - t1;
+      return offset;
+    });
+  }
+  var target = null;   // 타이머 시각
+  function tick() {
+    var d = now();
+    clockV.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    if (!target) { countEl.style.display = 'none'; return; }
+    var left = Math.ceil((target - d) / 1000);
+    countEl.style.display = '';
+    countEl.textContent = left > 0
+      ? '실행까지 ' + (left >= 86400 ? Math.floor(left / 86400) + '일 ' : '') + pad(Math.floor(left / 3600) % 24) + ':' + pad(Math.floor(left / 60) % 60) + ':' + pad(left % 60)
+      : '실행!';
+  }
+  var clockTimer = setInterval(tick, 200);
+  syncClock().then(function (off) {
+    clockV.parentNode.title = '서버 시간 (PC 시계와 ' + (off / 1000).toFixed(1) + '초 차이)';
+  }).catch(function () { clockV.parentNode.title = '동기화 실패 — PC 시계'; });
+
+  // 회차 조회에 쓰는 사이트 토큰을 패널이 열려 있는 동안 늘 유효하게 유지합니다.
+  // 사이트 함수(ensure)는 만료가 임박했을 때만 새로 받으므로, 즉시 실행을 눌렀을 때 재발급으로 늦어지지 않습니다.
+  function keepToken() {
+    if (running || !window.ScheduleToken) return;
+    ScheduleToken.ensure($('#gdSeq').val());
+  }
+  keepToken();
+  var tokenTimer = setInterval(keepToken, 15000);
+
+  // 기다리는 동안 탭이 가려지면 타이머가 늦어집니다. 알려 줍니다.
+  function onVis() { if (target && document.hidden) log('⚠️ 탭이 가려졌습니다 — 실행이 늦어질 수 있으니 이 탭을 화면에 띄워 두세요', 'warn'); }
+  document.addEventListener('visibilitychange', onVis);
+
+  // ── 사이트 알림창 가로채기 ──
+  // 실행 중에는 알림창·확인창을 띄우지 않고 로그에 남기며, 확인창은 "확인"으로 답합니다.
+  // 진행 안내(탑승 인원, 결제 금액 확인 등)는 회색, 그 밖의 알림은 실패일 수 있어 ⚠️ 노란색으로 표시합니다.
+  var INFO = /탑승 가능|구매 시|결제하시겠습니까|예매정보를 등록합니다/;
+  var native = null, restoreTimer = 0;
+  function siteMsg(prefix, m) {
+    m = String(m == null ? '' : m).replace(/\s+/g, ' ').trim();
+    var info = INFO.test(m);
+    log((info ? '' : '⚠️ ') + prefix + m, info ? '' : 'warn');
+  }
+  function capture() {
+    clearTimeout(restoreTimer);
+    if (native) return;
+    native = { alert: window.alert, confirm: window.confirm };
+    window.alert = function (m) { siteMsg('사이트 알림: ', m); };
+    window.confirm = function (m) { siteMsg('확인창 자동 승인: ', m); return true; };
+  }
+  function restore() {
+    clearTimeout(restoreTimer);
+    if (!native) return;
+    window.alert = native.alert;
+    window.confirm = native.confirm;
+    native = null;
+  }
+  // ms 뒤에 원래대로 돌립니다. 그 사이 늦게 뜨는 알림도 로그로 받습니다.
+  function restoreLater(ms) { clearTimeout(restoreTimer); restoreTimer = setTimeout(restore, ms); }
+
+  // 사이트가 응답을 받은 뒤 부르는 전역 함수를 한 번만 감쌉니다.
+  // 원래 화면 그리기가 끝난 직후 after 를 실행합니다. 응답이 없으면 원래대로 되돌립니다.
+  function hookOnce(name, after, what, onTimeout) {
+    var orig = window[name];
+    var done = false;
+    var wrap = function () {
+      done = true;
+      window[name] = orig;
+      orig.apply(this, arguments);
+      after();
+    };
+    window[name] = wrap;
+    setTimeout(function () {
+      if (done) return;
+      if (window[name] === wrap) window[name] = orig;
+      onTimeout(what + ' 응답이 15초 동안 없습니다. 페이지를 새로고침한 뒤 다시 시도하세요.');
+    }, 15000);
+  }
+
+  // ── 잔여 보기 ── 그 날짜의 회차 목록을 불러와 회차 선택지에 남은 자리를 붙입니다.
+  peekBtn.addEventListener('click', function () {
+    if (running) return;
+    var date = v('date').replace(/-/g, '');
+    if (!date) return;
+    capture();
+    log(v('date') + ' 잔여 확인 중…');
+    hookOnce('getDateScheduleListAfter', function () {
+      restoreLater(1000);
+      var lis = [].slice.call(document.querySelectorAll('#nonPackageGoods .scheduleInfoSelectUl li'));
+      if (!lis.length) { log(v('date') + ' — 회차가 없습니다.', 'warn'); return; }
+      var sel = document.getElementById('bl_time');
+      var open = 0;
+      [].forEach.call(sel.options, function (o, i) {
+        var li = lis.filter(function (el) { return el.textContent.indexOf('(' + o.value) > -1; })[0];
+        var m = li && /잔여\s*:\s*([^\]]+)/.exec(li.textContent);
+        var left = m ? m[1].trim() : '?';
+        if (li && !li.classList.contains('soldout')) open++;
+        o.textContent = slots[i][1] + ' · ' + (left === '매진' ? '매진' : '잔여 ' + left);
+      });
+      log(v('date') + ' — ' + lis.length + '개 회차 중 ' + open + '개 남음', open ? 'ok' : 'warn');
+    }, '회차 목록', function (msg) { restore(); log(msg, 'err'); });
+    chooseDate(date);
+  });
+  // 날짜를 바꾸면 붙여 둔 잔여 표시는 맞지 않으니 지웁니다.
+  document.getElementById('bl_date').addEventListener('change', function () {
+    [].forEach.call(document.getElementById('bl_time').options, function (o, i) { o.textContent = slots[i][1]; });
+  });
+
+  // ── 실행 ──
+  var running = false, runId = 0, armTimer = 0;
+
+  function collect() {
+    var errs = [];
+    var c = {
+      date: v('date').replace(/-/g, ''), time: v('time'), ticket: v('ticket'), count: parseInt(v('count'), 10), pay: v('pay'),
+      name: v('name').trim(), m2: v('m2'), m3: v('m3'), email: v('email').trim(), pwd: v('pwd'), auto: v('auto')
+    };
+    if (!/^\d{8}$/.test(c.date)) errs.push('탑승일');
+    if (!(c.count >= 1)) errs.push('매수');
+    if (!c.name) errs.push('예매자 이름');
+    if (!/^\d{3,4}$/.test(c.m2) || !/^\d{4}$/.test(c.m3)) errs.push('휴대폰 번호');
+    if (!/^\d{4}$/.test(c.pwd)) errs.push('예매 비밀번호(숫자 4자리)');
+    if (errs.length) { log('입력을 확인하세요: ' + errs.join(', '), 'err'); return null; }
+    return c;
+  }
+
+  function setBusy(on) {
+    running = on;
+    armBtn.style.display = on ? 'none' : '';
+    nowBtn.style.display = on ? 'none' : '';
+    stopBtn.style.display = on ? '' : 'none';
+    if (!on) { target = null; clearTimeout(armTimer); stopBtn.textContent = '중지'; }
+  }
+
+  function finish(text, kind, keepCapture) {
+    log('■ ' + text, kind || 'err');
+    restoreLater(keepCapture || 1500);
+    setBusy(false);
+    nowBtn.textContent = '다시 시도';
+  }
+
+  // 지정 시각까지 기다립니다. 긴 setTimeout 은 오차가 커서 1초 전부터 20ms 간격으로 재확인합니다.
+  armBtn.addEventListener('click', function () {
+    var c = collect();
+    if (!c) return;
+    var dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v('odate'));
+    var tm = /^(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(v('otime'));
+    if (!dm || !tm) { log('타이머 날짜와 시각을 정하세요.', 'err'); return; }
+    var t = new Date(+dm[1], dm[2] - 1, +dm[3], +tm[1], +tm[2], +(tm[3] || 0), 0);
+    var left = t - now();
+    if (left < -5 * 60 * 1000) { log('타이머 시각이 이미 지났습니다 — ' + t.toLocaleString('ko-KR'), 'err'); return; }
+    setBusy(true);
+    if (left <= 0) { log('타이머 시각이 지나 바로 시작합니다.'); run(c); return; }
+    target = t;
+    var my = ++runId;
+    stopBtn.textContent = '타이머 취소';
+    log('⏰ 타이머 — ' + t.toLocaleString('ko-KR') + ' 에 실행합니다 — ' + summary(c));
+    // 실행 1분 전에 서버 시계를 한 번 더 맞춥니다.
+    if (left > 70000) setTimeout(function () { if (my === runId && running) syncClock().catch(function () {}); }, left - 60000);
+    // 회차 조회에는 사이트 토큰이 필요합니다. 오래 열어 둬 만료됐으면 정시에 재발급하느라 늦어지므로 10초 전에 미리 받아 둡니다.
+    setTimeout(function () {
+      if (my !== runId || !running || !window.ScheduleToken) return;
+      ScheduleToken.ensure($('#gdSeq').val())
+        .done(function () { if (my === runId) log('예매 토큰 준비 완료'); })
+        .fail(function () { if (my === runId) log('⚠️ 예매 토큰을 미리 받지 못했습니다 — 실행 때 다시 시도합니다', 'warn'); });
+    }, Math.max(left - 10000, 0));
+    armTimer = setTimeout(function wait() {
+      if (my !== runId || !running) return;
+      if (now() >= target) { target = null; stopBtn.textContent = '중지'; run(c, my); }
+      else armTimer = setTimeout(wait, 20);
+    }, Math.max(left - 1000, 0));
+  });
+
+  nowBtn.addEventListener('click', function () {
+    var c = collect();
+    if (!c) return;
+    setBusy(true);
+    run(c);
+  });
+
+  stopBtn.addEventListener('click', function () {
+    var wasTimer = !!target;
+    runId++;
+    restore();
+    setBusy(false);
+    log(wasTimer ? '타이머를 취소했습니다.' : '중지했습니다.');
+  });
+
+  function summary(c) {
+    var slot = slots.filter(function (s) { return s[0] === c.time; })[0];
+    return c.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + ' ' + (slot ? slot[1] : c.time) + ' · ' + c.ticket + ' ' + c.count + '장';
+  }
+
+  // 날짜 → 회차 → 권종 → 결제수단 → 예매자 정보·약관 → 결제하기
+  function run(c, my) {
+    my = my || ++runId;
+    var alive = function () { return my === runId && running; };
+    capture();
+    log('▶ 실행 — ' + summary(c), 'ok');
+
+    // 결제수단 선택. 사이트가 날짜를 바꿀 때 #payMethod 값을 비우므로(goodsDayCheck), 선택 후 값과 표시를 직접 확인해 맞춥니다.
+    var payCode = c.pay || 'CARD';
+    function selectPay() {
+      var pay = document.querySelector('#payMethodArea li[data-value="' + payCode + '"]');
+      if (!pay) return null;
+      pay.click();
+      if ($('#payMethod').val() !== payCode) {
+        $('#payMethod').val(payCode).trigger('change');
+        $('#payMethodArea .placeholder').html(pay.innerHTML);
+      }
+      return pay;
+    }
+    selectPay();   // 회차가 없어 중간에 멈춰도 결제수단은 미리 골라 둡니다.
+
+    $('#rsBuyerName').val(c.name).trigger('change');
+    $('#mobile2').val(c.m2).trigger('change');
+    $('#mobile3').val(c.m3).trigger('change');
+    $('#email').val(c.email).trigger('change');
+    $('#rsBuyerPwd').val(c.pwd).trigger('change');
+    var nat = document.querySelector('#nationalSelectbox li[data-value="KOREA"]');
+    if (nat) nat.click();
+    $('#national').val('KOREA');
+    // 필수 동의는 ID가 바뀌어도(agree5 → agree6 등) 모두 체크되도록 목록 전체를 대상으로 함.
+    // 취소/환불규정 동의(#agree5)는 .agree-list 밖의 .box 안에 있어서 id 로도 함께 잡습니다.
+    function checkAgrees() {
+      $('.agree-list input[type="checkbox"], input[type="checkbox"][id^="agree"]')
+        .not('#checkAgree4').not('#blPanel input')
+        .prop('checked', true).trigger('change');
+      $('#checkAgree4').prop('checked', false).trigger('change');   // 광고성 정보 수신은 제외
+    }
+    checkAgrees();
+
+    var t0 = Date.now();
+    hookOnce('getDateScheduleListAfter', function () {
+      if (!alive()) return;
+      selectPay();   // 날짜 변경으로 비워진 결제수단을 다시 채움
+      var lis = [].slice.call(document.querySelectorAll('#nonPackageGoods .scheduleInfoSelectUl li'));
+      var li = lis.filter(function (el) { return el.textContent.indexOf('(' + c.time) > -1; })[0];
+      if (!lis.length) { finish('이 날짜에 회차가 없습니다 (아직 열리지 않았을 수 있음).'); return; }
+      if (!li) { finish(c.time + ' 회차를 찾지 못했습니다.'); return; }
+      var label = li.textContent.trim().replace(/\s+/g, ' ');
+      if (li.classList.contains('soldout')) { finish('매진 — ' + label); return; }
+      log('회차 목록 응답 ' + (Date.now() - t0) + 'ms — ' + label);
+
+      var t1 = Date.now();
+      hookOnce('getDateSchedulePriceLevelListAfter', function () {
+        if (!alive()) return;
+        var rows = [].slice.call(document.querySelectorAll('#priceLevelListArea > li'));
+        var row = rows.filter(function (el) {
+          var t = el.querySelector('.txt');
+          return t && t.textContent.indexOf(c.ticket) > -1;
+        })[0];
+        if (!row) { finish('권종을 찾지 못했습니다: ' + c.ticket); return; }
+        var plus = row.querySelector('.plus');
+        for (var i = 0; i < c.count; i++) plus.click();
+        var got = row.querySelector('input[name="rdPersons"]');
+        var n = got ? +got.value : c.count;
+        log('권종 응답 ' + (Date.now() - t1) + 'ms — ' + row.querySelector('.txt').textContent.trim() + ' ' + n + '장');
+        if (n !== c.count) { finish(c.count + '장을 담지 못했습니다 (잔여 부족일 수 있음).'); return; }
+
+        var pay = selectPay();
+        if (!pay) { finish('결제수단을 찾지 못했습니다: ' + payCode); return; }
+        log('결제수단 — ' + pay.textContent.trim() + ' (' + $('#payMethod').val() + ')');
+        checkAgrees();   // 회차·권종 선택 중 사이트가 동의를 풀었을 수 있어 결제 직전에 다시 체크
+
+        if (!valueCheck()) { finish('결제 조건이 충족되지 않았습니다. 화면의 입력값을 확인하세요.'); return; }
+        if (!c.auto) { finish('모두 채웠습니다. 확인 후 결제하기를 누르세요.', 'ok'); return; }
+        log('결제하기', 'ok');
+        reserveProc();   // 결제하기 버튼과 같은 동작. 금액 확인창은 자동 승인되고 내용이 로그에 남습니다.
+        // 예약 등록 요청이 실패하면 사이트가 알림을 띄우므로 30초 더 받아 둡니다.
+        finish('결제하기를 눌렀습니다 — 결제 창을 확인하세요. 실패 알림이 오면 위에 ⚠️ 로 표시됩니다.', 'ok', 30000);
+      }, '권종 목록', function (msg) { if (alive()) finish(msg); });
+
+      li.click();
+    }, '회차 목록', function (msg) { if (alive()) finish(msg); });
+
+    chooseDate(c.date);
+  }
+
+  function closePanel() {
+    runId++;
+    restore();
+    clearInterval(clockTimer);
+    clearInterval(tokenTimer);
+    clearTimeout(armTimer);
+    document.removeEventListener('visibilitychange', onVis);
+    panel.remove();
+    style.remove();
+  }
+  panel.__close = closePanel;
+}
+
+var href = 'javascript:' + encodeURIComponent('(' + bluelinePanel.toString() + ')();');
+document.getElementById('bm').href = href;
+document.getElementById('out').value = href;
+</script>
+</body>
+</html>
