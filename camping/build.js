@@ -4,7 +4,7 @@
 //   node build.js          빌드
 //   node build.js --check  현재 camfit.html 이 소스와 일치하는지만 확인 (수정하지 않음)
 //
-// camfit.html 의 <a class="bm" href="javascript:..."> 한 곳만 교체합니다.
+// camfit.html 의 <a class="bm" href="javascript:..."> 와 그 아래 복사용 textarea 를 교체합니다.
 
 const fs = require('fs');
 const path = require('path');
@@ -13,6 +13,8 @@ const ROOT = __dirname;
 const SRC = path.join(ROOT, 'src', 'camfit-panel.js');
 const OUT = path.join(ROOT, 'camfit.html');
 const MARKER = /(<a class="bm" href="javascript:)(.*?)(")/s;
+// 직접 복사해 설치하는 사람을 위한 textarea 복사본도 같은 코드로 맞춥니다.
+const COPY = /(<textarea readonly onclick="this\.select\(\)">javascript:)(.*?)(<\/textarea>)/s;
 
 // 주석과 들여쓰기를 걷어냅니다. 북마클릿은 URL 한 줄로 들어가므로
 // 남은 공백이 그대로 용량이 됩니다. 문자열 리터럴을 건드리면 안 되니
@@ -80,10 +82,9 @@ function build() {
     process.exit(1);
   }
 
-  const updated = html.replace(MARKER, (_, a, old, b) => {
-    if (process.env.__CHECK && old !== encoded) process.exitCode = 2;
-    return a + encoded + b;
-  });
+  const updated = html
+    .replace(MARKER, (_, a, old, b) => a + encoded + b)
+    .replace(COPY, (_, a, old, b) => a + encoded + b);
 
   return { code, encoded, html, updated };
 }
@@ -91,7 +92,6 @@ function build() {
 const checkOnly = process.argv.includes('--check');
 
 if (checkOnly) {
-  process.env.__CHECK = '1';
   const { html, updated } = build();
   if (html === updated) {
     console.log('✓ camfit.html 이 소스와 일치합니다.');

@@ -196,6 +196,16 @@
       </svg>
     </span>
   </a>
+  <a class="tool" href="blueline.html">
+    <span class="site">tbluelinepark.com</span>
+    <h2>스카이캡슐</h2>
+    <p>해운대 블루라인파크 예매 페이지에 패널을 띄웁니다. 정한 시각에 날짜·회차·권종·예매자 정보·약관을 채우고 결제하기까지 누릅니다.</p>
+    <span class="go">도우미 설치
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </a>
 </div>
 
 <p class="section-label">땡큐캠핑 — 예약 당일</p>
@@ -229,7 +239,7 @@
     <span class="marker"><span class="dot">1</span><span class="rail"></span></span>
     <div class="body">
       <h3>캠핏에 로그인한 채로 패널 열기</h3>
-      <p>북마크를 누르면 화면 오른쪽에 패널이 열립니다. 상단에 서버 시계가 함께 표시되어 오픈까지 남은 시간을 눈으로 확인할 수 있습니다.</p>
+      <p>북마크를 누르면 화면 오른쪽에 패널이 열립니다. 상단에 서버 시계가 함께 표시되어 오픈 순간을 눈으로 맞출 수 있습니다.</p>
     </div>
   </li>
   <li>
@@ -242,15 +252,15 @@
   <li>
     <span class="marker"><span class="dot">3</span><span class="rail"></span></span>
     <div class="body">
-      <h3>요금 후보 만들기</h3>
-      <p>구역 요금표로 금액을 계산합니다. 주말을 어디까지로 보는지가 캠핑장마다 달라, 해석이 갈리는 경우를 모두 후보로 넣습니다.</p>
+      <h3>금액 하나 고르기</h3>
+      <p>구역 요금표로 금액 후보를 제안합니다. 주말을 어디까지로 보는지가 캠핑장마다 달라 후보가 여럿일 수 있고, 빈자리가 있으면 캠핏 계산 금액에 <strong>추천</strong>이 붙습니다. 그중 하나를 고르세요.</p>
     </div>
   </li>
   <li class="key">
     <span class="marker"><span class="dot">4</span></span>
     <div class="body">
-      <h3>예약 시작</h3>
-      <p>오픈까지 기다렸다가 우선순위대로 시도합니다. 후보 금액과 실시간 계산 금액을 <strong>동시에</strong> 보내, 맞는 쪽이 통과합니다. 진행 상황은 패널 로그에 그대로 남습니다.</p>
+      <h3>지금 실행 / 타이머 실행</h3>
+      <p>누른 순간 우선순위대로 사이트마다 <strong>한 번씩</strong> 보냅니다. 요청 전송·응답 대기·결과가 패널 로그에 남고, 10초 안에 응답이 없으면 타임아웃으로 멈춥니다. 실패하면 <strong>다시 시도</strong>를 누르세요.</p>
     </div>
   </li>
 </ol>
@@ -267,8 +277,8 @@
     <dt>캠핏은 누르는 즉시 확정됩니다</dt>
     <dd>무통장 결제로 바로 요청하며 중간 확인 절차가 없습니다. 날짜와 인원을 확인한 뒤 시작하세요. 멈추려면 <code>중지</code> 버튼이나 <code>stopCf()</code>.</dd>
 
-    <dt>같은 자리가 두 번 잡힐 수 있습니다</dt>
-    <dd>금액 후보를 동시에 보내는 구조라 둘 이상이 통과할 여지가 있습니다. 그런 경우 로그에 경고가 남으니 예약 내역을 확인하세요.</dd>
+    <dt>타임아웃 뒤에는 예약 내역부터 확인하세요</dt>
+    <dd>응답이 없어 끊은 요청도 서버에서는 처리됐을 수 있습니다. 바로 다시 누르면 중복 예약이 될 수 있으니 캠핏 예약 내역을 먼저 확인하세요.</dd>
 
     <dt>진입용 날짜와 예약 날짜는 별개입니다</dt>
     <dd>사전 진입은 페이지에 들어가기 위한 수단이라 아무 날짜나 됩니다. 실제로 잡을 날짜는 <strong>캠핑 일정</strong>에 따로 넣으세요.</dd>
